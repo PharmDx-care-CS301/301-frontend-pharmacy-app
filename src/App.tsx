@@ -7,11 +7,11 @@ import {
 } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
-import Pharmacistlogin from "./pharmacist-login";
-import PatientLogin from "./patient-login";
+import PharmacistLogin from "./components/login/pharmacist-login";
+import PatientLogin from "./components/login/patient-login";
 import logo from "./logo.png";
 import Box from "@material-ui/core/Box";
-import ChooserPage from "./ChooserPage";
+import ChooserPage from "./components/landing/ChooserPage";
 
 const useStyles = makeStyles((theme) => ({
   buttons: {
@@ -39,7 +39,7 @@ function App() {
              height="300px">
           <Router>
             <Switch>
-              <Route path="/pharmacistlogin" component={Pharmacistlogin}/>
+              <Route path="/pharmacistlogin" component={PharmacistLogin}/>
               <Route path="/patientlogin" component={PatientLogin}/>
               <Route path="/" component={ChooserPage}/>
             </Switch>

@@ -1,16 +1,10 @@
 import React from 'react';
 import {
-    BrowserRouter as Router,
-    Route,
-    Link,
-    Switch
+    Link
 } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
-import Pharmacistlogin from "./pharmacist-login";
-import PatientLogin from "./patient-login";
-import logo from "./logo.png";
-import Box from "@material-ui/core/Box";
+import logo from "../../logo.png";
 
 
 const useStyles = makeStyles((theme) => ({
