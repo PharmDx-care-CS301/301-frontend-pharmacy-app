@@ -11,6 +11,7 @@ import Pharmacistlogin from "./pharmacist-login";
 import PatientLogin from "./patient-login";
 import logo from "./logo.png";
 import Box from "@material-ui/core/Box";
+import ChooserPage from "./ChooserPage";
 
 const useStyles = makeStyles((theme) => ({
   buttons: {
@@ -34,23 +35,13 @@ function App() {
   return (
     <Box className="App" display="flex" flexDirection="column" alignSelf="center" alignItems="center">
       <Box display="flex" alignItems="center" flexDirection="column" width="611px" height="497px">
-        <img src={logo} className={classes.logo} alt="logo"/>
         <Box flexDirection="column" alignItems="center" display="flex"
              height="300px">
           <Router>
-            <Link to="/pharmacistlogin">
-              <Button className={classes.buttons} variant="contained" color="primary">
-                Pharmacist Login
-              </Button>
-            </Link>
-            <Link to="/patientlogin">
-              <Button className={classes.buttons} variant="contained" color="primary">
-                Patient Login
-              </Button>
-            </Link>
             <Switch>
               <Route path="/pharmacistlogin" component={Pharmacistlogin}/>
               <Route path="/patientlogin" component={PatientLogin}/>
+              <Route path="/" component={ChooserPage}/>
             </Switch>
           </Router>
         </Box>
