@@ -74,7 +74,7 @@ function PharmacistLogin() {
           <Link to="/" className={classes.linkStyle}>
               <Button className={classes.signup} fullWidth>Forgot password?</Button>
           </Link>
-          <Link to="/" className={classes.linkStyle}>
+          <Link to="/pharmacistSignUp" className={classes.linkStyle}>
               <Button className={classes.signup} fullWidth>Don't have an account? SignUp!</Button>
           </Link>
 
