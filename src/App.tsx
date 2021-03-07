@@ -41,92 +41,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-class MenuIcon extends React.Component {
-  render() {
-    return null;
-  }
-}
-
-
-
-const ProtectedRoute: React.FC<any> = (props) => (
-  <Route
-    {...props}
-    component={withAuthenticator(props.component)}
-  />
-);
 
 function App() {
   const classes = useStyles();
-  const [patientData, setPatientData] = useState<PatientData>({
-    completed:undefined,
-    followuprequested: undefined,
-    pendingresponse: undefined,
-    todo: undefined
-  });
-
-  function createFollowUpPage() {
-    // @ts-ignore
-    return (
-      <FollowUpPage patientData={patientData} setPatientData={setPatientData} />
-    );
-  }
 
   return (
-    <Box
-      className="App"
-      display="flex"
-      flexDirection="column"
-      alignSelf="center"
-      alignItems="center"
-    >
-      <Box
-        display="flex"
-        alignItems="center"
-        flexDirection="column"
-        width="100%"
-        height="497px"
-      >
-        <Box
-          flexDirection="column"
-          alignItems="center"
-          display="flex"
-          height="300px"
-          width="100%"
-        >
+    <Box className="App" display="flex" flexDirection="column" alignSelf="center" alignItems="center">
+      <Box display="flex" alignItems="center" flexDirection="column" width="611px" height="497px">
+        <Box flexDirection="column" alignItems="center" display="flex"
+             height="300px">
           <Router>
-            <AppBar position="static">
-              <Toolbar>
-                <IconButton
-                  edge="start"
-                  className={classes.menuButton}
-                  color="inherit"
-                  aria-label="menu"
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Typography variant="h6" className={classes.title}>
-                  PharmDX
-                </Typography>
-                <Link to="/follow-up" className={classes.linkStyle}>
-                  <Button style={{ color: "#ffffff" }}>View Follow Up</Button>
-                </Link>
-                <Link to="/patientscheduling" className={classes.linkStyle}>
-                  <Button style={{ color: "#ffffff" }}>Create Follow Up</Button>
-                </Link>
-                <Link to="/follow-up" className={classes.linkStyle}>
-                  <Button
-                    style={{ color: "#ffffff" }}
-                    onClick={async () => {
-                      await Auth.signOut();
-                      window.location.reload(false);
-                    }}
-                  >
-                    Sign Out
-                  </Button>
-                </Link>
-              </Toolbar>
-            </AppBar>
             <Switch>
               <ProtectedRoute
                 exact
