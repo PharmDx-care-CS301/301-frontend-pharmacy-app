@@ -13,6 +13,7 @@ import logo from "./logo.png";
 import Box from "@material-ui/core/Box";
 import ChooserPage from "./components/landing/ChooserPage";
 import PharmacistSignUp from "./components/signup/pharmacist-signup";
+import FollowUpPage from "./components/follow-up/FollowUpPage";
 
 const useStyles = makeStyles((theme) => ({
   buttons: {
@@ -34,21 +35,22 @@ function App() {
   const classes = useStyles();
 
   return (
-    <Box className="App" display="flex" flexDirection="column" alignSelf="center" alignItems="center">
-      <Box display="flex" alignItems="center" flexDirection="column" width="611px" height="497px">
-        <Box flexDirection="column" alignItems="center" display="flex"
-             height="300px">
-          <Router>
-            <Switch>
-              <Route path="/pharmacistSignUp" component={PharmacistSignUp}/>
-              <Route path="/pharmacistlogin" component={PharmacistLogin}/>
-              <Route path="/patientlogin" component={PatientLogin}/>
-              <Route path="/" component={ChooserPage}/>
-            </Switch>
-          </Router>
+      <Box className="App" display="flex" flexDirection="column" alignSelf="center" alignItems="center">
+        <Box display="flex" alignItems="center" flexDirection="column" width="100%" height="497px">
+          <Box flexDirection="column" alignItems="center" display="flex"
+               height="300px" width="100%">
+            <Router>
+              <Switch>
+                <Route path="/pharmacistlogin" component={PharmacistLogin}/>
+                <Route path="/patientlogin" component={PatientLogin}/>
+                <Route path="/pharmacistSignUp" component={PharmacistSignUp}/>
+                <Route path="/follow-up" component={FollowUpPage}/>
+                <Route path="/" component={ChooserPage}/>
+              </Switch>
+            </Router>
+          </Box>
         </Box>
       </Box>
-    </Box>
   );
 }
 
