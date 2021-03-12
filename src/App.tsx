@@ -15,6 +15,7 @@ import ChooserPage from "./components/landing/ChooserPage";
 import PharmacistSignUp from "./components/signup/pharmacist-signup";
 import FollowUpPage from "./components/follow-up/FollowUpPage";
 import PatientScheduling from "./components/scheduling/patient-schedulling";
+import PharmacistConfirm from "./components/signup/pharmacist-confirmation";
 
 const useStyles = makeStyles((theme) => ({
   buttons: {
@@ -46,6 +47,7 @@ function App() {
                 <Route path="/pharmacistlogin" component={PharmacistLogin}/>
                 <Route path="/patientlogin" component={PatientLogin}/>
                 <Route path="/pharmacistSignUp" component={PharmacistSignUp}/>
+                <Route path="/pharmacistConfirm" component={PharmacistConfirm}/>
                 <Route path="/follow-up" component={FollowUpPage}/>
                 <Route path="/" component={ChooserPage}/>
               </Switch>

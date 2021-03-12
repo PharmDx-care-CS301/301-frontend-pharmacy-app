@@ -4,7 +4,9 @@ import {Link} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import {makeStyles} from "@material-ui/core/styles";
 import TextField from '@material-ui/core/TextField';
-import Box from '@material-ui/core/Box'
+import Alert from '@material-ui/lab/Alert';
+import Box from '@material-ui/core/Box';
+
 const useStyles = makeStyles((theme) => ({
     root: {
         "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
@@ -34,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-function PharmacistSignUp() {
+function PharmacistConfirm() {
     const classes = useStyles();
 
     return (
@@ -44,11 +46,12 @@ function PharmacistSignUp() {
             <Box className="input-container" width="337px" height="240px" bgcolor="white" flexDirection="column"
                  alignItems="center" display="flex">
                 <TextField
-                    required
                     id="outlined-basic"
                     name="name"
                     label="Pharmacy Name"
                     variant="outlined"
+                    defaultValue="Pharmacy Name"
+                    disabled
                     style={{
                         height: 60,
                         width: 302,
@@ -59,12 +62,13 @@ function PharmacistSignUp() {
                     }}
                 />
                 <TextField
-                    required
                     id="outlined-basic"
                     name="email"
                     label="Pharmacy Email"
                     type="email"
                     variant="outlined"
+                    defaultValue="Pharmacy Email"
+                    disabled
                     style={{
                         height: 60,
                         width: 302,
@@ -74,10 +78,25 @@ function PharmacistSignUp() {
                     }}
                 />
                 <TextField
-                    required
                     id="outlined-basic"
                     label="Address"
                     variant="outlined"
+                    defaultValue="Address"
+                    disabled
+                    style={{
+                        height: 60,
+                        width: 302,
+                        padding: 0,
+                        paddingBottom: 0,
+                        marginBottom: 15,
+                    }}
+                />
+                <TextField
+                    id="outlined-basic"
+                    label="ID"
+                    variant="outlined"
+                    defaultValue="ID"
+                    disabled
                     style={{
                         height: 60,
                         width: 302,
@@ -87,18 +106,17 @@ function PharmacistSignUp() {
                     }}
                 />
 
-                <Link to="/pharmacistlogin" className={classes.linkStyle}>
-                    <Button className={classes.signup} fullWidth>Already have an account? Sign In!</Button>
-                </Link>
-
-                <Link to="/pharmacistConfirm">
+                <Link to="/pharmacistlogin">
                     <Button className={classes.submit} variant="contained" color="primary">
-                        Sign Up
+                        Login
                     </Button>
                 </Link>
+                
+                <Alert severity="success">Account Created! Please login to continue.</Alert>
+            
             </Box>
         </Box>
     );
 }
 
-export default PharmacistSignUp;
+export default PharmacistConfirm;
