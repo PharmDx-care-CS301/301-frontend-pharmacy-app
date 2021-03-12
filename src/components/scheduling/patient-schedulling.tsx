@@ -43,12 +43,12 @@ function PatientScheduling() {
         setYesState(!yes)
     };
     return (
-        <Box className={classes.root} width="800px" height="525px" bgcolor="white" display="flex" flexDirection="column"
+        <Box className={classes.root} width="60%" height="525px" bgcolor="white" display="flex" flexDirection="column"
              alignItems="center">
             <img src={logo} alt="logo" className={classes.logo}/>
-            <Box className="input-container" width="700px" height="240px" bgcolor="white" flexDirection="column"
+            <Box className="input-container" width='100%' height="240px" bgcolor="white" flexDirection="column"
                  alignItems="center" display="flex">
-                <Grid container spacing={10}>
+                <Grid container spacing={8}>
                     <Grid item xs>
                         <TextField
                             required
@@ -61,7 +61,7 @@ function PatientScheduling() {
                             }}
                             style={{
                                 height: 60,
-                                width: 300,
+                                width: '100%',
                                 padding: 0,
                                 marginBottom: 15,
                             }}
@@ -77,7 +77,7 @@ function PatientScheduling() {
                             }}
                             style={{
                                 height: 60,
-                                width: 300,
+                                width: '100%',
                                 marginBottom: 15
                             }}
                         />
@@ -92,7 +92,7 @@ function PatientScheduling() {
                             }}
                             style={{
                                 height: 60,
-                                width: 300,
+                                width: '100%',
                                 marginBottom: 15,
                             }}
                         />
@@ -107,7 +107,7 @@ function PatientScheduling() {
                             }}
                             style={{
                                 height: 60,
-                                width: 300,
+                                width: '100%',
                                 marginBottom: 15
                             }}
                         />
@@ -124,7 +124,7 @@ function PatientScheduling() {
                             }}
                             style={{
                                 height: 60,
-                                width: 300,
+                                width: '100%',
                                 marginBottom: 15,
                             }}
                         />
@@ -142,7 +142,7 @@ function PatientScheduling() {
                             }}
                             style={{
                                 height: 135,
-                                width: 300,
+                                width: '100%',
                                 marginBottom: 15
                             }}
                         />
@@ -157,7 +157,7 @@ function PatientScheduling() {
                             }}
                             style={{
                                 height: 60,
-                                width: 300,
+                                width: '100%',
                                 marginBottom: 15
                             }}
                         />
