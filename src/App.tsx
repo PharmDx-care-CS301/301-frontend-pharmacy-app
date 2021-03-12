@@ -14,6 +14,7 @@ import Box from "@material-ui/core/Box";
 import ChooserPage from "./components/landing/ChooserPage";
 import PharmacistSignUp from "./components/signup/pharmacist-signup";
 import FollowUpPage from "./components/follow-up/FollowUpPage";
+import PatientScheduling from "./components/scheduling/patient-schedulling";
 
 const useStyles = makeStyles((theme) => ({
   buttons: {
@@ -41,6 +42,7 @@ function App() {
                height="300px" width="100%">
             <Router>
               <Switch>
+                <Route path="/patientscheduling" component={PatientScheduling}/>
                 <Route path="/pharmacistlogin" component={PharmacistLogin}/>
                 <Route path="/patientlogin" component={PatientLogin}/>
                 <Route path="/pharmacistSignUp" component={PharmacistSignUp}/>
