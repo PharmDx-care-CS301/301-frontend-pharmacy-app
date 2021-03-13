@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid';
 import {Checkbox, FormControlLabel} from "@material-ui/core";
+import {withAuthenticator} from "@aws-amplify/ui-react";
 const useStyles = makeStyles((theme) => ({
     root: {
         "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
@@ -35,6 +36,8 @@ const useStyles = makeStyles((theme) => ({
     }
 
 }));
+
+function handleClick(event) {}
 
 function PatientScheduling() {
     const classes = useStyles();
@@ -181,7 +184,7 @@ function PatientScheduling() {
                 />
 
 
-                <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+                <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} onClick={handleClick}>
                     Submit
                 </Button>
             </Box>
@@ -189,4 +192,4 @@ function PatientScheduling() {
     );
 }
 
-export default PatientScheduling;
+export default withAuthenticator(PatientScheduling);
