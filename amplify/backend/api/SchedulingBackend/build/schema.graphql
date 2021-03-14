@@ -1,0 +1,627 @@
+type Prescription @aws_iam @aws_api_key {
+  id: ID!
+  name: String
+  assessment_id: ID
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Assessment @aws_iam @aws_api_key {
+  id: ID!
+  date: AWSDateTime
+  description: String
+  patient_id: ID
+  pharmacist_id: ID
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  Prescription(filter: ModelPrescriptionFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPrescriptionConnection @aws_iam @aws_api_key
+  FollowUp: FollowUp @aws_iam @aws_api_key
+  AssessedBy: Pharmacist @aws_iam @aws_api_key
+  PerformedAt: Pharmacy @aws_iam @aws_api_key
+  AssessedFor: Patient @aws_iam @aws_api_key
+}
+
+type FollowUp @aws_iam @aws_api_key {
+  id: ID!
+  contact_method: ContactMethod
+  assessment_id: ID
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  ForAssessment: Assessment @aws_iam @aws_api_key
+}
+
+type Pharmacist @aws_iam @aws_api_key {
+  id: ID!
+  first_name: String
+  last_name: String
+  pharmacist_number: String
+  pharmacy_ids: [ID]
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  pharmacys(pharmacyID: ModelIDKeyConditionInput, filter: ModelPharmacyPharmacistFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPharmacyPharmacistConnection @aws_iam @aws_api_key
+}
+
+type Pharmacy @aws_iam @aws_api_key {
+  id: ID!
+  address: String
+  name: String
+  pharmacist_ids: [ID]
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  PharmacyPharmacists(pharmacistID: ModelIDKeyConditionInput, filter: ModelPharmacyPharmacistFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPharmacyPharmacistConnection @aws_iam @aws_api_key
+}
+
+enum FollowUpStatus {
+  COMPLETED
+  PENDINGRESPONSE
+  TODO
+  NOFOLLOWUPNEEDED
+  RESPONSEOVERDUE
+  FOLLOWUPREQUESTED
+}
+
+enum ContactMethod {
+  SMS
+  EMAIL
+  PHARMACY
+}
+
+type Patient @aws_iam @aws_api_key {
+  id: ID!
+  first_name: String!
+  last_name: String!
+  phone_number: AWSPhone
+  email: AWSEmail
+  postal_code: String
+  dob: AWSDate!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  AssessmentRecord(filter: ModelAssessmentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelAssessmentConnection @aws_iam @aws_api_key
+}
+
+type PharmacyPharmacist @aws_iam @aws_api_key {
+  id: ID!
+  pharmacyID: ID!
+  pharmacistID: ID!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  pharmacist: Pharmacist! @aws_iam @aws_api_key
+  pharmacy: Pharmacy! @aws_iam @aws_api_key
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelPrescriptionConnection @aws_api_key @aws_iam {
+  items: [Prescription]
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+input ModelPrescriptionFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  assessment_id: ModelIDInput
+  and: [ModelPrescriptionFilterInput]
+  or: [ModelPrescriptionFilterInput]
+  not: ModelPrescriptionFilterInput
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+type Query {
+  getPrescription(id: ID!): Prescription @aws_api_key @aws_iam
+  listPrescriptions(filter: ModelPrescriptionFilterInput, limit: Int, nextToken: String): ModelPrescriptionConnection @aws_api_key @aws_iam
+  syncPrescriptions(filter: ModelPrescriptionFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelPrescriptionConnection @aws_api_key @aws_iam
+  getAssessment(id: ID!): Assessment @aws_api_key @aws_iam
+  listAssessments(filter: ModelAssessmentFilterInput, limit: Int, nextToken: String): ModelAssessmentConnection @aws_api_key @aws_iam
+  syncAssessments(filter: ModelAssessmentFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelAssessmentConnection @aws_api_key @aws_iam
+  listFollowUps(filter: ModelFollowUpFilterInput, limit: Int, nextToken: String): ModelFollowUpConnection @aws_api_key @aws_iam
+  getFollowUp(id: ID!): FollowUp @aws_api_key @aws_iam
+  syncFollowUps(filter: ModelFollowUpFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelFollowUpConnection @aws_api_key @aws_iam
+  listPharmacists(filter: ModelPharmacistFilterInput, limit: Int, nextToken: String): ModelPharmacistConnection @aws_api_key @aws_iam
+  getPharmacist(id: ID!): Pharmacist @aws_api_key @aws_iam
+  syncPharmacists(filter: ModelPharmacistFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelPharmacistConnection @aws_api_key @aws_iam
+  listPharmacys(filter: ModelPharmacyFilterInput, limit: Int, nextToken: String): ModelPharmacyConnection @aws_api_key @aws_iam
+  getPharmacy(id: ID!): Pharmacy @aws_api_key @aws_iam
+  syncPharmacies(filter: ModelPharmacyFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelPharmacyConnection @aws_api_key @aws_iam
+  listPatients(filter: ModelPatientFilterInput, limit: Int, nextToken: String): ModelPatientConnection @aws_api_key @aws_iam
+  getPatient(id: ID!): Patient @aws_api_key @aws_iam
+  syncPatients(filter: ModelPatientFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelPatientConnection @aws_api_key @aws_iam
+  syncPharmacyPharmacists(filter: ModelPharmacyPharmacistFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelPharmacyPharmacistConnection @aws_api_key @aws_iam
+}
+
+input CreatePrescriptionInput {
+  id: ID
+  name: String
+  assessment_id: ID
+  _version: Int
+}
+
+input UpdatePrescriptionInput {
+  id: ID!
+  name: String
+  assessment_id: ID
+  _version: Int
+}
+
+input DeletePrescriptionInput {
+  id: ID
+  _version: Int
+}
+
+type Mutation {
+  createPrescription(input: CreatePrescriptionInput!, condition: ModelPrescriptionConditionInput): Prescription @aws_api_key @aws_iam
+  updatePrescription(input: UpdatePrescriptionInput!, condition: ModelPrescriptionConditionInput): Prescription @aws_api_key @aws_iam
+  deletePrescription(input: DeletePrescriptionInput!, condition: ModelPrescriptionConditionInput): Prescription @aws_api_key @aws_iam
+  createAssessment(input: CreateAssessmentInput!, condition: ModelAssessmentConditionInput): Assessment @aws_api_key @aws_iam
+  updateAssessment(input: UpdateAssessmentInput!, condition: ModelAssessmentConditionInput): Assessment @aws_api_key @aws_iam
+  deleteAssessment(input: DeleteAssessmentInput!, condition: ModelAssessmentConditionInput): Assessment @aws_api_key @aws_iam
+  createFollowUp(input: CreateFollowUpInput!, condition: ModelFollowUpConditionInput): FollowUp @aws_api_key @aws_iam
+  updateFollowUp(input: UpdateFollowUpInput!, condition: ModelFollowUpConditionInput): FollowUp @aws_api_key @aws_iam
+  deleteFollowUp(input: DeleteFollowUpInput!, condition: ModelFollowUpConditionInput): FollowUp @aws_api_key @aws_iam
+  createPharmacist(input: CreatePharmacistInput!, condition: ModelPharmacistConditionInput): Pharmacist @aws_api_key @aws_iam
+  updatePharmacist(input: UpdatePharmacistInput!, condition: ModelPharmacistConditionInput): Pharmacist @aws_api_key @aws_iam
+  deletePharmacist(input: DeletePharmacistInput!, condition: ModelPharmacistConditionInput): Pharmacist @aws_api_key @aws_iam
+  createPharmacy(input: CreatePharmacyInput!, condition: ModelPharmacyConditionInput): Pharmacy @aws_api_key @aws_iam
+  updatePharmacy(input: UpdatePharmacyInput!, condition: ModelPharmacyConditionInput): Pharmacy @aws_api_key @aws_iam
+  deletePharmacy(input: DeletePharmacyInput!, condition: ModelPharmacyConditionInput): Pharmacy @aws_api_key @aws_iam
+  createPatient(input: CreatePatientInput!, condition: ModelPatientConditionInput): Patient @aws_api_key @aws_iam
+  updatePatient(input: UpdatePatientInput!, condition: ModelPatientConditionInput): Patient @aws_api_key @aws_iam
+  deletePatient(input: DeletePatientInput!, condition: ModelPatientConditionInput): Patient @aws_api_key @aws_iam
+  createPharmacyPharmacist(input: CreatePharmacyPharmacistInput!, condition: ModelPharmacyPharmacistConditionInput): PharmacyPharmacist @aws_api_key @aws_iam
+  updatePharmacyPharmacist(input: UpdatePharmacyPharmacistInput!, condition: ModelPharmacyPharmacistConditionInput): PharmacyPharmacist @aws_api_key @aws_iam
+  deletePharmacyPharmacist(input: DeletePharmacyPharmacistInput!, condition: ModelPharmacyPharmacistConditionInput): PharmacyPharmacist @aws_api_key @aws_iam
+}
+
+input ModelPrescriptionConditionInput {
+  name: ModelStringInput
+  assessment_id: ModelIDInput
+  and: [ModelPrescriptionConditionInput]
+  or: [ModelPrescriptionConditionInput]
+  not: ModelPrescriptionConditionInput
+}
+
+type Subscription {
+  onCreatePrescription: Prescription @aws_subscribe(mutations: ["createPrescription"]) @aws_api_key @aws_iam
+  onUpdatePrescription: Prescription @aws_subscribe(mutations: ["updatePrescription"]) @aws_api_key @aws_iam
+  onDeletePrescription: Prescription @aws_subscribe(mutations: ["deletePrescription"]) @aws_api_key @aws_iam
+  onCreateAssessment: Assessment @aws_subscribe(mutations: ["createAssessment"]) @aws_api_key @aws_iam
+  onUpdateAssessment: Assessment @aws_subscribe(mutations: ["updateAssessment"]) @aws_api_key @aws_iam
+  onDeleteAssessment: Assessment @aws_subscribe(mutations: ["deleteAssessment"]) @aws_api_key @aws_iam
+  onCreateFollowUp: FollowUp @aws_subscribe(mutations: ["createFollowUp"]) @aws_api_key @aws_iam
+  onUpdateFollowUp: FollowUp @aws_subscribe(mutations: ["updateFollowUp"]) @aws_api_key @aws_iam
+  onDeleteFollowUp: FollowUp @aws_subscribe(mutations: ["deleteFollowUp"]) @aws_api_key @aws_iam
+  onCreatePharmacist: Pharmacist @aws_subscribe(mutations: ["createPharmacist"]) @aws_api_key @aws_iam
+  onUpdatePharmacist: Pharmacist @aws_subscribe(mutations: ["updatePharmacist"]) @aws_api_key @aws_iam
+  onDeletePharmacist: Pharmacist @aws_subscribe(mutations: ["deletePharmacist"]) @aws_api_key @aws_iam
+  onCreatePharmacy: Pharmacy @aws_subscribe(mutations: ["createPharmacy"]) @aws_api_key @aws_iam
+  onUpdatePharmacy: Pharmacy @aws_subscribe(mutations: ["updatePharmacy"]) @aws_api_key @aws_iam
+  onDeletePharmacy: Pharmacy @aws_subscribe(mutations: ["deletePharmacy"]) @aws_api_key @aws_iam
+  onCreatePatient: Patient @aws_subscribe(mutations: ["createPatient"]) @aws_api_key @aws_iam
+  onUpdatePatient: Patient @aws_subscribe(mutations: ["updatePatient"]) @aws_api_key @aws_iam
+  onDeletePatient: Patient @aws_subscribe(mutations: ["deletePatient"]) @aws_api_key @aws_iam
+  onCreatePharmacyPharmacist: PharmacyPharmacist @aws_subscribe(mutations: ["createPharmacyPharmacist"]) @aws_api_key @aws_iam
+  onUpdatePharmacyPharmacist: PharmacyPharmacist @aws_subscribe(mutations: ["updatePharmacyPharmacist"]) @aws_api_key @aws_iam
+  onDeletePharmacyPharmacist: PharmacyPharmacist @aws_subscribe(mutations: ["deletePharmacyPharmacist"]) @aws_api_key @aws_iam
+}
+
+type ModelAssessmentConnection @aws_api_key @aws_iam {
+  items: [Assessment]
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelAssessmentFilterInput {
+  id: ModelIDInput
+  date: ModelStringInput
+  description: ModelStringInput
+  patient_id: ModelIDInput
+  pharmacist_id: ModelIDInput
+  and: [ModelAssessmentFilterInput]
+  or: [ModelAssessmentFilterInput]
+  not: ModelAssessmentFilterInput
+}
+
+input CreateAssessmentInput {
+  id: ID
+  date: AWSDateTime
+  description: String
+  patient_id: ID
+  pharmacist_id: ID
+  _version: Int
+  assessmentAssessedById: ID
+  assessmentPerformedAtId: ID
+  assessmentAssessedForId: ID
+  assessmentFollowUpId: ID
+}
+
+input UpdateAssessmentInput {
+  id: ID!
+  date: AWSDateTime
+  description: String
+  patient_id: ID
+  pharmacist_id: ID
+  _version: Int
+  assessmentAssessedById: ID
+  assessmentPerformedAtId: ID
+  assessmentAssessedForId: ID
+  assessmentFollowUpId: ID
+}
+
+input DeleteAssessmentInput {
+  id: ID
+  _version: Int
+}
+
+input ModelAssessmentConditionInput {
+  date: ModelStringInput
+  description: ModelStringInput
+  patient_id: ModelIDInput
+  pharmacist_id: ModelIDInput
+  and: [ModelAssessmentConditionInput]
+  or: [ModelAssessmentConditionInput]
+  not: ModelAssessmentConditionInput
+}
+
+type ModelFollowUpConnection @aws_api_key @aws_iam {
+  items: [FollowUp]
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelContactMethodInput {
+  eq: ContactMethod
+  ne: ContactMethod
+}
+
+input ModelFollowUpFilterInput {
+  id: ModelIDInput
+  contact_method: ModelContactMethodInput
+  assessment_id: ModelIDInput
+  and: [ModelFollowUpFilterInput]
+  or: [ModelFollowUpFilterInput]
+  not: ModelFollowUpFilterInput
+}
+
+input CreateFollowUpInput {
+  id: ID
+  contact_method: ContactMethod
+  assessment_id: ID
+  _version: Int
+  followUpForAssessmentId: ID
+}
+
+input UpdateFollowUpInput {
+  id: ID!
+  contact_method: ContactMethod
+  assessment_id: ID
+  _version: Int
+  followUpForAssessmentId: ID
+}
+
+input DeleteFollowUpInput {
+  id: ID
+  _version: Int
+}
+
+input ModelFollowUpConditionInput {
+  contact_method: ModelContactMethodInput
+  assessment_id: ModelIDInput
+  and: [ModelFollowUpConditionInput]
+  or: [ModelFollowUpConditionInput]
+  not: ModelFollowUpConditionInput
+}
+
+type ModelPharmacistConnection @aws_api_key @aws_iam {
+  items: [Pharmacist]
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelPharmacistFilterInput {
+  id: ModelIDInput
+  first_name: ModelStringInput
+  last_name: ModelStringInput
+  pharmacist_number: ModelStringInput
+  pharmacy_ids: ModelIDInput
+  and: [ModelPharmacistFilterInput]
+  or: [ModelPharmacistFilterInput]
+  not: ModelPharmacistFilterInput
+}
+
+input CreatePharmacistInput {
+  id: ID
+  first_name: String
+  last_name: String
+  pharmacist_number: String
+  pharmacy_ids: [ID]
+  _version: Int
+}
+
+input UpdatePharmacistInput {
+  id: ID!
+  first_name: String
+  last_name: String
+  pharmacist_number: String
+  pharmacy_ids: [ID]
+  _version: Int
+}
+
+input DeletePharmacistInput {
+  id: ID
+  _version: Int
+}
+
+input ModelPharmacistConditionInput {
+  first_name: ModelStringInput
+  last_name: ModelStringInput
+  pharmacist_number: ModelStringInput
+  pharmacy_ids: ModelIDInput
+  and: [ModelPharmacistConditionInput]
+  or: [ModelPharmacistConditionInput]
+  not: ModelPharmacistConditionInput
+}
+
+type ModelPharmacyConnection @aws_api_key @aws_iam {
+  items: [Pharmacy]
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelPharmacyFilterInput {
+  id: ModelIDInput
+  address: ModelStringInput
+  name: ModelStringInput
+  pharmacist_ids: ModelIDInput
+  and: [ModelPharmacyFilterInput]
+  or: [ModelPharmacyFilterInput]
+  not: ModelPharmacyFilterInput
+}
+
+input CreatePharmacyInput {
+  id: ID
+  address: String
+  name: String
+  pharmacist_ids: [ID]
+  _version: Int
+}
+
+input UpdatePharmacyInput {
+  id: ID!
+  address: String
+  name: String
+  pharmacist_ids: [ID]
+  _version: Int
+}
+
+input DeletePharmacyInput {
+  id: ID
+  _version: Int
+}
+
+input ModelPharmacyConditionInput {
+  address: ModelStringInput
+  name: ModelStringInput
+  pharmacist_ids: ModelIDInput
+  and: [ModelPharmacyConditionInput]
+  or: [ModelPharmacyConditionInput]
+  not: ModelPharmacyConditionInput
+}
+
+type ModelPatientConnection @aws_api_key @aws_iam {
+  items: [Patient]
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelPatientFilterInput {
+  id: ModelIDInput
+  first_name: ModelStringInput
+  last_name: ModelStringInput
+  phone_number: ModelStringInput
+  email: ModelStringInput
+  postal_code: ModelStringInput
+  dob: ModelStringInput
+  and: [ModelPatientFilterInput]
+  or: [ModelPatientFilterInput]
+  not: ModelPatientFilterInput
+}
+
+input CreatePatientInput {
+  id: ID
+  first_name: String!
+  last_name: String!
+  phone_number: AWSPhone
+  email: AWSEmail
+  postal_code: String
+  dob: AWSDate!
+  _version: Int
+}
+
+input UpdatePatientInput {
+  id: ID!
+  first_name: String
+  last_name: String
+  phone_number: AWSPhone
+  email: AWSEmail
+  postal_code: String
+  dob: AWSDate
+  _version: Int
+}
+
+input DeletePatientInput {
+  id: ID
+  _version: Int
+}
+
+input ModelPatientConditionInput {
+  first_name: ModelStringInput
+  last_name: ModelStringInput
+  phone_number: ModelStringInput
+  email: ModelStringInput
+  postal_code: ModelStringInput
+  dob: ModelStringInput
+  and: [ModelPatientConditionInput]
+  or: [ModelPatientConditionInput]
+  not: ModelPatientConditionInput
+}
+
+type ModelPharmacyPharmacistConnection @aws_iam @aws_api_key {
+  items: [PharmacyPharmacist]
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelPharmacyPharmacistFilterInput {
+  id: ModelIDInput
+  pharmacyID: ModelIDInput
+  pharmacistID: ModelIDInput
+  and: [ModelPharmacyPharmacistFilterInput]
+  or: [ModelPharmacyPharmacistFilterInput]
+  not: ModelPharmacyPharmacistFilterInput
+}
+
+input CreatePharmacyPharmacistInput {
+  id: ID
+  pharmacyID: ID!
+  pharmacistID: ID!
+  _version: Int
+}
+
+input UpdatePharmacyPharmacistInput {
+  id: ID!
+  pharmacyID: ID
+  pharmacistID: ID
+  _version: Int
+}
+
+input DeletePharmacyPharmacistInput {
+  id: ID
+  _version: Int
+}
+
+input ModelPharmacyPharmacistConditionInput {
+  pharmacyID: ModelIDInput
+  pharmacistID: ModelIDInput
+  and: [ModelPharmacyPharmacistConditionInput]
+  or: [ModelPharmacyPharmacistConditionInput]
+  not: ModelPharmacyPharmacistConditionInput
+}
+
+input ModelIDKeyConditionInput {
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  between: [ID]
+  beginsWith: ID
+}
