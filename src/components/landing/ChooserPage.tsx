@@ -5,6 +5,9 @@ import {
 import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
 import logo from "../../logo.png";
+import {listPatients} from "../../graphql/queries";
+import {API} from 'aws-amplify';
+import {withAuthenticator} from '@aws-amplify/ui-react';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -22,6 +25,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+async function TestAPI() {
+    const apiData = await API.graphql({query: listPatients})
+
+    console.log(JSON.stringify(apiData))
+}
+
 function ChooserPage(){
     const classes = useStyles();
     return (<>
@@ -32,11 +41,11 @@ function ChooserPage(){
             </Button>
         </Link>
         <Link to="/patientlogin">
-            <Button className={classes.buttons} variant="contained" color="primary">
+            <Button className={classes.buttons} variant="contained" color="primary" onClick={TestAPI}>
                 Patient Login
             </Button>
         </Link>
     </>)
 }
 
-export default ChooserPage;
+export default withAuthenticator(ChooserPage);
