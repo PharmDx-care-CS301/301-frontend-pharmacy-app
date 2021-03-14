@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a4ce20d0-a3ce-41c4-ab62-3f84703ca90a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/scheduling/patient-schedulling.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/scheduling/patient-schedulling.tsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="develop" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="addFollowUpView" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="MERGE" />
+  </component>
+  <component name="ProjectId" id="1pUMpyhOO36vzq4FzbEp70077CN" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/components" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="ts.external.directory.path" value="D:\CSC301\301-frontend-pharmacy-app\node_modules\typescript\lib" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\CSC301\301-frontend-pharmacy-app\src\components" />
+    </key>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a4ce20d0-a3ce-41c4-ab62-3f84703ca90a" name="Default Changelist" comment="" />
+      <created>1615233401391</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1615233401391</updated>
+      <workItem from="1615233402658" duration="2087000" />
+      <workItem from="1615235994412" duration="1223000" />
+      <workItem from="1615561378464" duration="4886000" />
+      <workItem from="1615648785775" duration="2928000" />
+      <workItem from="1615660182124" duration="6292000" />
+      <workItem from="1615732164062" duration="2246000" />
+    </task>
+    <task id="LOCAL-00001" summary="Add Follow Up page and fix the parent sizing to take a larger width">
+      <created>1615233871922</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1615233871922</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Add Follow Up page and fix the parent sizing to take a larger width" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add Follow Up page and fix the parent sizing to take a larger width" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="583" y="28" key="CommitChangelistDialog2" timestamp="1615233870991">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="583" y="28" key="CommitChangelistDialog2/-1080.-464.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1615233870991" />
+    <state x="362" y="274" key="FileChooserDialogImpl" timestamp="1615233489891">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="362" y="274" key="FileChooserDialogImpl/-1080.-464.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1615233489891" />
+    <state width="723" height="550" key="Git.Branch.Popup" timestamp="1615735949969">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="723" height="550" key="Git.Branch.Popup/-1080.-464.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1615735949969" />
+    <state width="1899" height="258" key="GridCell.Tab.0.bottom" timestamp="1615660432696">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="258" key="GridCell.Tab.0.bottom/-1080.-464.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1615660432696" />
+    <state width="1899" height="258" key="GridCell.Tab.0.center" timestamp="1615660432696">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="258" key="GridCell.Tab.0.center/-1080.-464.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1615660432696" />
+    <state width="1899" height="258" key="GridCell.Tab.0.left" timestamp="1615660432696">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="258" key="GridCell.Tab.0.left/-1080.-464.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1615660432696" />
+    <state width="1899" height="258" key="GridCell.Tab.0.right" timestamp="1615660432696">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="258" key="GridCell.Tab.0.right/-1080.-464.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1615660432696" />
+    <state x="698" y="146" key="RollbackChangesDialog" timestamp="1615586981151">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="698" y="146" key="RollbackChangesDialog/-1080.-464.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1615586981151" />
+    <state x="552" y="234" key="Vcs.Push.Dialog.v2" timestamp="1615233873773">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="234" key="Vcs.Push.Dialog.v2/-1080.-464.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1615233873773" />
+    <state x="767" y="431" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1615650477575">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="767" y="431" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1080.-464.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1615650477575" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1615664337594">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/-1080.-464.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1615664337594" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/models/schema.js</url>
+          <line>1</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

@@ -1,0 +1,8 @@
+{
+    "CreateAPIKey": 1,
+    "AppSyncApiName": "SchedulingBackend",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": false,
+    "S3DeploymentBucket": "amplify-schedulingbackend-staging-172517-deployment",
+    "S3DeploymentRootKey": "amplify-appsync-files/31c1ad5fccbad279c4bd71c1215b64ed9055bbec"
+}

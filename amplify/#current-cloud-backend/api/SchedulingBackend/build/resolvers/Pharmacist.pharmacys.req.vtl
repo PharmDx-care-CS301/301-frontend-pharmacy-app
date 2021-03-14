@@ -1,0 +1,83 @@
+#if( $util.isNull($ctx.source.id) )
+  #set( $result = {
+  "items":   []
+} )
+  #return($result)
+#else
+  #set( $limit = $util.defaultIfNull($context.args.limit, 100) )
+  #set( $query = {
+  "expression": "#partitionKey = :partitionKey",
+  "expressionNames": {
+      "#partitionKey": "pharmacistID"
+  },
+  "expressionValues": {
+      ":partitionKey": {
+          "S": "$context.source.id"
+    }
+  }
+} )
+  ## [Start] Applying Key Condition **
+  #if( !$util.isNull($ctx.args.pharmacyID) && !$util.isNull($ctx.args.pharmacyID.beginsWith) )
+    #set( $query.expression = "$query.expression AND begins_with(#sortKey, :sortKey)" )
+    $util.qr($query.expressionNames.put("#sortKey", "pharmacyID"))
+    $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.pharmacyID.beginsWith" }))
+  #end
+  #if( !$util.isNull($ctx.args.pharmacyID) && !$util.isNull($ctx.args.pharmacyID.between) )
+    #set( $query.expression = "$query.expression AND #sortKey BETWEEN :sortKey0 AND :sortKey1" )
+    $util.qr($query.expressionNames.put("#sortKey", "pharmacyID"))
+    $util.qr($query.expressionValues.put(":sortKey0", { "S": "$ctx.args.pharmacyID.between[0]" }))
+    $util.qr($query.expressionValues.put(":sortKey1", { "S": "$ctx.args.pharmacyID.between[1]" }))
+  #end
+  #if( !$util.isNull($ctx.args.pharmacyID) && !$util.isNull($ctx.args.pharmacyID.eq) )
+    #set( $query.expression = "$query.expression AND #sortKey = :sortKey" )
+    $util.qr($query.expressionNames.put("#sortKey", "pharmacyID"))
+    $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.pharmacyID.eq" }))
+  #end
+  #if( !$util.isNull($ctx.args.pharmacyID) && !$util.isNull($ctx.args.pharmacyID.lt) )
+    #set( $query.expression = "$query.expression AND #sortKey < :sortKey" )
+    $util.qr($query.expressionNames.put("#sortKey", "pharmacyID"))
+    $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.pharmacyID.lt" }))
+  #end
+  #if( !$util.isNull($ctx.args.pharmacyID) && !$util.isNull($ctx.args.pharmacyID.le) )
+    #set( $query.expression = "$query.expression AND #sortKey <= :sortKey" )
+    $util.qr($query.expressionNames.put("#sortKey", "pharmacyID"))
+    $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.pharmacyID.le" }))
+  #end
+  #if( !$util.isNull($ctx.args.pharmacyID) && !$util.isNull($ctx.args.pharmacyID.gt) )
+    #set( $query.expression = "$query.expression AND #sortKey > :sortKey" )
+    $util.qr($query.expressionNames.put("#sortKey", "pharmacyID"))
+    $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.pharmacyID.gt" }))
+  #end
+  #if( !$util.isNull($ctx.args.pharmacyID) && !$util.isNull($ctx.args.pharmacyID.ge) )
+    #set( $query.expression = "$query.expression AND #sortKey >= :sortKey" )
+    $util.qr($query.expressionNames.put("#sortKey", "pharmacyID"))
+    $util.qr($query.expressionValues.put(":sortKey", { "S": "$ctx.args.pharmacyID.ge" }))
+  #end
+  ## [End] Applying Key Condition **
+{
+      "version": "2018-05-29",
+      "operation": "Query",
+      "query":     $util.toJson($query),
+      "scanIndexForward":     #if( $context.args.sortDirection )
+      #if( $context.args.sortDirection == "ASC" )
+true
+      #else
+false
+      #end
+    #else
+true
+    #end,
+      "filter":     #if( $context.args.filter )
+$util.transform.toDynamoDBFilterExpression($ctx.args.filter)
+    #else
+null
+    #end,
+      "limit": $limit,
+      "nextToken":     #if( $context.args.nextToken )
+$util.toJson($context.args.nextToken)
+    #else
+null
+    #end,
+      "index": "byPharmacist"
+  }
+#end
