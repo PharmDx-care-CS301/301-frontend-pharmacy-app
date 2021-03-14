@@ -4,8 +4,7 @@ import {Link} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import {makeStyles} from "@material-ui/core/styles";
 import TextField from '@material-ui/core/TextField';
-import Box from '@material-ui/core/Box';
-import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
+import Box from '@material-ui/core/Box'
 const useStyles = makeStyles((theme) => ({
   root: {
     "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
@@ -39,8 +38,6 @@ function PharmacistLogin() {
   const classes = useStyles();
 
   return (
-      <>
-      <AmplifySignOut/>
     <Box className={classes.root} width="433px" height="525px" bgcolor="white" display="flex" flexDirection="column"
       alignItems="center">
       <img src={logo} alt="logo" className={classes.logo}/>
@@ -86,8 +83,7 @@ function PharmacistLogin() {
           </Button>
         </Box>
       </Box>
-          </>
   );
 }
 
-export default withAuthenticator(PharmacistLogin);
+export default PharmacistLogin;
