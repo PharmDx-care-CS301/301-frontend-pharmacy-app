@@ -1,0 +1,19 @@
+{
+  "completed": [
+    {
+      "name": "Daniel Danielson",
+      "medication": 123,
+      "symptomsResolved": true,
+      "timeStamp": "01/01/2020, 21:00",
+      "nextFollowUp": "02/01/2020, 21:00"
+    },
+    {
+      "name": "Sophia Dizon",
+      "medication": 123,
+      "symptomsResolved": true,
+      "timeStamp": "01/01/2020, 21:00",
+      "nextFollowUp": "02/01/2020, 21:00"
+    }
+  ]
+}
+
