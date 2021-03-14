@@ -91,7 +91,7 @@ dist
 # vuepress build output
 .vuepress/dist
 
-git pyarn.lock
+yarn.lock
 # Serverless directories
 .serverless/
 
