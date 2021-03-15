@@ -91,9 +91,11 @@ function PharmacistSignUp() {
                     <Button className={classes.signup} fullWidth>Already have an account? Sign In!</Button>
                 </Link>
 
-                <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-                    Sign up
-                </Button>
+                <Link to="/pharmacistConfirm">
+                    <Button className={classes.submit} variant="contained" color="primary">
+                        Sign Up
+                    </Button>
+                </Link>
             </Box>
         </Box>
     );
