@@ -22,8 +22,9 @@ type Pharmacist @model @auth(rules: [{allow: public}]) {
   first_name: String
   last_name: String
   pharmacist_number: String
-  pharmacist_ids: [ID]
+  pharmacy_ids: [ID]
   WorksFor: [PharmacistPharmacy] @connection(keyName: "byPharmacist", fields: ["id"])
+  cognito_id: String!
 }
 
 type FollowUp @model @auth(rules: [{allow: public}]) {

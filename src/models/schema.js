@@ -321,8 +321,8 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "pharmacist_ids": {
-                    "name": "pharmacist_ids",
+                "pharmacy_ids": {
+                    "name": "pharmacy_ids",
                     "isArray": true,
                     "type": "ID",
                     "isRequired": false,
@@ -342,6 +342,13 @@ export const schema = {
                         "connectionType": "HAS_MANY",
                         "associatedWith": "pharmacist"
                     }
+                },
+                "cognito_id": {
+                    "name": "cognito_id",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -622,5 +629,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "3da3c7f18181eb8d8e073f170c25cd6b"
+    "version": "880b2152c67904419383df613e7efc8e"
 };

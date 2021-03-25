@@ -3,6 +3,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import logo from "../../logo.png";
 import data from "./data.json";
 import {AppBar, Box, Typography, Tab, Tabs, List, ListItem, ListItemText, Divider} from "@material-ui/core";
+import Amplify, { Auth, API } from 'aws-amplify';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import {createPharmacist} from '../../graphql/mutations'
+import {getPharmacist} from '../../graphql/queries'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -23,6 +27,18 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
     },
 }));
+
+function stuff(e: any) {
+    console.log(Auth.currentUserInfo())
+}
+
+async function createAPharmacist() {
+    await API.graphql({ query: createPharmacist, variables: { input: {cognito_id: "cognitoid", first_name: "Janee", id: "7", last_name: "Doe", pharmacist_number: "121", pharmacy_ids: "[\"3\"]"} } });
+}
+
+async function checkForExistingGUID(guid: string) {
+    await API.graphql({ query: getPharmacist, variables: {input: {id: guid}}});
+}
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -103,8 +119,9 @@ function FollowUpPage(){
             <TabPanel value={value} index={3}>
                 Item Four
             </TabPanel>
+            <button onClick={stuff}>Button</button>
         </div>
     </>)
 }
 
-export default FollowUpPage;
+export default withAuthenticator(FollowUpPage);

@@ -58,8 +58,9 @@ export declare class Pharmacist {
   readonly first_name?: string;
   readonly last_name?: string;
   readonly pharmacist_number?: string;
-  readonly pharmacist_ids?: (string | null)[];
+  readonly pharmacy_ids?: (string | null)[];
   readonly WorksFor?: (PharmacistPharmacy | null)[];
+  readonly cognito_id: string;
   constructor(init: ModelInit<Pharmacist>);
   static copyOf(source: Pharmacist, mutator: (draft: MutableModel<Pharmacist>) => MutableModel<Pharmacist> | void): Pharmacist;
 }
