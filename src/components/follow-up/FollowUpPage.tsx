@@ -1,7 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from "react-router-dom";
 import logo from "../../logo.png";
 import data from "./data.json";
+import {AppBar, Box, Typography, Tab, Tabs, List, ListItem, ListItemText, Divider, Fab, Link} from "@material-ui/core";
+import AddIcon from '@material-ui/icons/Add';
 import {AppBar, Box, Typography, Tab, Tabs, List, ListItem, ListItemText, Divider} from "@material-ui/core";
 import Amplify, { Auth, API } from 'aws-amplify';
 import { withAuthenticator } from '@aws-amplify/ui-react';
@@ -77,11 +80,17 @@ function FollowUpPage(){
     const [value, setValue] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [secondary, setSecondary] = React.useState(false);
+    const history = useHistory();
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-    console.log(data)
+
+    function handleClick() {
+        history.push("/createFollowUp");
+    };
+
+
     return (<>
         <img src={logo} className={classes.logo} alt="logo"/>
         <div className={classes.container}>
@@ -119,6 +128,16 @@ function FollowUpPage(){
             <TabPanel value={value} index={3}>
                 Item Four
             </TabPanel>
+
+
+            <Fab color="primary" aria-label="add" onClick={handleClick}
+                style={{
+                    position: "absolute",
+                    bottom: 30,
+                    right: 30,
+                }}>
+                    <AddIcon />
+            </Fab>
             <button onClick={stuff}>Button</button>
         </div>
     </>)
