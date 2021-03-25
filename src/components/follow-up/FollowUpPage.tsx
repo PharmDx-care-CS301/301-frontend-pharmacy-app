@@ -5,7 +5,6 @@ import logo from "../../logo.png";
 import data from "./data.json";
 import {AppBar, Box, Typography, Tab, Tabs, List, ListItem, ListItemText, Divider, Fab, Link} from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
-import {AppBar, Box, Typography, Tab, Tabs, List, ListItem, ListItemText, Divider} from "@material-ui/core";
 import Amplify, { Auth, API } from 'aws-amplify';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import {createPharmacist} from '../../graphql/mutations'
@@ -75,7 +74,10 @@ function formatText(item) {
 }
 
 
-function FollowUpPage(){
+interface IFollowUpPage {}
+
+
+const FollowUpPage: React.FC<IFollowUpPage> = (props) => {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
     const [dense, setDense] = React.useState(false);
@@ -89,7 +91,6 @@ function FollowUpPage(){
     function handleClick() {
         history.push("/createFollowUp");
     };
-
 
     return (<>
         <img src={logo} className={classes.logo} alt="logo"/>
