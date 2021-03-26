@@ -58,9 +58,6 @@ function formatText(item) {
     return item.name + " | Medication: " + item.medication + ' | Symptoms Resolved: ' + (item.symptomsResolved ? ' Yes ': ' False ') + '| ' + item.timeStamp + ' | ' + item.nextFollowUp
 }
 
-var completed = data["completed"];
-
-
 function CreateTable(rows){
     const classes = useStyles();
     return (
@@ -106,7 +103,7 @@ function FollowUpPage(){
     return (<>
         <img src={logo} className={classes.logo} alt="logo"/>
         <div className={classes.container}>
-            <AppBar position="static">
+            <AppBar style={{backgroundColor: "#2d9cdb"}} position="static">
                 <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" variant="fullWidth">
                     <Tab label="Completed" {...a11yProps(0)} />
                     <Tab label="Requested In Person" {...a11yProps(1)} />
@@ -115,10 +112,10 @@ function FollowUpPage(){
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
-                {CreateTable(completed)}
+                {CreateTable(data["completed"])}
             </TabPanel>
             <TabPanel value={value} index={1}>
-                {CreateTable(completed)}
+                {CreateTable(data["requested"])}
             </TabPanel>
             <TabPanel value={value} index={2}>
                 Item Three
