@@ -19,7 +19,7 @@
     {
       "name": "Daniel Danielson",
       "medication": 456,
-      "symptomsResolved": true,
+      "symptomsResolved": false,
       "timeStamp": "01/01/2020, 21:00",
       "nextFollowUp": "02/01/2020, 21:00"
     },

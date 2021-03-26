@@ -58,6 +58,13 @@ function formatText(item) {
     return item.name + " | Medication: " + item.medication + ' | Symptoms Resolved: ' + (item.symptomsResolved ? ' Yes ': ' False ') + '| ' + item.timeStamp + ' | ' + item.nextFollowUp
 }
 
+function getResolved(bool){
+    if (bool == true){
+        return "Yes";
+    }
+    return"No";
+}
+
 function CreateTable(rows){
     const classes = useStyles();
     return (
@@ -79,7 +86,7 @@ function CreateTable(rows){
                 {row.name}
               </TableCell>
               <TableCell align="right">{row.medication}</TableCell>
-              <TableCell align="right">{row.symptomsResolved.toString()}</TableCell>
+              <TableCell align="right">{getResolved(row.symptomsResolved)}</TableCell>
               <TableCell align="right">{row.timeStamp}</TableCell>
               <TableCell align="right">{row.nextFollowUp}</TableCell>
             </TableRow>
