@@ -1,14 +1,17 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import PharmacistLogin from "./components/login/pharmacist-login";
 import PatientLogin from "./components/login/patient-login";
+import logo from "./logo.png";
 import Box from "@material-ui/core/Box";
 import ChooserPage from "./components/landing/ChooserPage";
 import PharmacistSignUp from "./components/signup/pharmacist-signup";
 import FollowUpPage from "./components/follow-up/FollowUpPage";
 import PatientScheduling from "./components/scheduling/patient-schedulling";
 import PharmacistConfirm from "./components/signup/pharmacist-confirmation";
+import CreateFollowUp from "./components/create-follow-up/create-follow-up";
 
 const useStyles = makeStyles((theme) => ({
   buttons: {
@@ -58,6 +61,7 @@ function App() {
               <Route path="/pharmacistSignUp" component={PharmacistSignUp} />
               <Route path="/pharmacistConfirm" component={PharmacistConfirm} />
               <Route path="/follow-up" component={FollowUpPage} />
+              <Route path="/createFollowUp" component={CreateFollowUp} />
               <Route path="/" component={ChooserPage} />
             </Switch>
           </Router>
