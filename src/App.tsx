@@ -55,14 +55,31 @@ function App() {
         >
           <Router>
             <Switch>
-              <Route path="/patientscheduling" component={PatientScheduling} />
-              <Route path="/pharmacistlogin" component={PharmacistLogin} />
-              <Route path="/patientlogin" component={PatientLogin} />
-              <Route path="/pharmacistSignUp" component={PharmacistSignUp} />
-              <Route path="/pharmacistConfirm" component={PharmacistConfirm} />
-              <Route path="/follow-up" component={FollowUpPage} />
-              <Route path="/createFollowUp" component={CreateFollowUp} />
-              <Route path="/" component={ChooserPage} />
+              <Route
+                exact
+                path="/patientscheduling"
+                component={PatientScheduling}
+              />
+              <Route
+                exact
+                path="/pharmacistlogin"
+                component={PharmacistLogin}
+              />
+              <Route exact path="/patientlogin" component={PatientLogin} />
+              <Route
+                exact
+                path="/pharmacistSignUp"
+                component={PharmacistSignUp}
+              />
+              <Route
+                exact
+                path="/pharmacistConfirm"
+                component={PharmacistConfirm}
+              />
+              <Route exact path="/follow-up" component={FollowUpPage} />
+              <Route exact path="/createFollowUp" component={CreateFollowUp} />
+              <Route exact path="/" component={ChooserPage} />
+              <Route path="/" component={() => <div>404</div>} />
             </Switch>
           </Router>
         </Box>

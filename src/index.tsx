@@ -5,12 +5,15 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import Amplify, { Auth } from "aws-amplify";
 import config from "./aws-exports";
+import { SnackbarProvider } from "notistack";
 
 Amplify.configure(config);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <SnackbarProvider maxSnack={5}>
+      <App />
+    </SnackbarProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

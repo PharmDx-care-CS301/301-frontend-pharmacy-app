@@ -13,6 +13,8 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import Button from "@material-ui/core/Button";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   logo: {
@@ -21,9 +23,16 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "40px",
     marginTop: "60px",
   },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+    height: "36px",
+    width: "100px",
+    backgroundColor: "#2196F3",
+  },
 }));
 
 function CreateFollowUp() {
+  const history = useHistory();
   const classes = useStyles();
   const [appointmentType, setAppointmentType] = React.useState("");
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
@@ -36,6 +45,10 @@ function CreateFollowUp() {
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
   };
+
+  function createFollowUp(event) {
+    history.push("/follow-up");
+  }
 
   return (
     <>
@@ -87,6 +100,17 @@ function CreateFollowUp() {
         variant="outlined"
         style={{ width: 300 }}
       />
+      <br />
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        color="primary"
+        className={classes.submit}
+        onClick={createFollowUp}
+      >
+        Submit
+      </Button>
     </>
   );
 }

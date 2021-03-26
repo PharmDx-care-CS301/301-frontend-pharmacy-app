@@ -14,10 +14,9 @@ import {
   ListItemText,
   Divider,
   Fab,
-  Link,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import Amplify, { Auth, API } from "aws-amplify";
+import { Auth, API } from "aws-amplify";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import { createPharmacist } from "../../graphql/mutations";
 import { getPharmacist } from "../../graphql/queries";
@@ -58,13 +57,6 @@ async function createAPharmacist() {
         pharmacy_ids: '["3"]',
       },
     },
-  });
-}
-
-async function checkForExistingGUID(guid: string) {
-  await API.graphql({
-    query: getPharmacist,
-    variables: { input: { id: guid } },
   });
 }
 
