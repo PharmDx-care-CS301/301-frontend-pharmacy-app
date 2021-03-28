@@ -5,15 +5,16 @@ import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import { Checkbox, FormControlLabel } from "@material-ui/core";
+import {Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select} from "@material-ui/core";
 import { Auth, API } from "aws-amplify";
-import { withAuthenticator } from "@aws-amplify/ui-react";
+import {AmplifySignOut, withAuthenticator} from "@aws-amplify/ui-react";
 import { useSnackbar } from "notistack";
 import {
   createPatient,
   createAssessment,
   createFollowUp,
 } from "../../graphql/mutations";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function stuff() {}
 
 interface IFormData {
   firstName?: string;
@@ -52,12 +52,14 @@ interface IFormData {
   postalCode?: string;
   phoneNumber?: string;
   prescriptionDate?: string;
+  contactMethod?: string;
+  email?: string
 }
 
 const PatientScheduling: React.FC<any> = (props) => {
   const classes = useStyles();
   const [yes, setYesState] = React.useState(true);
-  const [state, setState] = React.useState<IFormData>({});
+  const [state, setState] = React.useState<IFormData>({contactMethod: '', prescriptionDate: moment().format("YYYY-MM-DD")});
   const { enqueueSnackbar } = useSnackbar();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,21 +67,33 @@ const PatientScheduling: React.FC<any> = (props) => {
   };
 
   const updateFirstName = (event: React.FocusEvent<HTMLInputElement>) => {
+    if (event.target.value === state.firstName) {
+      return;
+    }
     let newState = { ...state, firstName: event.target.value };
     setState(newState);
   };
 
   const updateLastName = (event: React.FocusEvent<HTMLInputElement>) => {
+    if (event.target.value === state.lastName) {
+      return;
+    }
     let newState = { ...state, lastName: event.target.value };
     setState(newState);
   };
 
   const updateDateOfBirth = (event: React.FocusEvent<HTMLInputElement>) => {
+    if (event.target.value === state.dateOfBirth) {
+      return;
+    }
     let newState = { ...state, dateOfBirth: event.target.value };
     setState(newState);
   };
 
   const updatePostalCode = (event: React.FocusEvent<HTMLInputElement>) => {
+    if (event.target.value === state.postalCode) {
+      return;
+    }
     let newState = { ...state, postalCode: event.target.value };
     setState(newState);
   };
@@ -87,13 +101,33 @@ const PatientScheduling: React.FC<any> = (props) => {
   const updatePrescriptionDate = (
     event: React.FocusEvent<HTMLInputElement>
   ) => {
+    if (event.target.value === state.prescriptionDate) {
+      return;
+    }
     let newState = { ...state, prescriptionDate: event.target.value };
     setState(newState);
   };
 
   const updatePhoneNumber = (event: React.FocusEvent<HTMLInputElement>) => {
+    if (event.target.value === state.phoneNumber) {
+      return;
+    }
     let newState = { ...state, phoneNumber: event.target.value };
     setState(newState);
+  };
+
+  const updateContactMethod = (event) => {
+    if (event.target.value === state.contactMethod) {
+      return;
+    }
+    setState({...state, contactMethod: event.target.value})
+  };
+
+  const updateEmail = (event: React.FocusEvent<HTMLInputElement>) => {
+    if (event.target.value === state.email) {
+      return;
+    }
+    setState({...state, email: event.target.value})
   };
 
   const printState = async (event) => {
@@ -120,13 +154,14 @@ const PatientScheduling: React.FC<any> = (props) => {
     let cognitoUser = Promise.resolve(Auth.currentUserInfo());
     let cognitoID;
     try {
-      cognitoID = cognitoUser.then(
-        function (data) {
-          return data.attributes.sub;
-        },
-        function (error) {
-          displayError(error);
-        }
+      await cognitoUser.then(
+          function (data) {
+            cognitoID = data.attributes.sub;
+            return data.attributes.sub;
+          },
+          function (error) {
+            displayError(error);
+          }
       );
     } catch (e) {
       displayError(e.message);
@@ -134,31 +169,29 @@ const PatientScheduling: React.FC<any> = (props) => {
 
     const followUp = {
       followUpForAssessmentId: "",
-      contact_method: "SMS",
+      contact_method: state.contactMethod,
       owner_id: cognitoID,
-      pharmacist_id: "3",
+      follow_up_status: 'COMPLETED'
     };
 
     const assessment = {
-      date: state.prescriptionDate,
+      date: moment(state.prescriptionDate).format("YYYY-MM-DD[T]HH:mm:ss[Z]"),
       description: "Appointment",
-      assessmentPerformedAtId: "1",
+      assessmentPerformedAtId: "1", // this most likely will be a query to grab the pharmacy that we get through an input
       assessmentAssessedForId: "",
-      assessmentAssessedById: "3",
+      assessmentAssessedById: cognitoID,
       owner_id: cognitoID,
-      pharmacist_id: "3",
     };
 
     const patient = {
       dob: state.dateOfBirth,
-      email: "jane.doe@gmail.com",
+      email: state.email,
       first_name: state.firstName,
       phone_number: state.phoneNumber,
       last_name: state.lastName,
       postal_code: state.postalCode,
-      ownder_id: cognitoID,
+      owner_id: cognitoID,
     };
-
     try {
       let ret = await API.graphql({
         query: createPatient,
@@ -177,6 +210,7 @@ const PatientScheduling: React.FC<any> = (props) => {
     } finally {
     }
 
+
     try {
       let ret = await API.graphql({
         query: createAssessment,
@@ -192,7 +226,6 @@ const PatientScheduling: React.FC<any> = (props) => {
       displayError("Assessment: " + e.errors[0].message);
     } finally {
     }
-
     try {
       let ret = await API.graphql({
         query: createFollowUp,
@@ -277,6 +310,22 @@ const PatientScheduling: React.FC<any> = (props) => {
               onBlur={updateLastName}
             />
             <TextField
+                required
+                id="outlined-basic"
+                label="Email"
+                type="text"
+                variant="outlined"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                style={{
+                  height: 60,
+                  width: "100%",
+                  marginBottom: 15,
+                }}
+                onBlur={updateEmail}
+            />
+            <TextField
               required
               id="outlined-basic"
               label="DOB"
@@ -310,10 +359,30 @@ const PatientScheduling: React.FC<any> = (props) => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
+            <FormControl variant="outlined" style={{
+              height: 60,
+              width: "100%",
+              marginBottom: 15,}}>
+              <InputLabel id="demo-simple-select-outlined-label">Contact Method</InputLabel>
+              <Select
+                  labelId="demo-simple-select-outlined-label"
+                  id="demo-simple-select-outlined"
+                  value={state.contactMethod}
+                  onChange={updateContactMethod}
+                  label="Contact Method"
+              >
+                <MenuItem value={'SMS'}>SMS</MenuItem>
+                <MenuItem value={'EMAIL'}>Email</MenuItem>
+                <MenuItem value={'PHARMACY'}>
+                  Pharmacy
+                </MenuItem>
+              </Select>
+            </FormControl>
             <TextField
               required
               id="outlined-basic"
               label="Prescription date"
+              defaultValue={state.prescriptionDate}
               type="date"
               variant="outlined"
               InputLabelProps={{
@@ -400,6 +469,7 @@ const PatientScheduling: React.FC<any> = (props) => {
           Test
         </Button>
       </Box>
+      <AmplifySignOut/>
     </Box>
   );
 };

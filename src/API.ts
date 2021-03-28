@@ -11,6 +11,7 @@ export type CreatePatientInput = {
   phone_number?: string | null,
   email?: string | null,
   owner_id?: string | null,
+  _version?: number | null,
 };
 
 export type ModelPatientConditionInput = {
@@ -76,6 +77,9 @@ export type Patient = {
   phone_number?: string | null,
   email?: string | null,
   owner_id?: string | null,
+  _version?: number,
+  _deleted?: boolean | null,
+  _lastChangedAt?: number,
   createdAt?: string,
   updatedAt?: string,
   AssessmentRecord?: ModelAssessmentConnection,
@@ -85,6 +89,7 @@ export type ModelAssessmentConnection = {
   __typename: "ModelAssessmentConnection",
   items?:  Array<Assessment | null > | null,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type Assessment = {
@@ -94,6 +99,9 @@ export type Assessment = {
   description?: string | null,
   patient_id?: string | null,
   owner_id?: string,
+  _version?: number,
+  _deleted?: boolean | null,
+  _lastChangedAt?: number,
   createdAt?: string,
   updatedAt?: string,
   AssessedFor?: Patient,
@@ -108,6 +116,9 @@ export type Pharmacy = {
   address?: string | null,
   name?: string | null,
   pharmacist_ids?: Array< string | null > | null,
+  _version?: number,
+  _deleted?: boolean | null,
+  _lastChangedAt?: number,
   createdAt?: string,
   updatedAt?: string,
   pharmacists?: ModelPharmacistPharmacyConnection,
@@ -117,6 +128,7 @@ export type ModelPharmacistPharmacyConnection = {
   __typename: "ModelPharmacistPharmacyConnection",
   items?:  Array<PharmacistPharmacy | null > | null,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type PharmacistPharmacy = {
@@ -124,6 +136,9 @@ export type PharmacistPharmacy = {
   id?: string,
   pharmacistID?: string,
   pharmacyID?: string,
+  _version?: number,
+  _deleted?: boolean | null,
+  _lastChangedAt?: number,
   createdAt?: string,
   updatedAt?: string,
   pharmacy?: Pharmacy,
@@ -138,6 +153,9 @@ export type Pharmacist = {
   pharmacist_number?: string | null,
   pharmacy_ids?: Array< string | null > | null,
   cognito_id?: string,
+  _version?: number,
+  _deleted?: boolean | null,
+  _lastChangedAt?: number,
   createdAt?: string,
   updatedAt?: string,
   WorksFor?: ModelPharmacistPharmacyConnection,
@@ -147,6 +165,7 @@ export type ModelPrescriptionConnection = {
   __typename: "ModelPrescriptionConnection",
   items?:  Array<Prescription | null > | null,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type Prescription = {
@@ -154,6 +173,9 @@ export type Prescription = {
   id?: string,
   name?: string | null,
   assessment_id?: string | null,
+  _version?: number,
+  _deleted?: boolean | null,
+  _lastChangedAt?: number,
   createdAt?: string,
   updatedAt?: string,
 };
@@ -167,10 +189,12 @@ export type UpdatePatientInput = {
   phone_number?: string | null,
   email?: string | null,
   owner_id?: string | null,
+  _version?: number | null,
 };
 
 export type DeletePatientInput = {
   id?: string | null,
+  _version?: number | null,
 };
 
 export type CreatePharmacyInput = {
@@ -178,6 +202,7 @@ export type CreatePharmacyInput = {
   address?: string | null,
   name?: string | null,
   pharmacist_ids?: Array< string | null > | null,
+  _version?: number | null,
 };
 
 export type ModelPharmacyConditionInput = {
@@ -210,10 +235,12 @@ export type UpdatePharmacyInput = {
   address?: string | null,
   name?: string | null,
   pharmacist_ids?: Array< string | null > | null,
+  _version?: number | null,
 };
 
 export type DeletePharmacyInput = {
   id?: string | null,
+  _version?: number | null,
 };
 
 export type CreatePharmacistInput = {
@@ -223,6 +250,7 @@ export type CreatePharmacistInput = {
   pharmacist_number?: string | null,
   pharmacy_ids?: Array< string | null > | null,
   cognito_id: string,
+  _version?: number | null,
 };
 
 export type ModelPharmacistConditionInput = {
@@ -243,10 +271,12 @@ export type UpdatePharmacistInput = {
   pharmacist_number?: string | null,
   pharmacy_ids?: Array< string | null > | null,
   cognito_id?: string | null,
+  _version?: number | null,
 };
 
 export type DeletePharmacistInput = {
   id?: string | null,
+  _version?: number | null,
 };
 
 export type CreateFollowUpInput = {
@@ -254,6 +284,8 @@ export type CreateFollowUpInput = {
   contact_method?: ContactMethod | null,
   assessment_id?: string | null,
   owner_id: string,
+  follow_up_status?: FollowUpStatus | null,
+  _version?: number | null,
   followUpForAssessmentId?: string | null,
 };
 
@@ -264,10 +296,21 @@ export enum ContactMethod {
 }
 
 
+export enum FollowUpStatus {
+  COMPLETED = "COMPLETED",
+  PENDINGRESPONSE = "PENDINGRESPONSE",
+  TODO = "TODO",
+  NOFOLLOWUPNEEDED = "NOFOLLOWUPNEEDED",
+  RESPONSEOVERDUE = "RESPONSEOVERDUE",
+  FOLLOWUPREQUESTED = "FOLLOWUPREQUESTED",
+}
+
+
 export type ModelFollowUpConditionInput = {
   contact_method?: ModelContactMethodInput | null,
   assessment_id?: ModelIDInput | null,
   owner_id?: ModelStringInput | null,
+  follow_up_status?: ModelFollowUpStatusInput | null,
   and?: Array< ModelFollowUpConditionInput | null > | null,
   or?: Array< ModelFollowUpConditionInput | null > | null,
   not?: ModelFollowUpConditionInput | null,
@@ -278,12 +321,21 @@ export type ModelContactMethodInput = {
   ne?: ContactMethod | null,
 };
 
+export type ModelFollowUpStatusInput = {
+  eq?: FollowUpStatus | null,
+  ne?: FollowUpStatus | null,
+};
+
 export type FollowUp = {
   __typename: "FollowUp",
   id?: string,
   contact_method?: ContactMethod | null,
   assessment_id?: string | null,
   owner_id?: string,
+  follow_up_status?: FollowUpStatus | null,
+  _version?: number,
+  _deleted?: boolean | null,
+  _lastChangedAt?: number,
   createdAt?: string,
   updatedAt?: string,
   ForAssessment?: Assessment,
@@ -294,11 +346,14 @@ export type UpdateFollowUpInput = {
   contact_method?: ContactMethod | null,
   assessment_id?: string | null,
   owner_id?: string | null,
+  follow_up_status?: FollowUpStatus | null,
+  _version?: number | null,
   followUpForAssessmentId?: string | null,
 };
 
 export type DeleteFollowUpInput = {
   id?: string | null,
+  _version?: number | null,
 };
 
 export type CreateAssessmentInput = {
@@ -307,6 +362,7 @@ export type CreateAssessmentInput = {
   description?: string | null,
   patient_id?: string | null,
   owner_id: string,
+  _version?: number | null,
   assessmentAssessedById?: string | null,
   assessmentPerformedAtId?: string | null,
   assessmentAssessedForId?: string | null,
@@ -328,6 +384,7 @@ export type UpdateAssessmentInput = {
   description?: string | null,
   patient_id?: string | null,
   owner_id?: string | null,
+  _version?: number | null,
   assessmentAssessedById?: string | null,
   assessmentPerformedAtId?: string | null,
   assessmentAssessedForId?: string | null,
@@ -335,12 +392,14 @@ export type UpdateAssessmentInput = {
 
 export type DeleteAssessmentInput = {
   id?: string | null,
+  _version?: number | null,
 };
 
 export type CreatePrescriptionInput = {
   id?: string | null,
   name?: string | null,
   assessment_id?: string | null,
+  _version?: number | null,
 };
 
 export type ModelPrescriptionConditionInput = {
@@ -355,16 +414,19 @@ export type UpdatePrescriptionInput = {
   id: string,
   name?: string | null,
   assessment_id?: string | null,
+  _version?: number | null,
 };
 
 export type DeletePrescriptionInput = {
   id?: string | null,
+  _version?: number | null,
 };
 
 export type CreatePharmacistPharmacyInput = {
   id?: string | null,
   pharmacistID: string,
   pharmacyID: string,
+  _version?: number | null,
 };
 
 export type ModelPharmacistPharmacyConditionInput = {
@@ -379,10 +441,12 @@ export type UpdatePharmacistPharmacyInput = {
   id: string,
   pharmacistID?: string | null,
   pharmacyID?: string | null,
+  _version?: number | null,
 };
 
 export type DeletePharmacistPharmacyInput = {
   id?: string | null,
+  _version?: number | null,
 };
 
 export type ModelPatientFilterInput = {
@@ -403,6 +467,7 @@ export type ModelPatientConnection = {
   __typename: "ModelPatientConnection",
   items?:  Array<Patient | null > | null,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type ModelPharmacyFilterInput = {
@@ -419,6 +484,7 @@ export type ModelPharmacyConnection = {
   __typename: "ModelPharmacyConnection",
   items?:  Array<Pharmacy | null > | null,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type ModelPharmacistFilterInput = {
@@ -437,6 +503,7 @@ export type ModelPharmacistConnection = {
   __typename: "ModelPharmacistConnection",
   items?:  Array<Pharmacist | null > | null,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type ModelFollowUpFilterInput = {
@@ -444,6 +511,7 @@ export type ModelFollowUpFilterInput = {
   contact_method?: ModelContactMethodInput | null,
   assessment_id?: ModelIDInput | null,
   owner_id?: ModelStringInput | null,
+  follow_up_status?: ModelFollowUpStatusInput | null,
   and?: Array< ModelFollowUpFilterInput | null > | null,
   or?: Array< ModelFollowUpFilterInput | null > | null,
   not?: ModelFollowUpFilterInput | null,
@@ -453,6 +521,7 @@ export type ModelFollowUpConnection = {
   __typename: "ModelFollowUpConnection",
   items?:  Array<FollowUp | null > | null,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type ModelAssessmentFilterInput = {
@@ -475,6 +544,15 @@ export type ModelPrescriptionFilterInput = {
   not?: ModelPrescriptionFilterInput | null,
 };
 
+export type ModelPharmacistPharmacyFilterInput = {
+  id?: ModelIDInput | null,
+  pharmacistID?: ModelIDInput | null,
+  pharmacyID?: ModelIDInput | null,
+  and?: Array< ModelPharmacistPharmacyFilterInput | null > | null,
+  or?: Array< ModelPharmacistPharmacyFilterInput | null > | null,
+  not?: ModelPharmacistPharmacyFilterInput | null,
+};
+
 export type CreatePatientMutationVariables = {
   input?: CreatePatientInput,
   condition?: ModelPatientConditionInput | null,
@@ -491,11 +569,15 @@ export type CreatePatientMutation = {
     phone_number?: string | null,
     email?: string | null,
     owner_id?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     AssessmentRecord?:  {
       __typename: "ModelAssessmentConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -516,11 +598,15 @@ export type UpdatePatientMutation = {
     phone_number?: string | null,
     email?: string | null,
     owner_id?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     AssessmentRecord?:  {
       __typename: "ModelAssessmentConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -541,11 +627,15 @@ export type DeletePatientMutation = {
     phone_number?: string | null,
     email?: string | null,
     owner_id?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     AssessmentRecord?:  {
       __typename: "ModelAssessmentConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -562,11 +652,15 @@ export type CreatePharmacyMutation = {
     address?: string | null,
     name?: string | null,
     pharmacist_ids?: Array< string | null > | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     pharmacists?:  {
       __typename: "ModelPharmacistPharmacyConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -583,11 +677,15 @@ export type UpdatePharmacyMutation = {
     address?: string | null,
     name?: string | null,
     pharmacist_ids?: Array< string | null > | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     pharmacists?:  {
       __typename: "ModelPharmacistPharmacyConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -604,11 +702,15 @@ export type DeletePharmacyMutation = {
     address?: string | null,
     name?: string | null,
     pharmacist_ids?: Array< string | null > | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     pharmacists?:  {
       __typename: "ModelPharmacistPharmacyConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -627,11 +729,15 @@ export type CreatePharmacistMutation = {
     pharmacist_number?: string | null,
     pharmacy_ids?: Array< string | null > | null,
     cognito_id: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     WorksFor?:  {
       __typename: "ModelPharmacistPharmacyConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -650,11 +756,15 @@ export type UpdatePharmacistMutation = {
     pharmacist_number?: string | null,
     pharmacy_ids?: Array< string | null > | null,
     cognito_id: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     WorksFor?:  {
       __typename: "ModelPharmacistPharmacyConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -673,11 +783,15 @@ export type DeletePharmacistMutation = {
     pharmacist_number?: string | null,
     pharmacy_ids?: Array< string | null > | null,
     cognito_id: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     WorksFor?:  {
       __typename: "ModelPharmacistPharmacyConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -694,6 +808,10 @@ export type CreateFollowUpMutation = {
     contact_method?: ContactMethod | null,
     assessment_id?: string | null,
     owner_id: string,
+    follow_up_status?: FollowUpStatus | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     ForAssessment?:  {
@@ -703,6 +821,9 @@ export type CreateFollowUpMutation = {
       description?: string | null,
       patient_id?: string | null,
       owner_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -721,6 +842,10 @@ export type UpdateFollowUpMutation = {
     contact_method?: ContactMethod | null,
     assessment_id?: string | null,
     owner_id: string,
+    follow_up_status?: FollowUpStatus | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     ForAssessment?:  {
@@ -730,6 +855,9 @@ export type UpdateFollowUpMutation = {
       description?: string | null,
       patient_id?: string | null,
       owner_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -748,6 +876,10 @@ export type DeleteFollowUpMutation = {
     contact_method?: ContactMethod | null,
     assessment_id?: string | null,
     owner_id: string,
+    follow_up_status?: FollowUpStatus | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     ForAssessment?:  {
@@ -757,6 +889,9 @@ export type DeleteFollowUpMutation = {
       description?: string | null,
       patient_id?: string | null,
       owner_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -776,6 +911,9 @@ export type CreateAssessmentMutation = {
     description?: string | null,
     patient_id?: string | null,
     owner_id: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     AssessedFor?:  {
@@ -788,6 +926,9 @@ export type CreateAssessmentMutation = {
       phone_number?: string | null,
       email?: string | null,
       owner_id?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -797,6 +938,9 @@ export type CreateAssessmentMutation = {
       address?: string | null,
       name?: string | null,
       pharmacist_ids?: Array< string | null > | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -808,12 +952,16 @@ export type CreateAssessmentMutation = {
       pharmacist_number?: string | null,
       pharmacy_ids?: Array< string | null > | null,
       cognito_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
     Prescription?:  {
       __typename: "ModelPrescriptionConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -831,6 +979,9 @@ export type UpdateAssessmentMutation = {
     description?: string | null,
     patient_id?: string | null,
     owner_id: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     AssessedFor?:  {
@@ -843,6 +994,9 @@ export type UpdateAssessmentMutation = {
       phone_number?: string | null,
       email?: string | null,
       owner_id?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -852,6 +1006,9 @@ export type UpdateAssessmentMutation = {
       address?: string | null,
       name?: string | null,
       pharmacist_ids?: Array< string | null > | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -863,12 +1020,16 @@ export type UpdateAssessmentMutation = {
       pharmacist_number?: string | null,
       pharmacy_ids?: Array< string | null > | null,
       cognito_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
     Prescription?:  {
       __typename: "ModelPrescriptionConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -886,6 +1047,9 @@ export type DeleteAssessmentMutation = {
     description?: string | null,
     patient_id?: string | null,
     owner_id: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     AssessedFor?:  {
@@ -898,6 +1062,9 @@ export type DeleteAssessmentMutation = {
       phone_number?: string | null,
       email?: string | null,
       owner_id?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -907,6 +1074,9 @@ export type DeleteAssessmentMutation = {
       address?: string | null,
       name?: string | null,
       pharmacist_ids?: Array< string | null > | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -918,12 +1088,16 @@ export type DeleteAssessmentMutation = {
       pharmacist_number?: string | null,
       pharmacy_ids?: Array< string | null > | null,
       cognito_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
     Prescription?:  {
       __typename: "ModelPrescriptionConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -939,6 +1113,9 @@ export type CreatePrescriptionMutation = {
     id: string,
     name?: string | null,
     assessment_id?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -955,6 +1132,9 @@ export type UpdatePrescriptionMutation = {
     id: string,
     name?: string | null,
     assessment_id?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -971,6 +1151,9 @@ export type DeletePrescriptionMutation = {
     id: string,
     name?: string | null,
     assessment_id?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -987,6 +1170,9 @@ export type CreatePharmacistPharmacyMutation = {
     id: string,
     pharmacistID: string,
     pharmacyID: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     pharmacy:  {
@@ -995,6 +1181,9 @@ export type CreatePharmacistPharmacyMutation = {
       address?: string | null,
       name?: string | null,
       pharmacist_ids?: Array< string | null > | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     },
@@ -1006,6 +1195,9 @@ export type CreatePharmacistPharmacyMutation = {
       pharmacist_number?: string | null,
       pharmacy_ids?: Array< string | null > | null,
       cognito_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     },
@@ -1023,6 +1215,9 @@ export type UpdatePharmacistPharmacyMutation = {
     id: string,
     pharmacistID: string,
     pharmacyID: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     pharmacy:  {
@@ -1031,6 +1226,9 @@ export type UpdatePharmacistPharmacyMutation = {
       address?: string | null,
       name?: string | null,
       pharmacist_ids?: Array< string | null > | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     },
@@ -1042,6 +1240,9 @@ export type UpdatePharmacistPharmacyMutation = {
       pharmacist_number?: string | null,
       pharmacy_ids?: Array< string | null > | null,
       cognito_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     },
@@ -1059,6 +1260,9 @@ export type DeletePharmacistPharmacyMutation = {
     id: string,
     pharmacistID: string,
     pharmacyID: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     pharmacy:  {
@@ -1067,6 +1271,9 @@ export type DeletePharmacistPharmacyMutation = {
       address?: string | null,
       name?: string | null,
       pharmacist_ids?: Array< string | null > | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     },
@@ -1078,6 +1285,9 @@ export type DeletePharmacistPharmacyMutation = {
       pharmacist_number?: string | null,
       pharmacy_ids?: Array< string | null > | null,
       cognito_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     },
@@ -1103,10 +1313,14 @@ export type ListPatientsQuery = {
       phone_number?: string | null,
       email?: string | null,
       owner_id?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null > | null,
     nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -1125,12 +1339,47 @@ export type GetPatientQuery = {
     phone_number?: string | null,
     email?: string | null,
     owner_id?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     AssessmentRecord?:  {
       __typename: "ModelAssessmentConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
+  } | null,
+};
+
+export type SyncPatientsQueryVariables = {
+  filter?: ModelPatientFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncPatientsQuery = {
+  syncPatients?:  {
+    __typename: "ModelPatientConnection",
+    items?:  Array< {
+      __typename: "Patient",
+      id: string,
+      first_name?: string | null,
+      last_name?: string | null,
+      postal_code?: string | null,
+      dob?: string | null,
+      phone_number?: string | null,
+      email?: string | null,
+      owner_id?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -1149,10 +1398,14 @@ export type ListPharmacysQuery = {
       address?: string | null,
       name?: string | null,
       pharmacist_ids?: Array< string | null > | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null > | null,
     nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -1167,12 +1420,43 @@ export type GetPharmacyQuery = {
     address?: string | null,
     name?: string | null,
     pharmacist_ids?: Array< string | null > | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     pharmacists?:  {
       __typename: "ModelPharmacistPharmacyConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
+  } | null,
+};
+
+export type SyncPharmaciesQueryVariables = {
+  filter?: ModelPharmacyFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncPharmaciesQuery = {
+  syncPharmacies?:  {
+    __typename: "ModelPharmacyConnection",
+    items?:  Array< {
+      __typename: "Pharmacy",
+      id: string,
+      address?: string | null,
+      name?: string | null,
+      pharmacist_ids?: Array< string | null > | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -1193,10 +1477,14 @@ export type ListPharmacistsQuery = {
       pharmacist_number?: string | null,
       pharmacy_ids?: Array< string | null > | null,
       cognito_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null > | null,
     nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -1213,12 +1501,45 @@ export type GetPharmacistQuery = {
     pharmacist_number?: string | null,
     pharmacy_ids?: Array< string | null > | null,
     cognito_id: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     WorksFor?:  {
       __typename: "ModelPharmacistPharmacyConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
+  } | null,
+};
+
+export type SyncPharmacistsQueryVariables = {
+  filter?: ModelPharmacistFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncPharmacistsQuery = {
+  syncPharmacists?:  {
+    __typename: "ModelPharmacistConnection",
+    items?:  Array< {
+      __typename: "Pharmacist",
+      id: string,
+      first_name?: string | null,
+      last_name?: string | null,
+      pharmacist_number?: string | null,
+      pharmacy_ids?: Array< string | null > | null,
+      cognito_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -1233,6 +1554,10 @@ export type GetFollowUpQuery = {
     contact_method?: ContactMethod | null,
     assessment_id?: string | null,
     owner_id: string,
+    follow_up_status?: FollowUpStatus | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     ForAssessment?:  {
@@ -1242,6 +1567,9 @@ export type GetFollowUpQuery = {
       description?: string | null,
       patient_id?: string | null,
       owner_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1263,10 +1591,43 @@ export type ListFollowUpsQuery = {
       contact_method?: ContactMethod | null,
       assessment_id?: string | null,
       owner_id: string,
+      follow_up_status?: FollowUpStatus | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null > | null,
     nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncFollowUpsQueryVariables = {
+  filter?: ModelFollowUpFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncFollowUpsQuery = {
+  syncFollowUps?:  {
+    __typename: "ModelFollowUpConnection",
+    items?:  Array< {
+      __typename: "FollowUp",
+      id: string,
+      contact_method?: ContactMethod | null,
+      assessment_id?: string | null,
+      owner_id: string,
+      follow_up_status?: FollowUpStatus | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -1286,10 +1647,14 @@ export type ListAssessmentsQuery = {
       description?: string | null,
       patient_id?: string | null,
       owner_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null > | null,
     nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -1305,6 +1670,9 @@ export type GetAssessmentQuery = {
     description?: string | null,
     patient_id?: string | null,
     owner_id: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     AssessedFor?:  {
@@ -1317,6 +1685,9 @@ export type GetAssessmentQuery = {
       phone_number?: string | null,
       email?: string | null,
       owner_id?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1326,6 +1697,9 @@ export type GetAssessmentQuery = {
       address?: string | null,
       name?: string | null,
       pharmacist_ids?: Array< string | null > | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1337,13 +1711,45 @@ export type GetAssessmentQuery = {
       pharmacist_number?: string | null,
       pharmacy_ids?: Array< string | null > | null,
       cognito_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
     Prescription?:  {
       __typename: "ModelPrescriptionConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
+  } | null,
+};
+
+export type SyncAssessmentsQueryVariables = {
+  filter?: ModelAssessmentFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncAssessmentsQuery = {
+  syncAssessments?:  {
+    __typename: "ModelAssessmentConnection",
+    items?:  Array< {
+      __typename: "Assessment",
+      id: string,
+      date?: string | null,
+      description?: string | null,
+      patient_id?: string | null,
+      owner_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -1357,6 +1763,9 @@ export type GetPrescriptionQuery = {
     id: string,
     name?: string | null,
     assessment_id?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1376,10 +1785,66 @@ export type ListPrescriptionsQuery = {
       id: string,
       name?: string | null,
       assessment_id?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null > | null,
     nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncPrescriptionsQueryVariables = {
+  filter?: ModelPrescriptionFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncPrescriptionsQuery = {
+  syncPrescriptions?:  {
+    __typename: "ModelPrescriptionConnection",
+    items?:  Array< {
+      __typename: "Prescription",
+      id: string,
+      name?: string | null,
+      assessment_id?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncPharmacistPharmaciesQueryVariables = {
+  filter?: ModelPharmacistPharmacyFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncPharmacistPharmaciesQuery = {
+  syncPharmacistPharmacies?:  {
+    __typename: "ModelPharmacistPharmacyConnection",
+    items?:  Array< {
+      __typename: "PharmacistPharmacy",
+      id: string,
+      pharmacistID: string,
+      pharmacyID: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -1394,11 +1859,15 @@ export type OnCreatePatientSubscription = {
     phone_number?: string | null,
     email?: string | null,
     owner_id?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     AssessmentRecord?:  {
       __typename: "ModelAssessmentConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -1414,11 +1883,15 @@ export type OnUpdatePatientSubscription = {
     phone_number?: string | null,
     email?: string | null,
     owner_id?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     AssessmentRecord?:  {
       __typename: "ModelAssessmentConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -1434,11 +1907,15 @@ export type OnDeletePatientSubscription = {
     phone_number?: string | null,
     email?: string | null,
     owner_id?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     AssessmentRecord?:  {
       __typename: "ModelAssessmentConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -1450,11 +1927,15 @@ export type OnCreatePharmacySubscription = {
     address?: string | null,
     name?: string | null,
     pharmacist_ids?: Array< string | null > | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     pharmacists?:  {
       __typename: "ModelPharmacistPharmacyConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -1466,11 +1947,15 @@ export type OnUpdatePharmacySubscription = {
     address?: string | null,
     name?: string | null,
     pharmacist_ids?: Array< string | null > | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     pharmacists?:  {
       __typename: "ModelPharmacistPharmacyConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -1482,11 +1967,15 @@ export type OnDeletePharmacySubscription = {
     address?: string | null,
     name?: string | null,
     pharmacist_ids?: Array< string | null > | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     pharmacists?:  {
       __typename: "ModelPharmacistPharmacyConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -1500,11 +1989,15 @@ export type OnCreatePharmacistSubscription = {
     pharmacist_number?: string | null,
     pharmacy_ids?: Array< string | null > | null,
     cognito_id: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     WorksFor?:  {
       __typename: "ModelPharmacistPharmacyConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -1518,11 +2011,15 @@ export type OnUpdatePharmacistSubscription = {
     pharmacist_number?: string | null,
     pharmacy_ids?: Array< string | null > | null,
     cognito_id: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     WorksFor?:  {
       __typename: "ModelPharmacistPharmacyConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -1536,11 +2033,15 @@ export type OnDeletePharmacistSubscription = {
     pharmacist_number?: string | null,
     pharmacy_ids?: Array< string | null > | null,
     cognito_id: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     WorksFor?:  {
       __typename: "ModelPharmacistPharmacyConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -1552,6 +2053,10 @@ export type OnCreateFollowUpSubscription = {
     contact_method?: ContactMethod | null,
     assessment_id?: string | null,
     owner_id: string,
+    follow_up_status?: FollowUpStatus | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     ForAssessment?:  {
@@ -1561,6 +2066,9 @@ export type OnCreateFollowUpSubscription = {
       description?: string | null,
       patient_id?: string | null,
       owner_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1574,6 +2082,10 @@ export type OnUpdateFollowUpSubscription = {
     contact_method?: ContactMethod | null,
     assessment_id?: string | null,
     owner_id: string,
+    follow_up_status?: FollowUpStatus | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     ForAssessment?:  {
@@ -1583,6 +2095,9 @@ export type OnUpdateFollowUpSubscription = {
       description?: string | null,
       patient_id?: string | null,
       owner_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1596,6 +2111,10 @@ export type OnDeleteFollowUpSubscription = {
     contact_method?: ContactMethod | null,
     assessment_id?: string | null,
     owner_id: string,
+    follow_up_status?: FollowUpStatus | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     ForAssessment?:  {
@@ -1605,6 +2124,9 @@ export type OnDeleteFollowUpSubscription = {
       description?: string | null,
       patient_id?: string | null,
       owner_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1619,6 +2141,9 @@ export type OnCreateAssessmentSubscription = {
     description?: string | null,
     patient_id?: string | null,
     owner_id: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     AssessedFor?:  {
@@ -1631,6 +2156,9 @@ export type OnCreateAssessmentSubscription = {
       phone_number?: string | null,
       email?: string | null,
       owner_id?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1640,6 +2168,9 @@ export type OnCreateAssessmentSubscription = {
       address?: string | null,
       name?: string | null,
       pharmacist_ids?: Array< string | null > | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1651,12 +2182,16 @@ export type OnCreateAssessmentSubscription = {
       pharmacist_number?: string | null,
       pharmacy_ids?: Array< string | null > | null,
       cognito_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
     Prescription?:  {
       __typename: "ModelPrescriptionConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -1669,6 +2204,9 @@ export type OnUpdateAssessmentSubscription = {
     description?: string | null,
     patient_id?: string | null,
     owner_id: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     AssessedFor?:  {
@@ -1681,6 +2219,9 @@ export type OnUpdateAssessmentSubscription = {
       phone_number?: string | null,
       email?: string | null,
       owner_id?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1690,6 +2231,9 @@ export type OnUpdateAssessmentSubscription = {
       address?: string | null,
       name?: string | null,
       pharmacist_ids?: Array< string | null > | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1701,12 +2245,16 @@ export type OnUpdateAssessmentSubscription = {
       pharmacist_number?: string | null,
       pharmacy_ids?: Array< string | null > | null,
       cognito_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
     Prescription?:  {
       __typename: "ModelPrescriptionConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -1719,6 +2267,9 @@ export type OnDeleteAssessmentSubscription = {
     description?: string | null,
     patient_id?: string | null,
     owner_id: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     AssessedFor?:  {
@@ -1731,6 +2282,9 @@ export type OnDeleteAssessmentSubscription = {
       phone_number?: string | null,
       email?: string | null,
       owner_id?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1740,6 +2294,9 @@ export type OnDeleteAssessmentSubscription = {
       address?: string | null,
       name?: string | null,
       pharmacist_ids?: Array< string | null > | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1751,12 +2308,16 @@ export type OnDeleteAssessmentSubscription = {
       pharmacist_number?: string | null,
       pharmacy_ids?: Array< string | null > | null,
       cognito_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     } | null,
     Prescription?:  {
       __typename: "ModelPrescriptionConnection",
       nextToken?: string | null,
+      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -1767,6 +2328,9 @@ export type OnCreatePrescriptionSubscription = {
     id: string,
     name?: string | null,
     assessment_id?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1778,6 +2342,9 @@ export type OnUpdatePrescriptionSubscription = {
     id: string,
     name?: string | null,
     assessment_id?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1789,6 +2356,9 @@ export type OnDeletePrescriptionSubscription = {
     id: string,
     name?: string | null,
     assessment_id?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1800,6 +2370,9 @@ export type OnCreatePharmacistPharmacySubscription = {
     id: string,
     pharmacistID: string,
     pharmacyID: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     pharmacy:  {
@@ -1808,6 +2381,9 @@ export type OnCreatePharmacistPharmacySubscription = {
       address?: string | null,
       name?: string | null,
       pharmacist_ids?: Array< string | null > | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     },
@@ -1819,6 +2395,9 @@ export type OnCreatePharmacistPharmacySubscription = {
       pharmacist_number?: string | null,
       pharmacy_ids?: Array< string | null > | null,
       cognito_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     },
@@ -1831,6 +2410,9 @@ export type OnUpdatePharmacistPharmacySubscription = {
     id: string,
     pharmacistID: string,
     pharmacyID: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     pharmacy:  {
@@ -1839,6 +2421,9 @@ export type OnUpdatePharmacistPharmacySubscription = {
       address?: string | null,
       name?: string | null,
       pharmacist_ids?: Array< string | null > | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     },
@@ -1850,6 +2435,9 @@ export type OnUpdatePharmacistPharmacySubscription = {
       pharmacist_number?: string | null,
       pharmacy_ids?: Array< string | null > | null,
       cognito_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     },
@@ -1862,6 +2450,9 @@ export type OnDeletePharmacistPharmacySubscription = {
     id: string,
     pharmacistID: string,
     pharmacyID: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     pharmacy:  {
@@ -1870,6 +2461,9 @@ export type OnDeletePharmacistPharmacySubscription = {
       address?: string | null,
       name?: string | null,
       pharmacist_ids?: Array< string | null > | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     },
@@ -1881,6 +2475,9 @@ export type OnDeletePharmacistPharmacySubscription = {
       pharmacist_number?: string | null,
       pharmacy_ids?: Array< string | null > | null,
       cognito_id: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
     },

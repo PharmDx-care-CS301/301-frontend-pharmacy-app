@@ -6,7 +6,7 @@ export enum ContactMethod {
   PHARMACY = "PHARMACY"
 }
 
-export enum FollowUpMethod {
+export enum FollowUpStatus {
   COMPLETED = "COMPLETED",
   PENDINGRESPONSE = "PENDINGRESPONSE",
   TODO = "TODO",
@@ -89,6 +89,7 @@ export declare class FollowUp {
   readonly assessment_id?: string;
   readonly ForAssessment?: Assessment;
   readonly owner_id: string;
+  readonly follow_up_status?: FollowUpStatus | keyof typeof FollowUpStatus;
   constructor(init: ModelInit<FollowUp>);
   static copyOf(source: FollowUp, mutator: (draft: MutableModel<FollowUp>) => MutableModel<FollowUp> | void): FollowUp;
 }

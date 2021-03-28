@@ -13,10 +13,14 @@ export const onCreatePatient = /* GraphQL */ `
       phone_number
       email
       owner_id
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       AssessmentRecord {
         nextToken
+        startedAt
       }
     }
   }
@@ -32,10 +36,14 @@ export const onUpdatePatient = /* GraphQL */ `
       phone_number
       email
       owner_id
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       AssessmentRecord {
         nextToken
+        startedAt
       }
     }
   }
@@ -51,10 +59,14 @@ export const onDeletePatient = /* GraphQL */ `
       phone_number
       email
       owner_id
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       AssessmentRecord {
         nextToken
+        startedAt
       }
     }
   }
@@ -66,10 +78,14 @@ export const onCreatePharmacy = /* GraphQL */ `
       address
       name
       pharmacist_ids
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       pharmacists {
         nextToken
+        startedAt
       }
     }
   }
@@ -81,10 +97,14 @@ export const onUpdatePharmacy = /* GraphQL */ `
       address
       name
       pharmacist_ids
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       pharmacists {
         nextToken
+        startedAt
       }
     }
   }
@@ -96,10 +116,14 @@ export const onDeletePharmacy = /* GraphQL */ `
       address
       name
       pharmacist_ids
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       pharmacists {
         nextToken
+        startedAt
       }
     }
   }
@@ -113,10 +137,14 @@ export const onCreatePharmacist = /* GraphQL */ `
       pharmacist_number
       pharmacy_ids
       cognito_id
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       WorksFor {
         nextToken
+        startedAt
       }
     }
   }
@@ -130,10 +158,14 @@ export const onUpdatePharmacist = /* GraphQL */ `
       pharmacist_number
       pharmacy_ids
       cognito_id
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       WorksFor {
         nextToken
+        startedAt
       }
     }
   }
@@ -147,10 +179,14 @@ export const onDeletePharmacist = /* GraphQL */ `
       pharmacist_number
       pharmacy_ids
       cognito_id
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       WorksFor {
         nextToken
+        startedAt
       }
     }
   }
@@ -162,6 +198,10 @@ export const onCreateFollowUp = /* GraphQL */ `
       contact_method
       assessment_id
       owner_id
+      follow_up_status
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       ForAssessment {
@@ -170,6 +210,9 @@ export const onCreateFollowUp = /* GraphQL */ `
         description
         patient_id
         owner_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
@@ -183,6 +226,10 @@ export const onUpdateFollowUp = /* GraphQL */ `
       contact_method
       assessment_id
       owner_id
+      follow_up_status
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       ForAssessment {
@@ -191,6 +238,9 @@ export const onUpdateFollowUp = /* GraphQL */ `
         description
         patient_id
         owner_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
@@ -204,6 +254,10 @@ export const onDeleteFollowUp = /* GraphQL */ `
       contact_method
       assessment_id
       owner_id
+      follow_up_status
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       ForAssessment {
@@ -212,6 +266,9 @@ export const onDeleteFollowUp = /* GraphQL */ `
         description
         patient_id
         owner_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
@@ -226,6 +283,9 @@ export const onCreateAssessment = /* GraphQL */ `
       description
       patient_id
       owner_id
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       AssessedFor {
@@ -237,6 +297,9 @@ export const onCreateAssessment = /* GraphQL */ `
         phone_number
         email
         owner_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
@@ -245,6 +308,9 @@ export const onCreateAssessment = /* GraphQL */ `
         address
         name
         pharmacist_ids
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
@@ -255,11 +321,15 @@ export const onCreateAssessment = /* GraphQL */ `
         pharmacist_number
         pharmacy_ids
         cognito_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       Prescription {
         nextToken
+        startedAt
       }
     }
   }
@@ -272,6 +342,9 @@ export const onUpdateAssessment = /* GraphQL */ `
       description
       patient_id
       owner_id
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       AssessedFor {
@@ -283,6 +356,9 @@ export const onUpdateAssessment = /* GraphQL */ `
         phone_number
         email
         owner_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
@@ -291,6 +367,9 @@ export const onUpdateAssessment = /* GraphQL */ `
         address
         name
         pharmacist_ids
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
@@ -301,11 +380,15 @@ export const onUpdateAssessment = /* GraphQL */ `
         pharmacist_number
         pharmacy_ids
         cognito_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       Prescription {
         nextToken
+        startedAt
       }
     }
   }
@@ -318,6 +401,9 @@ export const onDeleteAssessment = /* GraphQL */ `
       description
       patient_id
       owner_id
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       AssessedFor {
@@ -329,6 +415,9 @@ export const onDeleteAssessment = /* GraphQL */ `
         phone_number
         email
         owner_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
@@ -337,6 +426,9 @@ export const onDeleteAssessment = /* GraphQL */ `
         address
         name
         pharmacist_ids
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
@@ -347,11 +439,15 @@ export const onDeleteAssessment = /* GraphQL */ `
         pharmacist_number
         pharmacy_ids
         cognito_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       Prescription {
         nextToken
+        startedAt
       }
     }
   }
@@ -362,6 +458,9 @@ export const onCreatePrescription = /* GraphQL */ `
       id
       name
       assessment_id
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -373,6 +472,9 @@ export const onUpdatePrescription = /* GraphQL */ `
       id
       name
       assessment_id
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -384,6 +486,9 @@ export const onDeletePrescription = /* GraphQL */ `
       id
       name
       assessment_id
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -395,6 +500,9 @@ export const onCreatePharmacistPharmacy = /* GraphQL */ `
       id
       pharmacistID
       pharmacyID
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       pharmacy {
@@ -402,6 +510,9 @@ export const onCreatePharmacistPharmacy = /* GraphQL */ `
         address
         name
         pharmacist_ids
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
@@ -412,6 +523,9 @@ export const onCreatePharmacistPharmacy = /* GraphQL */ `
         pharmacist_number
         pharmacy_ids
         cognito_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
@@ -424,6 +538,9 @@ export const onUpdatePharmacistPharmacy = /* GraphQL */ `
       id
       pharmacistID
       pharmacyID
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       pharmacy {
@@ -431,6 +548,9 @@ export const onUpdatePharmacistPharmacy = /* GraphQL */ `
         address
         name
         pharmacist_ids
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
@@ -441,6 +561,9 @@ export const onUpdatePharmacistPharmacy = /* GraphQL */ `
         pharmacist_number
         pharmacy_ids
         cognito_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
@@ -453,6 +576,9 @@ export const onDeletePharmacistPharmacy = /* GraphQL */ `
       id
       pharmacistID
       pharmacyID
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       pharmacy {
@@ -460,6 +586,9 @@ export const onDeletePharmacistPharmacy = /* GraphQL */ `
         address
         name
         pharmacist_ids
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
@@ -470,6 +599,9 @@ export const onDeletePharmacistPharmacy = /* GraphQL */ `
         pharmacist_number
         pharmacy_ids
         cognito_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }

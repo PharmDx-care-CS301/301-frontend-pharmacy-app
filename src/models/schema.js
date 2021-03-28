@@ -580,6 +580,15 @@ export const schema = {
                     "type": "String",
                     "isRequired": true,
                     "attributes": []
+                },
+                "follow_up_status": {
+                    "name": "follow_up_status",
+                    "isArray": false,
+                    "type": {
+                        "enum": "FollowUpStatus"
+                    },
+                    "isRequired": false,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -617,8 +626,8 @@ export const schema = {
                 "PHARMACY"
             ]
         },
-        "FollowUpMethod": {
-            "name": "FollowUpMethod",
+        "FollowUpStatus": {
+            "name": "FollowUpStatus",
             "values": [
                 "COMPLETED",
                 "PENDINGRESPONSE",
@@ -630,5 +639,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "9f30486135f110fd6861e132c6f8824e"
+    "version": "c3ec393ec4463ec9b555901ee3041463"
 };

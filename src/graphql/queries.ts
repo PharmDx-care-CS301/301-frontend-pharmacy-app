@@ -18,10 +18,14 @@ export const listPatients = /* GraphQL */ `
         phone_number
         email
         owner_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
     }
   }
 `;
@@ -36,11 +40,48 @@ export const getPatient = /* GraphQL */ `
       phone_number
       email
       owner_id
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       AssessmentRecord {
         nextToken
+        startedAt
       }
+    }
+  }
+`;
+export const syncPatients = /* GraphQL */ `
+  query SyncPatients(
+    $filter: ModelPatientFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncPatients(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        first_name
+        last_name
+        postal_code
+        dob
+        phone_number
+        email
+        owner_id
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -56,10 +97,14 @@ export const listPharmacys = /* GraphQL */ `
         address
         name
         pharmacist_ids
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
     }
   }
 `;
@@ -70,11 +115,44 @@ export const getPharmacy = /* GraphQL */ `
       address
       name
       pharmacist_ids
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       pharmacists {
         nextToken
+        startedAt
       }
+    }
+  }
+`;
+export const syncPharmacies = /* GraphQL */ `
+  query SyncPharmacies(
+    $filter: ModelPharmacyFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncPharmacies(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        address
+        name
+        pharmacist_ids
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -92,10 +170,14 @@ export const listPharmacists = /* GraphQL */ `
         pharmacist_number
         pharmacy_ids
         cognito_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
     }
   }
 `;
@@ -108,11 +190,46 @@ export const getPharmacist = /* GraphQL */ `
       pharmacist_number
       pharmacy_ids
       cognito_id
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       WorksFor {
         nextToken
+        startedAt
       }
+    }
+  }
+`;
+export const syncPharmacists = /* GraphQL */ `
+  query SyncPharmacists(
+    $filter: ModelPharmacistFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncPharmacists(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        first_name
+        last_name
+        pharmacist_number
+        pharmacy_ids
+        cognito_id
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -123,6 +240,10 @@ export const getFollowUp = /* GraphQL */ `
       contact_method
       assessment_id
       owner_id
+      follow_up_status
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       ForAssessment {
@@ -131,6 +252,9 @@ export const getFollowUp = /* GraphQL */ `
         description
         patient_id
         owner_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
@@ -149,10 +273,45 @@ export const listFollowUps = /* GraphQL */ `
         contact_method
         assessment_id
         owner_id
+        follow_up_status
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncFollowUps = /* GraphQL */ `
+  query SyncFollowUps(
+    $filter: ModelFollowUpFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncFollowUps(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        contact_method
+        assessment_id
+        owner_id
+        follow_up_status
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -169,10 +328,14 @@ export const listAssessments = /* GraphQL */ `
         description
         patient_id
         owner_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
     }
   }
 `;
@@ -184,6 +347,9 @@ export const getAssessment = /* GraphQL */ `
       description
       patient_id
       owner_id
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       AssessedFor {
@@ -195,6 +361,9 @@ export const getAssessment = /* GraphQL */ `
         phone_number
         email
         owner_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
@@ -203,6 +372,9 @@ export const getAssessment = /* GraphQL */ `
         address
         name
         pharmacist_ids
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
@@ -213,12 +385,46 @@ export const getAssessment = /* GraphQL */ `
         pharmacist_number
         pharmacy_ids
         cognito_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       Prescription {
         nextToken
+        startedAt
       }
+    }
+  }
+`;
+export const syncAssessments = /* GraphQL */ `
+  query SyncAssessments(
+    $filter: ModelAssessmentFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncAssessments(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        date
+        description
+        patient_id
+        owner_id
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -228,6 +434,9 @@ export const getPrescription = /* GraphQL */ `
       id
       name
       assessment_id
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
     }
@@ -244,10 +453,70 @@ export const listPrescriptions = /* GraphQL */ `
         id
         name
         assessment_id
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncPrescriptions = /* GraphQL */ `
+  query SyncPrescriptions(
+    $filter: ModelPrescriptionFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncPrescriptions(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        name
+        assessment_id
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncPharmacistPharmacies = /* GraphQL */ `
+  query SyncPharmacistPharmacies(
+    $filter: ModelPharmacistPharmacyFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncPharmacistPharmacies(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        pharmacistID
+        pharmacyID
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import logo from "../../logo.png";
@@ -19,7 +19,7 @@ import AddIcon from "@material-ui/icons/Add";
 import { Auth, API } from "aws-amplify";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import { createPharmacist } from "../../graphql/mutations";
-import { getPharmacist } from "../../graphql/queries";
+import {getFollowUp, getPharmacist, listFollowUps} from "../../graphql/queries";
 
 const useStyles = makeStyles((theme) => ({
   logo: {
@@ -40,25 +40,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function stuff(e: any) {
-  console.log(Auth.currentUserInfo());
-}
-
-async function createAPharmacist() {
-  await API.graphql({
-    query: createPharmacist,
-    variables: {
-      input: {
-        cognito_id: "cognitoid",
-        first_name: "Janee",
-        id: "7",
-        last_name: "Doe",
-        pharmacist_number: "121",
-        pharmacy_ids: '["3"]',
-      },
-    },
-  });
-}
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -80,13 +61,6 @@ function TabPanel(props) {
   );
 }
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
-
 function formatText(item) {
   return (
     item.name +
@@ -101,14 +75,42 @@ function formatText(item) {
   );
 }
 
+
 function FollowUpPage() {
+
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
+  const [pageData, setPageData] = React.useState([]);
   const history = useHistory();
 
+  async function getFollowUpList(status: string) {
+    let ret = await API.graphql({
+      query: listFollowUps,
+      variables: {filter: {follow_up_status: {eq: status}}}
+    });
+
+    setPageData(ret['data']['listFollowUps']['items']);
+    // setPageData(ret['data']['listFollowUps']['items'])
+  }
+
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      "aria-controls": `simple-tabpanel-${index}`,
+    };
+  }
+
+
   const handleChange = (event, newValue) => {
+    const lookUp = {
+      0: "COMPLETED",
+      1: 'FOLLOWUPREQUESTED',
+      2: 'PENDINGRESPONSE',
+      3: "TODO",
+    };
+    getFollowUpList(lookUp[newValue]);
     setValue(newValue);
   };
 
@@ -136,11 +138,11 @@ function FollowUpPage() {
         <TabPanel value={value} index={0}>
           <div className={classes.demo}>
             <List dense={dense}>
-              {data.completed.map((item) => (
+              {pageData.map((item) => (
                 <div>
                   <ListItem>
                     <ListItemText
-                      primary={formatText(item)}
+                      primary={JSON.stringify(item)}
                       secondary={secondary ? "Secondary text" : null}
                     >
                       {" "}
@@ -153,13 +155,61 @@ function FollowUpPage() {
           </div>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Item Two
+          <div className={classes.demo}>
+            <List dense={dense}>
+              {pageData.map((item) => (
+                  <div>
+                    <ListItem>
+                      <ListItemText
+                          primary={JSON.stringify(item)}
+                          secondary={secondary ? "Secondary text" : null}
+                      >
+                        {" "}
+                      </ListItemText>
+                    </ListItem>
+                    <Divider />
+                  </div>
+              ))}
+            </List>
+          </div>
         </TabPanel>
         <TabPanel value={value} index={2}>
-          Item Three
+          <div className={classes.demo}>
+            <List dense={dense}>
+              {pageData.map((item) => (
+                  <div>
+                    <ListItem>
+                      <ListItemText
+                          primary={JSON.stringify(item)}
+                          secondary={secondary ? "Secondary text" : null}
+                      >
+                        {" "}
+                      </ListItemText>
+                    </ListItem>
+                    <Divider />
+                  </div>
+              ))}
+            </List>
+          </div>
         </TabPanel>
         <TabPanel value={value} index={3}>
-          Item Four
+          <div className={classes.demo}>
+            <List dense={dense}>
+              {pageData.map((item) => (
+                  <div>
+                    <ListItem>
+                      <ListItemText
+                          primary={JSON.stringify(item)}
+                          secondary={secondary ? "Secondary text" : null}
+                      >
+                        {" "}
+                      </ListItemText>
+                    </ListItem>
+                    <Divider />
+                  </div>
+              ))}
+            </List>
+          </div>
         </TabPanel>
 
         <Fab
@@ -174,7 +224,6 @@ function FollowUpPage() {
         >
           <AddIcon />
         </Fab>
-        <button onClick={stuff}>Button</button>
       </div>
     </>
   );
