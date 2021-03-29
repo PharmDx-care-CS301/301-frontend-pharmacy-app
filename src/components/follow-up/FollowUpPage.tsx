@@ -20,6 +20,7 @@ import { Auth, API } from "aws-amplify";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import { createPharmacist } from "../../graphql/mutations";
 import {getFollowUp, getPharmacist, listFollowUps} from "../../graphql/queries";
+import {format} from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
   logo: {
@@ -102,7 +103,55 @@ function FollowUpPage() {
     };
   }
 
+  function formatInputItem(item) {
+    const date = item["updatedAt"]
+    const conv = format(new Date(date), "hh:mm MMM dd, yyyy")
+    return (
+        <ListItem style={{"justifyContent":"spaceEvenly"}} button>
+          <ListItemText
+              secondary={secondary ? "Secondary text" : null}
+          >
+            {item["owner_id"]}
+          </ListItemText>
+          <ListItemText
+              secondary={secondary ? "Secondary text" : null}
+          >
+            {item["contact_method"]}
+          </ListItemText>
+          <ListItemText
+              secondary={secondary ? "Secondary text" : null}
+              style={{"textAlign":"right"}}
+          >
+            {conv}
+          </ListItemText>
+        </ListItem>
+    )
+  }
 
+  function formatHeader(){
+    return (
+        <ListItem style={{"textAlign": "center"}}>
+          <ListItemText
+              secondary={secondary ? "Secondary text" : null}
+          >
+            {"Patient"}
+          </ListItemText>
+          <Divider orientation="vertical" flexItem />
+          <ListItemText
+              secondary={secondary ? "Secondary text" : null}
+          >
+            {"Contact Method"}
+          </ListItemText>
+          <Divider orientation="vertical" flexItem />
+          <ListItemText
+              secondary={secondary ? "Secondary text" : null}
+          >
+            {"Date"}
+          </ListItemText>
+
+        </ListItem>
+    )
+  }
   const handleChange = (event, newValue) => {
     const lookUp = {
       0: "COMPLETED",
@@ -138,16 +187,11 @@ function FollowUpPage() {
         <TabPanel value={value} index={0}>
           <div className={classes.demo}>
             <List dense={dense}>
+              {formatHeader()}
+              <Divider />
               {pageData.map((item) => (
                 <div>
-                  <ListItem>
-                    <ListItemText
-                      primary={JSON.stringify(item)}
-                      secondary={secondary ? "Secondary text" : null}
-                    >
-                      {" "}
-                    </ListItemText>
-                  </ListItem>
+                  {formatInputItem(item)}
                   <Divider />
                 </div>
               ))}
@@ -156,17 +200,12 @@ function FollowUpPage() {
         </TabPanel>
         <TabPanel value={value} index={1}>
           <div className={classes.demo}>
+            {formatHeader()}
+            <Divider/>
             <List dense={dense}>
               {pageData.map((item) => (
                   <div>
-                    <ListItem>
-                      <ListItemText
-                          primary={JSON.stringify(item)}
-                          secondary={secondary ? "Secondary text" : null}
-                      >
-                        {" "}
-                      </ListItemText>
-                    </ListItem>
+                    {formatInputItem(item)}
                     <Divider />
                   </div>
               ))}
@@ -175,17 +214,12 @@ function FollowUpPage() {
         </TabPanel>
         <TabPanel value={value} index={2}>
           <div className={classes.demo}>
+            {formatHeader()}
+            <Divider/>
             <List dense={dense}>
               {pageData.map((item) => (
                   <div>
-                    <ListItem>
-                      <ListItemText
-                          primary={JSON.stringify(item)}
-                          secondary={secondary ? "Secondary text" : null}
-                      >
-                        {" "}
-                      </ListItemText>
-                    </ListItem>
+                    {formatInputItem(item)}
                     <Divider />
                   </div>
               ))}
@@ -194,15 +228,17 @@ function FollowUpPage() {
         </TabPanel>
         <TabPanel value={value} index={3}>
           <div className={classes.demo}>
+
             <List dense={dense}>
+              {formatHeader()}
+              <Divider/>
               {pageData.map((item) => (
                   <div>
                     <ListItem>
                       <ListItemText
-                          primary={JSON.stringify(item)}
                           secondary={secondary ? "Secondary text" : null}
                       >
-                        {" "}
+                        {formatInputItem(item)}
                       </ListItemText>
                     </ListItem>
                     <Divider />
