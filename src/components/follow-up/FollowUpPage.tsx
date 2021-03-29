@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import logo from "../../logo.png";
@@ -19,8 +19,12 @@ import AddIcon from "@material-ui/icons/Add";
 import { Auth, API } from "aws-amplify";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import { createPharmacist } from "../../graphql/mutations";
-import {getFollowUp, getPharmacist, listFollowUps} from "../../graphql/queries";
-import {format} from "date-fns";
+import {
+  getFollowUp,
+  getPharmacist,
+  listFollowUps,
+} from "../../graphql/queries";
+import { format } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
   logo: {
@@ -40,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
   },
 }));
-
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -76,9 +79,7 @@ function formatText(item) {
   );
 }
 
-
 function FollowUpPage() {
-
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -89,10 +90,10 @@ function FollowUpPage() {
   async function getFollowUpList(status: string) {
     let ret = await API.graphql({
       query: listFollowUps,
-      variables: {filter: {follow_up_status: {eq: status}}}
+      variables: { filter: { follow_up_status: { eq: status } } },
     });
 
-    setPageData(ret['data']['listFollowUps']['items']);
+    setPageData(ret["data"]["listFollowUps"]["items"]);
     // setPageData(ret['data']['listFollowUps']['items'])
   }
 
@@ -104,59 +105,48 @@ function FollowUpPage() {
   }
 
   function formatInputItem(item) {
-    const date = item["updatedAt"]
-    const conv = format(new Date(date), "hh:mm MMM dd, yyyy")
+    const date = item["updatedAt"];
+    const conv = format(new Date(date), "hh:mm MMM dd, yyyy");
     return (
-        <ListItem style={{"justifyContent":"spaceEvenly"}} button>
-          <ListItemText
-              secondary={secondary ? "Secondary text" : null}
-          >
-            {item["owner_id"]}
-          </ListItemText>
-          <ListItemText
-              secondary={secondary ? "Secondary text" : null}
-          >
-            {item["contact_method"]}
-          </ListItemText>
-          <ListItemText
-              secondary={secondary ? "Secondary text" : null}
-              style={{"textAlign":"right"}}
-          >
-            {conv}
-          </ListItemText>
-        </ListItem>
-    )
+      <ListItem style={{ justifyContent: "spaceEvenly" }} button>
+        <ListItemText secondary={secondary ? "Secondary text" : null}>
+          {item["owner_id"]}
+        </ListItemText>
+        <ListItemText secondary={secondary ? "Secondary text" : null}>
+          {item["contact_method"]}
+        </ListItemText>
+        <ListItemText
+          secondary={secondary ? "Secondary text" : null}
+          style={{ textAlign: "right" }}
+        >
+          {conv}
+        </ListItemText>
+      </ListItem>
+    );
   }
 
-  function formatHeader(){
+  function formatHeader() {
     return (
-        <ListItem style={{"textAlign": "center"}}>
-          <ListItemText
-              secondary={secondary ? "Secondary text" : null}
-          >
-            {"Patient"}
-          </ListItemText>
-          <Divider orientation="vertical" flexItem />
-          <ListItemText
-              secondary={secondary ? "Secondary text" : null}
-          >
-            {"Contact Method"}
-          </ListItemText>
-          <Divider orientation="vertical" flexItem />
-          <ListItemText
-              secondary={secondary ? "Secondary text" : null}
-          >
-            {"Date"}
-          </ListItemText>
-
-        </ListItem>
-    )
+      <ListItem style={{ textAlign: "center" }}>
+        <ListItemText secondary={secondary ? "Secondary text" : null}>
+          {"Patient"}
+        </ListItemText>
+        <Divider orientation="vertical" flexItem />
+        <ListItemText secondary={secondary ? "Secondary text" : null}>
+          {"Contact Method"}
+        </ListItemText>
+        <Divider orientation="vertical" flexItem />
+        <ListItemText secondary={secondary ? "Secondary text" : null}>
+          {"Date"}
+        </ListItemText>
+      </ListItem>
+    );
   }
   const handleChange = (event, newValue) => {
     const lookUp = {
       0: "COMPLETED",
-      1: 'FOLLOWUPREQUESTED',
-      2: 'PENDINGRESPONSE',
+      1: "FOLLOWUPREQUESTED",
+      2: "PENDINGRESPONSE",
       3: "TODO",
     };
     getFollowUpList(lookUp[newValue]);
@@ -164,7 +154,7 @@ function FollowUpPage() {
   };
 
   function handleClick() {
-    history.push("/createFollowUp");
+    history.push("/patientscheduling");
   }
 
   return (
@@ -201,13 +191,13 @@ function FollowUpPage() {
         <TabPanel value={value} index={1}>
           <div className={classes.demo}>
             {formatHeader()}
-            <Divider/>
+            <Divider />
             <List dense={dense}>
               {pageData.map((item) => (
-                  <div>
-                    {formatInputItem(item)}
-                    <Divider />
-                  </div>
+                <div>
+                  {formatInputItem(item)}
+                  <Divider />
+                </div>
               ))}
             </List>
           </div>
@@ -215,34 +205,33 @@ function FollowUpPage() {
         <TabPanel value={value} index={2}>
           <div className={classes.demo}>
             {formatHeader()}
-            <Divider/>
+            <Divider />
             <List dense={dense}>
               {pageData.map((item) => (
-                  <div>
-                    {formatInputItem(item)}
-                    <Divider />
-                  </div>
+                <div>
+                  {formatInputItem(item)}
+                  <Divider />
+                </div>
               ))}
             </List>
           </div>
         </TabPanel>
         <TabPanel value={value} index={3}>
           <div className={classes.demo}>
-
             <List dense={dense}>
               {formatHeader()}
-              <Divider/>
+              <Divider />
               {pageData.map((item) => (
-                  <div>
-                    <ListItem>
-                      <ListItemText
-                          secondary={secondary ? "Secondary text" : null}
-                      >
-                        {formatInputItem(item)}
-                      </ListItemText>
-                    </ListItem>
-                    <Divider />
-                  </div>
+                <div>
+                  <ListItem>
+                    <ListItemText
+                      secondary={secondary ? "Secondary text" : null}
+                    >
+                      {formatInputItem(item)}
+                    </ListItemText>
+                  </ListItem>
+                  <Divider />
+                </div>
               ))}
             </List>
           </div>

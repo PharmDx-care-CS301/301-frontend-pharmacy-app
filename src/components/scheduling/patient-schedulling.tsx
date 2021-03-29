@@ -3,11 +3,19 @@ import logo from "../../logo.png";
 import Button from "@material-ui/core/Button";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import { useHistory } from "react-router-dom";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import {Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select} from "@material-ui/core";
+import {
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@material-ui/core";
 import { Auth, API } from "aws-amplify";
-import {AmplifySignOut, withAuthenticator} from "@aws-amplify/ui-react";
+import { AmplifySignOut, withAuthenticator } from "@aws-amplify/ui-react";
 import { useSnackbar } from "notistack";
 import {
   createPatient,
@@ -44,7 +52,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 interface IFormData {
   firstName?: string;
   lastName?: string;
@@ -53,14 +60,18 @@ interface IFormData {
   phoneNumber?: string;
   prescriptionDate?: string;
   contactMethod?: string;
-  email?: string
+  email?: string;
 }
 
 const PatientScheduling: React.FC<any> = (props) => {
   const classes = useStyles();
   const [yes, setYesState] = React.useState(true);
-  const [state, setState] = React.useState<IFormData>({contactMethod: '', prescriptionDate: moment().format("YYYY-MM-DD")});
+  const [state, setState] = React.useState<IFormData>({
+    contactMethod: "",
+    prescriptionDate: moment().format("YYYY-MM-DD"),
+  });
   const { enqueueSnackbar } = useSnackbar();
+  const history = useHistory();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setYesState(!yes);
@@ -120,14 +131,14 @@ const PatientScheduling: React.FC<any> = (props) => {
     if (event.target.value === state.contactMethod) {
       return;
     }
-    setState({...state, contactMethod: event.target.value})
+    setState({ ...state, contactMethod: event.target.value });
   };
 
   const updateEmail = (event: React.FocusEvent<HTMLInputElement>) => {
     if (event.target.value === state.email) {
       return;
     }
-    setState({...state, email: event.target.value})
+    setState({ ...state, email: event.target.value });
   };
 
   const printState = async (event) => {
@@ -155,13 +166,13 @@ const PatientScheduling: React.FC<any> = (props) => {
     let cognitoID;
     try {
       await cognitoUser.then(
-          function (data) {
-            cognitoID = data.attributes.sub;
-            return data.attributes.sub;
-          },
-          function (error) {
-            displayError(error);
-          }
+        function (data) {
+          cognitoID = data.attributes.sub;
+          return data.attributes.sub;
+        },
+        function (error) {
+          displayError(error);
+        }
       );
     } catch (e) {
       displayError(e.message);
@@ -171,7 +182,7 @@ const PatientScheduling: React.FC<any> = (props) => {
       followUpForAssessmentId: "",
       contact_method: state.contactMethod,
       owner_id: cognitoID,
-      follow_up_status: 'COMPLETED'
+      follow_up_status: "COMPLETED",
     };
 
     const assessment = {
@@ -210,7 +221,6 @@ const PatientScheduling: React.FC<any> = (props) => {
     } finally {
     }
 
-
     try {
       let ret = await API.graphql({
         query: createAssessment,
@@ -220,10 +230,10 @@ const PatientScheduling: React.FC<any> = (props) => {
         let newAssessmentID = ret["data"]["createAssessment"]["id"];
         followUp.followUpForAssessmentId = newAssessmentID;
       } catch (e) {
-        displayError("Assessment: " + e.message);
+        displayError(e.message);
       }
     } catch (e) {
-      displayError("Assessment: " + e.errors[0].message);
+      displayError(e.errors[0].message);
     } finally {
     }
     try {
@@ -233,11 +243,14 @@ const PatientScheduling: React.FC<any> = (props) => {
       });
       try {
         let newFollowUpID = ret["data"]["createFollowUp"]["id"];
+        displaySuccess("Successfully created");
+
+        history.push("/follow-up");
       } catch (e) {
-        displayError("Followup: " + e.message);
+        displayError(e.message);
       }
     } catch (e) {
-      displayError("Followup: " + e.errors[0].message);
+      displayError(e.errors[0].message);
     } finally {
     }
   };
@@ -310,20 +323,20 @@ const PatientScheduling: React.FC<any> = (props) => {
               onBlur={updateLastName}
             />
             <TextField
-                required
-                id="outlined-basic"
-                label="Email"
-                type="text"
-                variant="outlined"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                style={{
-                  height: 60,
-                  width: "100%",
-                  marginBottom: 15,
-                }}
-                onBlur={updateEmail}
+              required
+              id="outlined-basic"
+              label="Email"
+              type="text"
+              variant="outlined"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              style={{
+                height: 60,
+                width: "100%",
+                marginBottom: 15,
+              }}
+              onBlur={updateEmail}
             />
             <TextField
               required
@@ -359,23 +372,27 @@ const PatientScheduling: React.FC<any> = (props) => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormControl variant="outlined" style={{
-              height: 60,
-              width: "100%",
-              marginBottom: 15,}}>
-              <InputLabel id="demo-simple-select-outlined-label">Contact Method</InputLabel>
+            <FormControl
+              variant="outlined"
+              style={{
+                height: 60,
+                width: "100%",
+                marginBottom: 15,
+              }}
+            >
+              <InputLabel id="demo-simple-select-outlined-label">
+                Contact Method
+              </InputLabel>
               <Select
-                  labelId="demo-simple-select-outlined-label"
-                  id="demo-simple-select-outlined"
-                  value={state.contactMethod}
-                  onChange={updateContactMethod}
-                  label="Contact Method"
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={state.contactMethod}
+                onChange={updateContactMethod}
+                label="Contact Method"
               >
-                <MenuItem value={'SMS'}>SMS</MenuItem>
-                <MenuItem value={'EMAIL'}>Email</MenuItem>
-                <MenuItem value={'PHARMACY'}>
-                  Pharmacy
-                </MenuItem>
+                <MenuItem value={"SMS"}>SMS</MenuItem>
+                <MenuItem value={"EMAIL"}>Email</MenuItem>
+                <MenuItem value={"PHARMACY"}>Pharmacy</MenuItem>
               </Select>
             </FormControl>
             <TextField
@@ -454,22 +471,12 @@ const PatientScheduling: React.FC<any> = (props) => {
           variant="contained"
           color="primary"
           className={classes.submit}
+          onClick={printState}
         >
           Submit
         </Button>
-
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-          className={classes.submit}
-          onClick={printState}
-        >
-          Test
-        </Button>
       </Box>
-      <AmplifySignOut/>
+      <AmplifySignOut />
     </Box>
   );
 };
