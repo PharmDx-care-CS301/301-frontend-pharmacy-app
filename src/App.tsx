@@ -12,6 +12,8 @@ import FollowUpPage from "./components/follow-up/FollowUpPage";
 import PatientScheduling from "./components/scheduling/patient-schedulling";
 import PharmacistConfirm from "./components/signup/pharmacist-confirmation";
 import CreateFollowUp from "./components/create-follow-up/create-follow-up";
+import {AppBar, IconButton, Toolbar, Typography} from "@material-ui/core";
+import {Auth} from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
   buttons: {
@@ -26,11 +28,27 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "40px",
     marginTop: "60px",
   },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+  linkStyle: {
+    textDecoration: "none"
+  }
 }));
+
+class MenuIcon extends React.Component {
+  render() {
+    return null;
+  }
+}
 
 function App() {
   const classes = useStyles();
 
+  // @ts-ignore
   return (
     <Box
       className="App"
@@ -54,6 +72,28 @@ function App() {
           width="100%"
         >
           <Router>
+            <AppBar position="static">
+              <Toolbar>
+                <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                  <MenuIcon />
+                </IconButton>
+                <Typography variant="h6" className={classes.title}>
+                  PharmDX
+                </Typography>
+                <Link to="/follow-up" className={classes.linkStyle}>
+                  <Button style={{"color": "#ffffff"}}>View Follow Up</Button>
+                </Link>
+                <Link to="/createFollowup" className={classes.linkStyle}>
+                  <Button style={{"color": "#ffffff"}}>Create Follow Up</Button>
+                </Link>
+                <Link to="/follow-up" className={classes.linkStyle}>
+                  <Button style={{"color": "#ffffff"}} onClick={async () => {
+                    await Auth.signOut()
+                    window.location.reload(false);
+                  }}>Sign Out</Button>
+                </Link>
+              </Toolbar>
+            </AppBar>
             <Switch>
               <Route
                 exact

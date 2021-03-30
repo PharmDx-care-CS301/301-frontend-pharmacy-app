@@ -242,7 +242,7 @@ function FollowUpPage() {
           aria-label="add"
           onClick={handleClick}
           style={{
-            position: "absolute",
+            position: "fixed",
             bottom: 30,
             right: 30,
           }}
