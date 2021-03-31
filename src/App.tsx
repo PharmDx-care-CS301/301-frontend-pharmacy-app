@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
@@ -8,12 +8,14 @@ import logo from "./logo.png";
 import Box from "@material-ui/core/Box";
 import ChooserPage from "./components/landing/ChooserPage";
 import PharmacistSignUp from "./components/signup/pharmacist-signup";
-import FollowUpPage from "./components/follow-up/FollowUpPage";
+import FollowUpPage, { PatientData } from "./components/follow-up/FollowUpPage";
 import PatientScheduling from "./components/scheduling/patient-schedulling";
 import PharmacistConfirm from "./components/signup/pharmacist-confirmation";
 import CreateFollowUp from "./components/create-follow-up/create-follow-up";
-import {AppBar, IconButton, Toolbar, Typography} from "@material-ui/core";
-import {Auth} from "aws-amplify";
+import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
+import { Auth } from "aws-amplify";
+import { withAuthenticator } from "@aws-amplify/ui-react";
+
 
 const useStyles = makeStyles((theme) => ({
   buttons: {
@@ -35,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   linkStyle: {
-    textDecoration: "none"
-  }
+    textDecoration: "none",
+  },
 }));
 
 class MenuIcon extends React.Component {
@@ -47,16 +49,22 @@ class MenuIcon extends React.Component {
 
 
 
+const ProtectedRoute: React.FC<any> = (props) => (
+  <Route
+    {...props}
+    component={withAuthenticator(props.component)}
+  />
+);
+
 function App() {
   const classes = useStyles();
-  const [patientData, setPatientData] = useState<undefined|Object>(undefined)
-  const [completedList, setCompletedList] = useState<undefined|Object>(undefined)
+  const [patientData, setPatientData] = useState<PatientData>({});
 
-  function createFollowUpPage(){
+  function createFollowUpPage() {
     // @ts-ignore
     return (
-        <FollowUpPage patientData={patientData} setPatientData={setPatientData}/>
-    )
+      <FollowUpPage patientData={patientData} setPatientData={setPatientData} />
+    );
   }
 
   return (
@@ -84,50 +92,60 @@ function App() {
           <Router>
             <AppBar position="static">
               <Toolbar>
-                <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                <IconButton
+                  edge="start"
+                  className={classes.menuButton}
+                  color="inherit"
+                  aria-label="menu"
+                >
                   <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" className={classes.title}>
                   PharmDX
                 </Typography>
                 <Link to="/follow-up" className={classes.linkStyle}>
-                  <Button style={{"color": "#ffffff"}}>View Follow Up</Button>
+                  <Button style={{ color: "#ffffff" }}>View Follow Up</Button>
                 </Link>
                 <Link to="/createFollowup" className={classes.linkStyle}>
-                  <Button style={{"color": "#ffffff"}}>Create Follow Up</Button>
+                  <Button style={{ color: "#ffffff" }}>Create Follow Up</Button>
                 </Link>
                 <Link to="/follow-up" className={classes.linkStyle}>
-                  <Button style={{"color": "#ffffff"}} onClick={async () => {
-                    await Auth.signOut()
-                    window.location.reload(false);
-                  }}>Sign Out</Button>
+                  <Button
+                    style={{ color: "#ffffff" }}
+                    onClick={async () => {
+                      await Auth.signOut();
+                      window.location.reload(false);
+                    }}
+                  >
+                    Sign Out
+                  </Button>
                 </Link>
               </Toolbar>
             </AppBar>
             <Switch>
-              <Route
+              <ProtectedRoute
                 exact
                 path="/patientscheduling"
                 component={PatientScheduling}
               />
-              <Route
+              <ProtectedRoute
                 exact
                 path="/pharmacistlogin"
                 component={PharmacistLogin}
               />
-              <Route exact path="/patientlogin" component={PatientLogin} />
-              <Route
+              <ProtectedRoute exact path="/patientlogin" component={PatientLogin} />
+              <ProtectedRoute
                 exact
                 path="/pharmacistSignUp"
                 component={PharmacistSignUp}
               />
-              <Route
+              <ProtectedRoute
                 exact
                 path="/pharmacistConfirm"
                 component={PharmacistConfirm}
               />
-              <Route exact path="/follow-up" component={createFollowUpPage}/>
-              <Route exact path="/createFollowUp" component={CreateFollowUp}/>
+              <ProtectedRoute exact path="/follow-up" component={createFollowUpPage} />
+              <ProtectedRoute exact path="/createFollowUp" component={CreateFollowUp} />
               <Route exact path="/" component={ChooserPage} />
               <Route path="/" component={() => <div>404</div>} />
             </Switch>
