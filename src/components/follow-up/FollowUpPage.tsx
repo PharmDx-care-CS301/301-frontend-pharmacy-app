@@ -26,9 +26,6 @@ import {
 } from "../../graphql/queries";
 import { format } from "date-fns";
 
-
-
-
 const useStyles = makeStyles((theme) => ({
   logo: {
     height: "144px",
@@ -82,26 +79,99 @@ function formatText(item) {
   );
 }
 
-interface FollowUpProps {
-  patientData: undefined|Object,
-  setPatientData: Function
+export interface FollowUpProps {
+  patientData: PatientData;
+  setPatientData: Function;
 }
 
-const FollowUpPage:React.FC<FollowUpProps> = ({patientData, setPatientData}) => {
+export interface PatientData {
+  completed?: {};
+  followuprequested?: {};
+  pendingresponse?: {};
+  todo?: {};
+}
+
+const FollowUpPage: React.FC<FollowUpProps> = (props) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
-  const [pageData, setPageData] = React.useState([]);
+  const [pageData, setPageData] = React.useState<any>([]);
   const history = useHistory();
 
   async function getFollowUpList(status: string) {
-    let ret = await API.graphql({
-      query: listFollowUps,
-      variables: { filter: { follow_up_status: { eq: status } } },
-    });
+    console.log(`Calling getFollowUpList(${status})`)
+    console.log(`patientData obj: ${props.patientData}`)
+    console.log(props.patientData)
+    switch (status) {
+      case "COMPLETED":
+        if (props.patientData.completed === undefined) {
+          let ret = await API.graphql({
+            query: listFollowUps,
+            variables: { filter: { follow_up_status: { eq: status } } },
+          });
+          props.setPatientData({
+            ...props.patientData,
+            completed: ret["data"]["listFollowUps"]["items"],
+          });
+        }
 
-    setPageData(ret["data"]["listFollowUps"]["items"]);
+        setPageData(props.patientData.completed);
+        break;
+      case "FOLLOWUPREQUESTED":
+        if (props.patientData.followuprequested === undefined) {
+          let ret = await API.graphql({
+            query: listFollowUps,
+            variables: { filter: { follow_up_status: { eq: status } } },
+          });
+          props.setPatientData({
+            ...props.patientData,
+            followuprequested: ret["data"]["listFollowUps"]["items"],
+          });
+        }
+
+        setPageData(props.patientData.followuprequested);
+
+        break;
+      case "PENDINGRESPONSE":
+        if (props.patientData.pendingresponse === undefined) {
+          let ret = await API.graphql({
+            query: listFollowUps,
+            variables: { filter: { follow_up_status: { eq: status } } },
+          });
+          props.setPatientData({
+            ...props.patientData,
+            pendingresponse: ret["data"]["listFollowUps"]["items"],
+          });
+          
+        }
+        setPageData(props.patientData.pendingresponse);
+        break;
+      case "TODO":
+        if (props.patientData.todo === undefined) {
+          let ret = await API.graphql({
+            query: listFollowUps,
+            variables: { filter: { follow_up_status: { eq: status } } },
+          });
+          props.setPatientData({
+            ...props.patientData,
+            todo: ret["data"]["listFollowUps"]["items"],
+          });
+        }
+        setPageData(props.patientData.todo);
+
+        break;
+      default:
+        console.error(
+          `Unknown STATUS provided for querying patient data. STATUS:${status}`
+        );
+        break;
+    }
+
+    // let ret = await API.graphql({
+    //   query: listFollowUps,
+    //   variables: { filter: { follow_up_status: { eq: status } } },
+    // });
     // setPageData(ret['data']['listFollowUps']['items'])
   }
 
@@ -260,6 +330,6 @@ const FollowUpPage:React.FC<FollowUpProps> = ({patientData, setPatientData}) => 
       </div>
     </>
   );
-}
+};
 
-export default withAuthenticator(FollowUpPage);
+export default FollowUpPage;
