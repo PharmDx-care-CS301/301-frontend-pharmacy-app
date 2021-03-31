@@ -45,9 +45,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+interface TabPanelInterface {
+  children: any;
+  value:number;
+  index: number;
+}
 
+const TabPanel:React.FC<TabPanelInterface> = (props)=> {
+  const { children, value, index, ...other } = props;
   return (
     <div
       role="tabpanel"
@@ -58,7 +63,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box p={3}>
-          <Typography>{children}</Typography>
+          <Typography component={"span"}>{children}</Typography>
         </Box>
       )}
     </div>
@@ -85,10 +90,10 @@ export interface FollowUpProps {
 }
 
 export interface PatientData {
-  completed?: {};
-  followuprequested?: {};
-  pendingresponse?: {};
-  todo?: {};
+  completed?: [];
+  followuprequested?: [];
+  pendingresponse?: [];
+  todo?: [];
 }
 
 const FollowUpPage: React.FC<FollowUpProps> = (props) => {
@@ -98,67 +103,84 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
   const [secondary, setSecondary] = React.useState(false);
   const [pageData, setPageData] = React.useState<any>([]);
   const history = useHistory();
+  const numEffect = 0
+
+  //only called once
+  /**Caution: If screen gets into infinite loop, kindly delete this code**/
+  /**This call makes sure to get data when component gets mounted**/
+  useEffect(()=>{
+     handleChange(null, value)
+  }, [numEffect])
+
+  function updateProps(status){
+    /**NOTE: This code runs slow s.t. screen gets updated and all states reinitialized**/
+    /**TODO: Find alternative way of updating props.setPageData**/
+    if (status === "COMPLETED" && pageData !== []) {
+      props.setPatientData({...props.patientData, "completed": pageData})
+    }
+  }
 
   async function getFollowUpList(status: string) {
-    console.log(`Calling getFollowUpList(${status})`)
-    console.log(`patientData obj: ${props.patientData}`)
-    console.log(props.patientData)
     switch (status) {
       case "COMPLETED":
         if (props.patientData.completed === undefined) {
-          let ret = await API.graphql({
+          const ret = await API.graphql({
             query: listFollowUps,
             variables: { filter: { follow_up_status: { eq: status } } },
           });
-          props.setPatientData({
-            ...props.patientData,
-            completed: ret["data"]["listFollowUps"]["items"],
-          });
-        }
+          const values = ret["data"]["listFollowUps"]["items"]
+          setPageData(values)
 
-        setPageData(props.patientData.completed);
+        }
+        else{
+          setPageData(props.patientData.completed);
+        }
+        setValue(0)
         break;
       case "FOLLOWUPREQUESTED":
         if (props.patientData.followuprequested === undefined) {
-          let ret = await API.graphql({
+          const ret = await API.graphql({
             query: listFollowUps,
             variables: { filter: { follow_up_status: { eq: status } } },
           });
-          props.setPatientData({
-            ...props.patientData,
-            followuprequested: ret["data"]["listFollowUps"]["items"],
-          });
+          const values = ret["data"]["listFollowUps"]["items"]
+          setPageData(values)
         }
-
-        setPageData(props.patientData.followuprequested);
+        else{
+          setPageData(props.patientData.followuprequested);
+        }
+        setValue(1)
 
         break;
       case "PENDINGRESPONSE":
         if (props.patientData.pendingresponse === undefined) {
-          let ret = await API.graphql({
+          const ret = await API.graphql({
             query: listFollowUps,
             variables: { filter: { follow_up_status: { eq: status } } },
           });
-          props.setPatientData({
-            ...props.patientData,
-            pendingresponse: ret["data"]["listFollowUps"]["items"],
-          });
-          
+          const values = ret["data"]["listFollowUps"]["items"]
+          setPageData(values)
+
         }
-        setPageData(props.patientData.pendingresponse);
+        else {
+          setPageData(props.patientData.pendingresponse);
+        }
+        setValue(2)
+
         break;
       case "TODO":
         if (props.patientData.todo === undefined) {
-          let ret = await API.graphql({
+          const ret = await API.graphql({
             query: listFollowUps,
             variables: { filter: { follow_up_status: { eq: status } } },
           });
-          props.setPatientData({
-            ...props.patientData,
-            todo: ret["data"]["listFollowUps"]["items"],
-          });
+          const values = ret["data"]["listFollowUps"]["items"]
+          setPageData(values)
         }
-        setPageData(props.patientData.todo);
+        else {
+          setPageData(props.patientData.todo);
+        }
+        setValue(3)
 
         break;
       default:
@@ -186,7 +208,7 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
     const date = item["updatedAt"];
     const conv = format(new Date(date), "hh:mm MMM dd, yyyy");
     return (
-      <ListItem style={{ justifyContent: "spaceEvenly" }} button>
+      <ListItem style={{ justifyContent: "spaceEvenly" }} button key={item["id"]}>
         <ListItemText secondary={secondary ? "Secondary text" : null}>
           {item["owner_id"]}
         </ListItemText>
@@ -220,15 +242,14 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
       </ListItem>
     );
   }
-  const handleChange = (event, newValue) => {
+  const handleChange = async (event, newValue) => {
     const lookUp = {
       0: "COMPLETED",
       1: "FOLLOWUPREQUESTED",
       2: "PENDINGRESPONSE",
       3: "TODO",
     };
-    getFollowUpList(lookUp[newValue]);
-    setValue(newValue);
+    await getFollowUpList(lookUp[newValue])
   };
 
   function handleClick() {
@@ -255,10 +276,12 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
         <TabPanel value={value} index={0}>
           <div className={classes.demo}>
             <List dense={dense}>
-              {formatHeader()}
-              <Divider />
+              <div>
+                {formatHeader()}
+                <Divider />
+              </div>
               {pageData.map((item) => (
-                <div>
+                <div key={item["id"]}>
                   {formatInputItem(item)}
                   <Divider />
                 </div>
@@ -272,7 +295,7 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
             <Divider />
             <List dense={dense}>
               {pageData.map((item) => (
-                <div>
+                <div key={item["id"]}>
                   {formatInputItem(item)}
                   <Divider />
                 </div>
@@ -286,7 +309,7 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
             <Divider />
             <List dense={dense}>
               {pageData.map((item) => (
-                <div>
+                <div key={item["id"]}>
                   {formatInputItem(item)}
                   <Divider />
                 </div>
@@ -300,14 +323,8 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
               {formatHeader()}
               <Divider />
               {pageData.map((item) => (
-                <div>
-                  <ListItem>
-                    <ListItemText
-                      secondary={secondary ? "Secondary text" : null}
-                    >
-                      {formatInputItem(item)}
-                    </ListItemText>
-                  </ListItem>
+                <div key={item["id"]}>
+                  {formatInputItem(item)}
                   <Divider />
                 </div>
               ))}
