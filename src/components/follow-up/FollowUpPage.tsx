@@ -26,6 +26,8 @@ import {
 } from "../../graphql/queries";
 import { format } from "date-fns";
 
+
+
 const useStyles = makeStyles((theme) => ({
   logo: {
     height: "144px",
@@ -79,7 +81,7 @@ function formatText(item) {
   );
 }
 
-function FollowUpPage() {
+const FollowUpPage:React.FC<any> = (props) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [dense, setDense] = React.useState(false);

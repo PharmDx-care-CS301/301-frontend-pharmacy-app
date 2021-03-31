@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
@@ -45,10 +45,19 @@ class MenuIcon extends React.Component {
   }
 }
 
+
+
 function App() {
   const classes = useStyles();
+  const [patientData, setPatientData] = useState<undefined|Object>(undefined)
+  const [completedList, setCompletedList] = useState<undefined|Object>(undefined)
 
-  // @ts-ignore
+  function createFollowUpPage(){
+    return (
+        <FollowUpPage patientData={patientData} setPatientData={setPatientData}/>
+    )
+  }
+
   return (
     <Box
       className="App"
@@ -116,8 +125,8 @@ function App() {
                 path="/pharmacistConfirm"
                 component={PharmacistConfirm}
               />
-              <Route exact path="/follow-up" component={FollowUpPage} />
-              <Route exact path="/createFollowUp" component={CreateFollowUp} />
+              <Route exact path="/follow-up" component={createFollowUpPage}/>
+              <Route exact path="/createFollowUp" component={CreateFollowUp}/>
               <Route exact path="/" component={ChooserPage} />
               <Route path="/" component={() => <div>404</div>} />
             </Switch>
