@@ -53,6 +53,7 @@ function App() {
   const [completedList, setCompletedList] = useState<undefined|Object>(undefined)
 
   function createFollowUpPage(){
+    // @ts-ignore
     return (
         <FollowUpPage patientData={patientData} setPatientData={setPatientData}/>
     )

@@ -28,6 +28,7 @@ import { format } from "date-fns";
 
 
 
+
 const useStyles = makeStyles((theme) => ({
   logo: {
     height: "144px",
@@ -81,7 +82,12 @@ function formatText(item) {
   );
 }
 
-const FollowUpPage:React.FC<any> = (props) => {
+interface FollowUpProps {
+  patientData: undefined|Object,
+  setPatientData: Function
+}
+
+const FollowUpPage:React.FC<FollowUpProps> = ({patientData, setPatientData}) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [dense, setDense] = React.useState(false);
