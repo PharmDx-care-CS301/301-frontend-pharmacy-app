@@ -164,7 +164,7 @@ function PatientScheduling() {
                 </Grid>
                 <h3> Patient verbal consent for follow up</h3>
                 <FormControlLabel
-                    control={<Checkbox checked = {yes} onChange={handleChange}/>}
+                    control={<Checkbox checked = {!yes} onChange={handleChange}/>}
                     label="Yes"
                     style= {{
                         width: 50,
@@ -172,7 +172,7 @@ function PatientScheduling() {
                 />
 
                 <FormControlLabel
-                    control={<Checkbox checked={!yes} onChange={handleChange}/>}
+                    control={<Checkbox checked={yes} onChange={handleChange}/>}
                     label="No"
                     style= {{
                         width: 50

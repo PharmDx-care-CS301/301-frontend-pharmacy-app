@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import logo from "../../logo.png";
 import data from "./data.json";
-import {AppBar, Box, Typography, Tab, Tabs, List, ListItem, ListItemText, Divider} from "@material-ui/core";
+import {AppBar, Box, Typography, Tab, Tabs, List, ListItem, ListItemText, Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from "@material-ui/core";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
     demo: {
         backgroundColor: theme.palette.background.paper,
     },
+    table: {
+        minWidth: 200,
+      },
 }));
 
 function TabPanel(props) {
@@ -55,6 +58,44 @@ function formatText(item) {
     return item.name + " | Medication: " + item.medication + ' | Symptoms Resolved: ' + (item.symptomsResolved ? ' Yes ': ' False ') + '| ' + item.timeStamp + ' | ' + item.nextFollowUp
 }
 
+function getResolved(bool){
+    if (bool == true){
+        return "Yes";
+    }
+    return"No";
+}
+
+function CreateTable(rows){
+    const classes = useStyles();
+    return (
+    <TableContainer component={Paper}>
+      <Table className={classes.table} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell align="right">Medication</TableCell>
+            <TableCell align="right">Symptoms Resolved?</TableCell>
+            <TableCell align="right">Time</TableCell>
+            <TableCell align="right">Next Follow Up</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                {row.name}
+              </TableCell>
+              <TableCell align="right">{row.medication}</TableCell>
+              <TableCell align="right">{getResolved(row.symptomsResolved)}</TableCell>
+              <TableCell align="right">{row.timeStamp}</TableCell>
+              <TableCell align="right">{row.nextFollowUp}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+    )
+}
 
 function FollowUpPage(){
     const classes = useStyles();
@@ -69,7 +110,7 @@ function FollowUpPage(){
     return (<>
         <img src={logo} className={classes.logo} alt="logo"/>
         <div className={classes.container}>
-            <AppBar position="static">
+            <AppBar style={{backgroundColor: "#2d9cdb"}} position="static">
                 <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" variant="fullWidth">
                     <Tab label="Completed" {...a11yProps(0)} />
                     <Tab label="Requested In Person" {...a11yProps(1)} />
@@ -78,24 +119,10 @@ function FollowUpPage(){
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
-                <div className={classes.demo}>
-                    <List dense={dense}>
-                        {data.completed.map((item) => (
-                            <div>
-                                <ListItem>
-                                    <ListItemText
-                                        primary={formatText(item)}
-                                        secondary={secondary ? 'Secondary text' : null}
-                                    >  </ListItemText>
-                                </ListItem>
-                                <Divider />
-                            </div>
-                        ))}
-                    </List>
-                </div>
+                {CreateTable(data["completed"])}
             </TabPanel>
             <TabPanel value={value} index={1}>
-                Item Two
+                {CreateTable(data["requested"])}
             </TabPanel>
             <TabPanel value={value} index={2}>
                 Item Three
