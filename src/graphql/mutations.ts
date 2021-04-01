@@ -15,6 +15,7 @@ export const createPatient = /* GraphQL */ `
       dob
       phone_number
       email
+      owner_id
       _version
       _deleted
       _lastChangedAt
@@ -40,6 +41,7 @@ export const updatePatient = /* GraphQL */ `
       dob
       phone_number
       email
+      owner_id
       _version
       _deleted
       _lastChangedAt
@@ -65,6 +67,7 @@ export const deletePatient = /* GraphQL */ `
       dob
       phone_number
       email
+      owner_id
       _version
       _deleted
       _lastChangedAt
@@ -153,7 +156,8 @@ export const createPharmacist = /* GraphQL */ `
       first_name
       last_name
       pharmacist_number
-      pharmacist_ids
+      pharmacy_ids
+      cognito_id
       _version
       _deleted
       _lastChangedAt
@@ -176,7 +180,8 @@ export const updatePharmacist = /* GraphQL */ `
       first_name
       last_name
       pharmacist_number
-      pharmacist_ids
+      pharmacy_ids
+      cognito_id
       _version
       _deleted
       _lastChangedAt
@@ -199,7 +204,8 @@ export const deletePharmacist = /* GraphQL */ `
       first_name
       last_name
       pharmacist_number
-      pharmacist_ids
+      pharmacy_ids
+      cognito_id
       _version
       _deleted
       _lastChangedAt
@@ -221,6 +227,8 @@ export const createFollowUp = /* GraphQL */ `
       id
       contact_method
       assessment_id
+      owner_id
+      follow_up_status
       _version
       _deleted
       _lastChangedAt
@@ -230,8 +238,8 @@ export const createFollowUp = /* GraphQL */ `
         id
         date
         description
-        pharmacist_id
         patient_id
+        owner_id
         _version
         _deleted
         _lastChangedAt
@@ -250,6 +258,8 @@ export const updateFollowUp = /* GraphQL */ `
       id
       contact_method
       assessment_id
+      owner_id
+      follow_up_status
       _version
       _deleted
       _lastChangedAt
@@ -259,8 +269,8 @@ export const updateFollowUp = /* GraphQL */ `
         id
         date
         description
-        pharmacist_id
         patient_id
+        owner_id
         _version
         _deleted
         _lastChangedAt
@@ -279,6 +289,8 @@ export const deleteFollowUp = /* GraphQL */ `
       id
       contact_method
       assessment_id
+      owner_id
+      follow_up_status
       _version
       _deleted
       _lastChangedAt
@@ -288,8 +300,8 @@ export const deleteFollowUp = /* GraphQL */ `
         id
         date
         description
-        pharmacist_id
         patient_id
+        owner_id
         _version
         _deleted
         _lastChangedAt
@@ -308,8 +320,8 @@ export const createAssessment = /* GraphQL */ `
       id
       date
       description
-      pharmacist_id
       patient_id
+      owner_id
       _version
       _deleted
       _lastChangedAt
@@ -323,6 +335,7 @@ export const createAssessment = /* GraphQL */ `
         dob
         phone_number
         email
+        owner_id
         _version
         _deleted
         _lastChangedAt
@@ -345,17 +358,8 @@ export const createAssessment = /* GraphQL */ `
         first_name
         last_name
         pharmacist_number
-        pharmacist_ids
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      FollowUp {
-        id
-        contact_method
-        assessment_id
+        pharmacy_ids
+        cognito_id
         _version
         _deleted
         _lastChangedAt
@@ -378,8 +382,8 @@ export const updateAssessment = /* GraphQL */ `
       id
       date
       description
-      pharmacist_id
       patient_id
+      owner_id
       _version
       _deleted
       _lastChangedAt
@@ -393,6 +397,7 @@ export const updateAssessment = /* GraphQL */ `
         dob
         phone_number
         email
+        owner_id
         _version
         _deleted
         _lastChangedAt
@@ -415,17 +420,8 @@ export const updateAssessment = /* GraphQL */ `
         first_name
         last_name
         pharmacist_number
-        pharmacist_ids
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      FollowUp {
-        id
-        contact_method
-        assessment_id
+        pharmacy_ids
+        cognito_id
         _version
         _deleted
         _lastChangedAt
@@ -448,8 +444,8 @@ export const deleteAssessment = /* GraphQL */ `
       id
       date
       description
-      pharmacist_id
       patient_id
+      owner_id
       _version
       _deleted
       _lastChangedAt
@@ -463,6 +459,7 @@ export const deleteAssessment = /* GraphQL */ `
         dob
         phone_number
         email
+        owner_id
         _version
         _deleted
         _lastChangedAt
@@ -485,17 +482,8 @@ export const deleteAssessment = /* GraphQL */ `
         first_name
         last_name
         pharmacist_number
-        pharmacist_ids
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      FollowUp {
-        id
-        contact_method
-        assessment_id
+        pharmacy_ids
+        cognito_id
         _version
         _deleted
         _lastChangedAt
@@ -590,7 +578,8 @@ export const createPharmacistPharmacy = /* GraphQL */ `
         first_name
         last_name
         pharmacist_number
-        pharmacist_ids
+        pharmacy_ids
+        cognito_id
         _version
         _deleted
         _lastChangedAt
@@ -630,7 +619,8 @@ export const updatePharmacistPharmacy = /* GraphQL */ `
         first_name
         last_name
         pharmacist_number
-        pharmacist_ids
+        pharmacy_ids
+        cognito_id
         _version
         _deleted
         _lastChangedAt
@@ -670,7 +660,8 @@ export const deletePharmacistPharmacy = /* GraphQL */ `
         first_name
         last_name
         pharmacist_number
-        pharmacist_ids
+        pharmacy_ids
+        cognito_id
         _version
         _deleted
         _lastChangedAt

@@ -65,6 +65,13 @@ export const schema = {
                         "connectionType": "HAS_MANY",
                         "associatedWith": "patient_id"
                     }
+                },
+                "owner_id": {
+                    "name": "owner_id",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -113,13 +120,6 @@ export const schema = {
                     "name": "description",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "pharmacist_id": {
-                    "name": "pharmacist_id",
-                    "isArray": false,
-                    "type": "ID",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -183,18 +183,12 @@ export const schema = {
                         "targetName": "assessmentAssessedForId"
                     }
                 },
-                "FollowUp": {
-                    "name": "FollowUp",
+                "owner_id": {
+                    "name": "owner_id",
                     "isArray": false,
-                    "type": {
-                        "model": "FollowUp"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "assessmentFollowUpId"
-                    }
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -579,6 +573,22 @@ export const schema = {
                         "connectionType": "BELONGS_TO",
                         "targetName": "followUpForAssessmentId"
                     }
+                },
+                "owner_id": {
+                    "name": "owner_id",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "follow_up_status": {
+                    "name": "follow_up_status",
+                    "isArray": false,
+                    "type": {
+                        "enum": "FollowUpStatus"
+                    },
+                    "isRequired": false,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -616,8 +626,8 @@ export const schema = {
                 "PHARMACY"
             ]
         },
-        "FollowUpMethod": {
-            "name": "FollowUpMethod",
+        "FollowUpStatus": {
+            "name": "FollowUpStatus",
             "values": [
                 "COMPLETED",
                 "PENDINGRESPONSE",
@@ -629,5 +639,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "880b2152c67904419383df613e7efc8e"
+    "version": "c3ec393ec4463ec9b555901ee3041463"
 };

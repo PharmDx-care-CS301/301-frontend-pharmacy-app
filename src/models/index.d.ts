@@ -6,7 +6,7 @@ export enum ContactMethod {
   PHARMACY = "PHARMACY"
 }
 
-export enum FollowUpMethod {
+export enum FollowUpStatus {
   COMPLETED = "COMPLETED",
   PENDINGRESPONSE = "PENDINGRESPONSE",
   TODO = "TODO",
@@ -26,6 +26,7 @@ export declare class Patient {
   readonly phone_number?: string;
   readonly email?: string;
   readonly AssessmentRecord?: (Assessment | null)[];
+  readonly owner_id?: string;
   constructor(init: ModelInit<Patient>);
   static copyOf(source: Patient, mutator: (draft: MutableModel<Patient>) => MutableModel<Patient> | void): Patient;
 }
@@ -34,13 +35,12 @@ export declare class Assessment {
   readonly id: string;
   readonly date?: string;
   readonly description?: string;
-  readonly pharmacist_id?: string;
   readonly patient_id?: string;
   readonly Prescription?: (Prescription | null)[];
   readonly AssessedBy?: Pharmacist;
   readonly PerformedAt?: Pharmacy;
   readonly AssessedFor?: Patient;
-  readonly FollowUp?: FollowUp;
+  readonly owner_id: string;
   constructor(init: ModelInit<Assessment>);
   static copyOf(source: Assessment, mutator: (draft: MutableModel<Assessment>) => MutableModel<Assessment> | void): Assessment;
 }
@@ -88,6 +88,8 @@ export declare class FollowUp {
   readonly contact_method?: ContactMethod | keyof typeof ContactMethod;
   readonly assessment_id?: string;
   readonly ForAssessment?: Assessment;
+  readonly owner_id: string;
+  readonly follow_up_status?: FollowUpStatus | keyof typeof FollowUpStatus;
   constructor(init: ModelInit<FollowUp>);
   static copyOf(source: FollowUp, mutator: (draft: MutableModel<FollowUp>) => MutableModel<FollowUp> | void): FollowUp;
 }

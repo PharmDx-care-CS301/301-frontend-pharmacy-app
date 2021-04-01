@@ -8,7 +8,7 @@ const ContactMethod = {
   "PHARMACY": "PHARMACY"
 };
 
-const FollowUpMethod = {
+const FollowUpStatus = {
   "COMPLETED": "COMPLETED",
   "PENDINGRESPONSE": "PENDINGRESPONSE",
   "TODO": "TODO",
@@ -28,5 +28,5 @@ export {
   Pharmacy,
   FollowUp,
   ContactMethod,
-  FollowUpMethod
+  FollowUpStatus
 };
