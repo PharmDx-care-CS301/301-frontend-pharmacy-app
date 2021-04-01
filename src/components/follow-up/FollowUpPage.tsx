@@ -1,29 +1,13 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import logo from "../../logo.png";
 import data from "./data.json";
-import {
-  AppBar,
-  Box,
-  Typography,
-  Tab,
-  Tabs,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-  Fab,
-} from "@material-ui/core";
+import { AppBar, Box, Typography, Tab, Tabs,
+  Fab, TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody} from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { Auth, API } from "aws-amplify";
-import { withAuthenticator } from "@aws-amplify/ui-react";
-import { createPharmacist } from "../../graphql/mutations";
-import {
-  getFollowUp,
-  getPharmacist,
-  listFollowUps,
-} from "../../graphql/queries";
+import {listFollowUps,} from "../../graphql/queries";
 import { format } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
@@ -42,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
   },
   demo: {
     backgroundColor: theme.palette.background.paper,
+  },
+  table: {
+    minWidth: 200,
   },
 }));
 
@@ -103,20 +90,27 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
   const [secondary, setSecondary] = React.useState(false);
   const [pageData, setPageData] = React.useState<any>([]);
   const history = useHistory();
-  const numEffect = 0
+  const numEffect = 1
 
   //only called once
   /**Caution: If screen gets into infinite loop, kindly delete this code**/
   /**This call makes sure to get data when component gets mounted**/
-  useEffect(()=>{
-     handleChange(null, value)
-  }, [numEffect])
+  useEffect(()=>{handleChange(null, value)}, [])
 
-  function updateProps(status){
+  function updateProps(status, values){
     /**NOTE: This code runs slow s.t. screen gets updated and all states reinitialized**/
     /**TODO: Find alternative way of updating props.setPageData**/
-    if (status === "COMPLETED" && pageData !== []) {
-      props.setPatientData({...props.patientData, "completed": pageData})
+    if (status === "COMPLETED" && values.length > 0) {
+      props.setPatientData({...props.patientData, "completed": values})
+    }
+    else if (status === "FOLLOWUPREQUESTED" && values.length > 0) {
+      props.setPatientData({...props.patientData, "followuprequested": values})
+    }
+    else if (status === "PENDINGRESPONSE" && values.length > 0) {
+      props.setPatientData({...props.patientData, "pendingresponse": values})
+    }
+    else if (status === "TODO" && values.length > 0) {
+      props.setPatientData({...props.patientData, "todo": values})
     }
   }
 
@@ -131,11 +125,12 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
           const values = ret["data"]["listFollowUps"]["items"]
           setPageData(values)
 
+          // props.setPatientData({...props.patientData, "completed": values})
         }
         else{
           setPageData(props.patientData.completed);
         }
-        setValue(0)
+
         break;
       case "FOLLOWUPREQUESTED":
         if (props.patientData.followuprequested === undefined) {
@@ -145,11 +140,11 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
           });
           const values = ret["data"]["listFollowUps"]["items"]
           setPageData(values)
+          // props.setPatientData({...props.patientData, "followuprequested": values})
         }
         else{
           setPageData(props.patientData.followuprequested);
         }
-        setValue(1)
 
         break;
       case "PENDINGRESPONSE":
@@ -165,7 +160,6 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
         else {
           setPageData(props.patientData.pendingresponse);
         }
-        setValue(2)
 
         break;
       case "TODO":
@@ -180,7 +174,6 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
         else {
           setPageData(props.patientData.todo);
         }
-        setValue(3)
 
         break;
       default:
@@ -190,11 +183,6 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
         break;
     }
 
-    // let ret = await API.graphql({
-    //   query: listFollowUps,
-    //   variables: { filter: { follow_up_status: { eq: status } } },
-    // });
-    // setPageData(ret['data']['listFollowUps']['items'])
   }
 
   function a11yProps(index) {
@@ -204,44 +192,6 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
     };
   }
 
-  function formatInputItem(item) {
-    const date = item["updatedAt"];
-    const conv = format(new Date(date), "hh:mm MMM dd, yyyy");
-    return (
-      <ListItem style={{ justifyContent: "spaceEvenly" }} button key={item["id"]}>
-        <ListItemText secondary={secondary ? "Secondary text" : null}>
-          {item["owner_id"]}
-        </ListItemText>
-        <ListItemText secondary={secondary ? "Secondary text" : null}>
-          {item["contact_method"]}
-        </ListItemText>
-        <ListItemText
-          secondary={secondary ? "Secondary text" : null}
-          style={{ textAlign: "right" }}
-        >
-          {conv}
-        </ListItemText>
-      </ListItem>
-    );
-  }
-
-  function formatHeader() {
-    return (
-      <ListItem style={{ textAlign: "center" }}>
-        <ListItemText secondary={secondary ? "Secondary text" : null}>
-          {"Patient"}
-        </ListItemText>
-        <Divider orientation="vertical" flexItem />
-        <ListItemText secondary={secondary ? "Secondary text" : null}>
-          {"Contact Method"}
-        </ListItemText>
-        <Divider orientation="vertical" flexItem />
-        <ListItemText secondary={secondary ? "Secondary text" : null}>
-          {"Date"}
-        </ListItemText>
-      </ListItem>
-    );
-  }
   const handleChange = async (event, newValue) => {
     const lookUp = {
       0: "COMPLETED",
@@ -249,13 +199,45 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
       2: "PENDINGRESPONSE",
       3: "TODO",
     };
-    await getFollowUpList(lookUp[newValue])
+    getFollowUpList(lookUp[newValue]).then(()=>{
+      setValue(newValue);
+      // updateProps(lookUp[newValue]);
+    })
+
   };
 
   function handleClick() {
     history.push("/patientscheduling");
   }
-
+  function CreateTable(rows){
+    const classes = useStyles();
+    return (
+        <TableContainer component={Paper}>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="left">Id</TableCell>
+                <TableCell align="left">Patient</TableCell>
+                <TableCell align="right">Contact method</TableCell>
+                <TableCell align="right">Date</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell component="th" scope="row" align="left">
+                      {row.id}
+                    </TableCell>
+                    <TableCell align="left">{row.owner_id}</TableCell>
+                    <TableCell align="right">{row.contact_method}</TableCell>
+                    <TableCell align="right">{format(new Date(row.updatedAt), "hh:mm MMM dd, yyyy")}</TableCell>
+                  </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+    )
+  }
   return (
     <>
       <img src={logo} className={classes.logo} alt="logo" />
@@ -274,62 +256,16 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <div className={classes.demo}>
-            <List dense={dense}>
-              <div>
-                {formatHeader()}
-                <Divider />
-              </div>
-              {pageData.map((item) => (
-                <div key={item["id"]}>
-                  {formatInputItem(item)}
-                  <Divider />
-                </div>
-              ))}
-            </List>
-          </div>
+          {CreateTable(pageData)}
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <div className={classes.demo}>
-            {formatHeader()}
-            <Divider />
-            <List dense={dense}>
-              {pageData.map((item) => (
-                <div key={item["id"]}>
-                  {formatInputItem(item)}
-                  <Divider />
-                </div>
-              ))}
-            </List>
-          </div>
+          {CreateTable(pageData)}
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <div className={classes.demo}>
-            {formatHeader()}
-            <Divider />
-            <List dense={dense}>
-              {pageData.map((item) => (
-                <div key={item["id"]}>
-                  {formatInputItem(item)}
-                  <Divider />
-                </div>
-              ))}
-            </List>
-          </div>
+          {CreateTable(pageData)}
         </TabPanel>
         <TabPanel value={value} index={3}>
-          <div className={classes.demo}>
-            <List dense={dense}>
-              {formatHeader()}
-              <Divider />
-              {pageData.map((item) => (
-                <div key={item["id"]}>
-                  {formatInputItem(item)}
-                  <Divider />
-                </div>
-              ))}
-            </List>
-          </div>
+          {CreateTable(pageData)}
         </TabPanel>
 
         <Fab
