@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "../../logo.png";
 import Button from "@material-ui/core/Button";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { useHistory } from "react-router-dom";
 import Box from "@material-ui/core/Box";
@@ -15,7 +15,7 @@ import {
   Select,
 } from "@material-ui/core";
 import { Auth, API } from "aws-amplify";
-import { AmplifySignOut, withAuthenticator } from "@aws-amplify/ui-react";
+import { withAuthenticator } from "@aws-amplify/ui-react";
 import { useSnackbar } from "notistack";
 import {
   createPatient,
@@ -215,7 +215,7 @@ const PatientScheduling: React.FC<any> = (props) => {
         displayError(e.message);
       }
     } catch (e) {
-      if (e.errors != undefined) {
+      if (e.errors !== undefined) {
         displayError(e.errors[0].message);
       }
     } finally {

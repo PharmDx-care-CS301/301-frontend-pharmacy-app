@@ -4,7 +4,6 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import PharmacistLogin from "./components/login/pharmacist-login";
 import PatientLogin from "./components/login/patient-login";
-import logo from "./logo.png";
 import Box from "@material-ui/core/Box";
 import ChooserPage from "./components/landing/ChooserPage";
 import PharmacistSignUp from "./components/signup/pharmacist-signup";
@@ -41,47 +40,122 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+class MenuIcon extends React.Component {
+  render() {
+    return null;
+  }
+}
+
+
+const ProtectedRoute: React.FC<any> = (props) => (
+    <Route
+        {...props}
+        component={withAuthenticator(props.component)}
+    />
+);
 
 function App() {
   const classes = useStyles();
+  const [patientData, setPatientData] = useState<PatientData>({
+    completed:undefined,
+    followuprequested: undefined,
+    pendingresponse: undefined,
+    todo: undefined
+  });
+
+  function createFollowUpPage() {
+    // @ts-ignore
+    return (
+        <FollowUpPage patientData={patientData} setPatientData={setPatientData} />
+    );
+  }
 
   return (
-    <Box className="App" display="flex" flexDirection="column" alignSelf="center" alignItems="center">
-      <Box display="flex" alignItems="center" flexDirection="column" width="611px" height="497px">
-        <Box flexDirection="column" alignItems="center" display="flex"
-             height="300px">
-          <Router>
-            <Switch>
-              <ProtectedRoute
-                exact
-                path="/patientscheduling"
-                component={PatientScheduling}
-              />
-              <ProtectedRoute
-                exact
-                path="/pharmacistlogin"
-                component={PharmacistLogin}
-              />
-              <ProtectedRoute exact path="/patientlogin" component={PatientLogin} />
-              <ProtectedRoute
-                exact
-                path="/pharmacistSignUp"
-                component={PharmacistSignUp}
-              />
-              <ProtectedRoute
-                exact
-                path="/pharmacistConfirm"
-                component={PharmacistConfirm}
-              />
-              <ProtectedRoute exact path="/follow-up" component={createFollowUpPage} />
-              <ProtectedRoute exact path="/createFollowUp" component={CreateFollowUp} />
-              <Route exact path="/" component={ChooserPage} />
-              <Route path="/" component={() => <div>404</div>} />
-            </Switch>
-          </Router>
+      <Box
+          className="App"
+          display="flex"
+          flexDirection="column"
+          alignSelf="center"
+          alignItems="center"
+      >
+        <Box
+            display="flex"
+            alignItems="center"
+            flexDirection="column"
+            width="100%"
+            height="497px"
+        >
+          <Box
+              flexDirection="column"
+              alignItems="center"
+              display="flex"
+              height="300px"
+              width="100%"
+          >
+            <Router>
+              <AppBar position="static">
+                <Toolbar>
+                  <IconButton
+                      edge="start"
+                      className={classes.menuButton}
+                      color="inherit"
+                      aria-label="menu"
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Typography variant="h6" className={classes.title}>
+                    PharmDX
+                  </Typography>
+                  <Link to="/follow-up" className={classes.linkStyle}>
+                    <Button style={{ color: "#ffffff" }}>View Follow Up</Button>
+                  </Link>
+                  <Link to="/patientscheduling" className={classes.linkStyle}>
+                    <Button style={{ color: "#ffffff" }}>Create Follow Up</Button>
+                  </Link>
+                  <Link to="/follow-up" className={classes.linkStyle}>
+                    <Button
+                        style={{ color: "#ffffff" }}
+                        onClick={async () => {
+                          await Auth.signOut();
+                          window.location.reload(false);
+                        }}
+                    >
+                      Sign Out
+                    </Button>
+                  </Link>
+                </Toolbar>
+              </AppBar>
+              <Switch>
+                <ProtectedRoute
+                    exact
+                    path="/patientscheduling"
+                    component={PatientScheduling}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/pharmacistlogin"
+                    component={PharmacistLogin}
+                />
+                <ProtectedRoute exact path="/patientlogin" component={PatientLogin} />
+                <ProtectedRoute
+                    exact
+                    path="/pharmacistSignUp"
+                    component={PharmacistSignUp}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/pharmacistConfirm"
+                    component={PharmacistConfirm}
+                />
+                <ProtectedRoute exact path="/follow-up" component={createFollowUpPage} />
+                <ProtectedRoute exact path="/createFollowUp" component={CreateFollowUp} />
+                <Route exact path="/" component={ChooserPage} />
+                <Route path="/" component={() => <div>404</div>} />
+              </Switch>
+            </Router>
+          </Box>
         </Box>
       </Box>
-    </Box>
   );
 }
 

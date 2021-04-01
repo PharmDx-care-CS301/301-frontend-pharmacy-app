@@ -2,11 +2,10 @@ import React, {useEffect} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import logo from "../../logo.png";
-import data from "./data.json";
 import { AppBar, Box, Typography, Tab, Tabs,
   Fab, TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody} from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import { Auth, API } from "aws-amplify";
+import { API } from "aws-amplify";
 import {listFollowUps,} from "../../graphql/queries";
 import { format } from "date-fns";
 
@@ -57,20 +56,6 @@ const TabPanel:React.FC<TabPanelInterface> = (props)=> {
   );
 }
 
-function formatText(item) {
-  return (
-    item.name +
-    " | Medication: " +
-    item.medication +
-    " | Symptoms Resolved: " +
-    (item.symptomsResolved ? " Yes " : " False ") +
-    "| " +
-    item.timeStamp +
-    " | " +
-    item.nextFollowUp
-  );
-}
-
 export interface FollowUpProps {
   patientData: PatientData;
   setPatientData: Function;
@@ -86,11 +71,8 @@ export interface PatientData {
 const FollowUpPage: React.FC<FollowUpProps> = (props) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [secondary, setSecondary] = React.useState(false);
   const [pageData, setPageData] = React.useState<any>([]);
   const history = useHistory();
-  const numEffect = 1
 
   //only called once
   /**Caution: If screen gets into infinite loop, kindly delete this code**/
