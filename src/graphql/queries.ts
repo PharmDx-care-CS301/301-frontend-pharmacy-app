@@ -17,6 +17,7 @@ export const listPatients = /* GraphQL */ `
         dob
         phone_number
         email
+        owner_id
         _version
         _deleted
         _lastChangedAt
@@ -38,6 +39,7 @@ export const getPatient = /* GraphQL */ `
       dob
       phone_number
       email
+      owner_id
       _version
       _deleted
       _lastChangedAt
@@ -71,6 +73,7 @@ export const syncPatients = /* GraphQL */ `
         dob
         phone_number
         email
+        owner_id
         _version
         _deleted
         _lastChangedAt
@@ -165,7 +168,8 @@ export const listPharmacists = /* GraphQL */ `
         first_name
         last_name
         pharmacist_number
-        pharmacist_ids
+        pharmacy_ids
+        cognito_id
         _version
         _deleted
         _lastChangedAt
@@ -184,7 +188,8 @@ export const getPharmacist = /* GraphQL */ `
       first_name
       last_name
       pharmacist_number
-      pharmacist_ids
+      pharmacy_ids
+      cognito_id
       _version
       _deleted
       _lastChangedAt
@@ -215,29 +220,8 @@ export const syncPharmacists = /* GraphQL */ `
         first_name
         last_name
         pharmacist_number
-        pharmacist_ids
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const listFollowUps = /* GraphQL */ `
-  query ListFollowUps(
-    $filter: ModelFollowUpFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listFollowUps(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        contact_method
-        assessment_id
+        pharmacy_ids
+        cognito_id
         _version
         _deleted
         _lastChangedAt
@@ -255,6 +239,8 @@ export const getFollowUp = /* GraphQL */ `
       id
       contact_method
       assessment_id
+      owner_id
+      follow_up_status
       _version
       _deleted
       _lastChangedAt
@@ -264,14 +250,38 @@ export const getFollowUp = /* GraphQL */ `
         id
         date
         description
-        pharmacist_id
         patient_id
+        owner_id
         _version
         _deleted
         _lastChangedAt
         createdAt
         updatedAt
       }
+    }
+  }
+`;
+export const listFollowUps = /* GraphQL */ `
+  query ListFollowUps(
+    $filter: ModelFollowUpFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listFollowUps(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        contact_method
+        assessment_id
+        owner_id
+        follow_up_status
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -292,6 +302,8 @@ export const syncFollowUps = /* GraphQL */ `
         id
         contact_method
         assessment_id
+        owner_id
+        follow_up_status
         _version
         _deleted
         _lastChangedAt
@@ -314,8 +326,8 @@ export const listAssessments = /* GraphQL */ `
         id
         date
         description
-        pharmacist_id
         patient_id
+        owner_id
         _version
         _deleted
         _lastChangedAt
@@ -333,8 +345,8 @@ export const getAssessment = /* GraphQL */ `
       id
       date
       description
-      pharmacist_id
       patient_id
+      owner_id
       _version
       _deleted
       _lastChangedAt
@@ -348,6 +360,7 @@ export const getAssessment = /* GraphQL */ `
         dob
         phone_number
         email
+        owner_id
         _version
         _deleted
         _lastChangedAt
@@ -370,17 +383,8 @@ export const getAssessment = /* GraphQL */ `
         first_name
         last_name
         pharmacist_number
-        pharmacist_ids
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-      }
-      FollowUp {
-        id
-        contact_method
-        assessment_id
+        pharmacy_ids
+        cognito_id
         _version
         _deleted
         _lastChangedAt
@@ -411,8 +415,8 @@ export const syncAssessments = /* GraphQL */ `
         id
         date
         description
-        pharmacist_id
         patient_id
+        owner_id
         _version
         _deleted
         _lastChangedAt

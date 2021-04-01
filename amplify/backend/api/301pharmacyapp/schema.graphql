@@ -7,6 +7,7 @@ type Patient @model @auth(rules: [{allow: public}]) {
   phone_number: AWSPhone
   email: AWSEmail
   AssessmentRecord: [Assessment] @connection(keyName: "byPatient", fields: ["id"])
+  owner_id: String
 }
 
 type Pharmacy @model @auth(rules: [{allow: public}]) {
@@ -32,19 +33,20 @@ type FollowUp @model @auth(rules: [{allow: public}]) {
   contact_method: ContactMethod
   assessment_id: ID
   ForAssessment: Assessment @connection
+  owner_id: String!
+  follow_up_status: FollowUpStatus
 }
 
 type Assessment @model @key(name: "byPatient", fields: ["patient_id"]) @auth(rules: [{allow: public}]) {
   id: ID!
   date: AWSDateTime
   description: String
-  pharmacist_id: ID
   patient_id: ID
   Prescription: [Prescription] @connection(keyName: "byAssessment", fields: ["id"])
   AssessedBy: Pharmacist @connection
   PerformedAt: Pharmacy @connection
   AssessedFor: Patient @connection
-  FollowUp: FollowUp @connection
+  owner_id: String!
 }
 
 enum ContactMethod {
@@ -53,7 +55,7 @@ enum ContactMethod {
   PHARMACY
 }
 
-enum FollowUpMethod {
+enum FollowUpStatus {
   COMPLETED
   PENDINGRESPONSE
   TODO

@@ -1,147 +1,274 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, {useEffect} from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import logo from "../../logo.png";
 import data from "./data.json";
-import {AppBar, Box, Typography, Tab, Tabs, List, ListItem, ListItemText, Divider, Fab, Link} from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
-import Amplify, { Auth, API } from 'aws-amplify';
-import { withAuthenticator } from '@aws-amplify/ui-react';
-import {createPharmacist} from '../../graphql/mutations'
-import {getPharmacist} from '../../graphql/queries'
-
+import { AppBar, Box, Typography, Tab, Tabs,
+  Fab, TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody} from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
+import { Auth, API } from "aws-amplify";
+import {listFollowUps,} from "../../graphql/queries";
+import { format } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
-    logo: {
-        height: '144px',
-        backgroundColor: 'white',
-        marginBottom: '40px',
-        marginTop: '60px'
-    },
-    root: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.background.paper,
-    },
-    container: {
-        width: "100%"
-    },
-    demo: {
-        backgroundColor: theme.palette.background.paper,
-    },
+  logo: {
+    height: "144px",
+    backgroundColor: "white",
+    marginBottom: "40px",
+    marginTop: "60px",
+  },
+  root: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+  },
+  container: {
+    width: "100%",
+  },
+  demo: {
+    backgroundColor: theme.palette.background.paper,
+  },
+  table: {
+    minWidth: 200,
+  },
 }));
 
-function stuff(e: any) {
-    console.log(Auth.currentUserInfo())
+interface TabPanelInterface {
+  children: any;
+  value:number;
+  index: number;
 }
 
-async function createAPharmacist() {
-    await API.graphql({ query: createPharmacist, variables: { input: {cognito_id: "cognitoid", first_name: "Janee", id: "7", last_name: "Doe", pharmacist_number: "121", pharmacy_ids: "[\"3\"]"} } });
+const TabPanel:React.FC<TabPanelInterface> = (props)=> {
+  const { children, value, index, ...other } = props;
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography component={"span"}>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
 }
 
-async function checkForExistingGUID(guid: string) {
-    await API.graphql({ query: getPharmacist, variables: {input: {id: guid}}});
+export interface FollowUpProps {
+  patientData: PatientData;
+  setPatientData: Function;
 }
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box p={3}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
-    );
+export interface PatientData {
+  completed?: [];
+  followuprequested?: [];
+  pendingresponse?: [];
+  todo?: [];
 }
 
-function a11yProps(index) {
+const FollowUpPage: React.FC<FollowUpProps> = (props) => {
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0);
+  const [dense, setDense] = React.useState(false);
+  const [secondary, setSecondary] = React.useState(false);
+  const [pageData, setPageData] = React.useState<any>([]);
+  const history = useHistory();
+  const numEffect = 1
+
+  //only called once
+  /**Caution: If screen gets into infinite loop, kindly delete this code**/
+  /**This call makes sure to get data when component gets mounted**/
+  useEffect(()=>{handleChange(null, value)}, [])
+
+  function updateProps(status, values){
+    /**NOTE: This code runs slow s.t. screen gets updated and all states reinitialized**/
+    /**TODO: Find alternative way of updating props.setPageData**/
+    if (status === "COMPLETED" && values.length > 0) {
+      props.setPatientData({...props.patientData, "completed": values})
+    }
+    else if (status === "FOLLOWUPREQUESTED" && values.length > 0) {
+      props.setPatientData({...props.patientData, "followuprequested": values})
+    }
+    else if (status === "PENDINGRESPONSE" && values.length > 0) {
+      props.setPatientData({...props.patientData, "pendingresponse": values})
+    }
+    else if (status === "TODO" && values.length > 0) {
+      props.setPatientData({...props.patientData, "todo": values})
+    }
+  }
+
+  async function getFollowUpList(status: string) {
+    switch (status) {
+      case "COMPLETED":
+        if (props.patientData.completed === undefined) {
+          const ret = await API.graphql({
+            query: listFollowUps,
+            variables: { filter: { follow_up_status: { eq: status } } },
+          });
+          const values = ret["data"]["listFollowUps"]["items"]
+          setPageData(values)
+
+          // props.setPatientData({...props.patientData, "completed": values})
+        }
+        else{
+          setPageData(props.patientData.completed);
+        }
+
+        break;
+      case "FOLLOWUPREQUESTED":
+        if (props.patientData.followuprequested === undefined) {
+          const ret = await API.graphql({
+            query: listFollowUps,
+            variables: { filter: { follow_up_status: { eq: status } } },
+          });
+          const values = ret["data"]["listFollowUps"]["items"]
+          setPageData(values)
+          // props.setPatientData({...props.patientData, "followuprequested": values})
+        }
+        else{
+          setPageData(props.patientData.followuprequested);
+        }
+
+        break;
+      case "PENDINGRESPONSE":
+        if (props.patientData.pendingresponse === undefined) {
+          const ret = await API.graphql({
+            query: listFollowUps,
+            variables: { filter: { follow_up_status: { eq: status } } },
+          });
+          const values = ret["data"]["listFollowUps"]["items"]
+          setPageData(values)
+
+        }
+        else {
+          setPageData(props.patientData.pendingresponse);
+        }
+
+        break;
+      case "TODO":
+        if (props.patientData.todo === undefined) {
+          const ret = await API.graphql({
+            query: listFollowUps,
+            variables: { filter: { follow_up_status: { eq: status } } },
+          });
+          const values = ret["data"]["listFollowUps"]["items"]
+          setPageData(values)
+        }
+        else {
+          setPageData(props.patientData.todo);
+        }
+
+        break;
+      default:
+        console.error(
+          `Unknown STATUS provided for querying patient data. STATUS:${status}`
+        );
+        break;
+    }
+
+  }
+
+  function a11yProps(index) {
     return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
+      id: `simple-tab-${index}`,
+      "aria-controls": `simple-tabpanel-${index}`,
     };
-}
+  }
 
-function formatText(item) {
-    return item.name + " | Medication: " + item.medication + ' | Symptoms Resolved: ' + (item.symptomsResolved ? ' Yes ': ' False ') + '| ' + item.timeStamp + ' | ' + item.nextFollowUp
-}
+  const handleChange = async (event, newValue) => {
+    const lookUp = {
+      0: "COMPLETED",
+      1: "FOLLOWUPREQUESTED",
+      2: "PENDINGRESPONSE",
+      3: "TODO",
+    };
+    getFollowUpList(lookUp[newValue]).then(()=>{
+      setValue(newValue);
+      // updateProps(lookUp[newValue]);
+    })
 
+  };
 
-interface IFollowUpPage {}
-
-
-const FollowUpPage: React.FC<IFollowUpPage> = (props) => {
+  function handleClick() {
+    history.push("/patientscheduling");
+  }
+  function CreateTable(rows){
     const classes = useStyles();
-    const [value, setValue] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
-    const [secondary, setSecondary] = React.useState(false);
-    const history = useHistory();
+    return (
+        <TableContainer component={Paper}>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="left">Id</TableCell>
+                <TableCell align="left">Patient</TableCell>
+                <TableCell align="right">Contact method</TableCell>
+                <TableCell align="right">Date</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell component="th" scope="row" align="left">
+                      {row.id}
+                    </TableCell>
+                    <TableCell align="left">{row.owner_id}</TableCell>
+                    <TableCell align="right">{row.contact_method}</TableCell>
+                    <TableCell align="right">{format(new Date(row.updatedAt), "hh:mm MMM dd, yyyy")}</TableCell>
+                  </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+    )
+  }
+  return (
+    <>
+      <img src={logo} className={classes.logo} alt="logo" />
+      <div className={classes.container}>
+        <AppBar position="static">
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="simple tabs example"
+            variant="fullWidth"
+          >
+            <Tab label="Completed" {...a11yProps(0)} />
+            <Tab label="Requested In Person" {...a11yProps(1)} />
+            <Tab label="Sent" {...a11yProps(2)} />
+            <Tab label="Future(Not Sent)"> Future (not sent) </Tab>
+          </Tabs>
+        </AppBar>
+        <TabPanel value={value} index={0}>
+          {CreateTable(pageData)}
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          {CreateTable(pageData)}
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          {CreateTable(pageData)}
+        </TabPanel>
+        <TabPanel value={value} index={3}>
+          {CreateTable(pageData)}
+        </TabPanel>
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
+        <Fab
+          color="primary"
+          aria-label="add"
+          onClick={handleClick}
+          style={{
+            position: "fixed",
+            bottom: 30,
+            right: 30,
+          }}
+        >
+          <AddIcon />
+        </Fab>
+      </div>
+    </>
+  );
+};
 
-    function handleClick() {
-        history.push("/createFollowUp");
-    };
-
-    return (<>
-        <img src={logo} className={classes.logo} alt="logo"/>
-        <div className={classes.container}>
-            <AppBar position="static">
-                <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" variant="fullWidth">
-                    <Tab label="Completed" {...a11yProps(0)} />
-                    <Tab label="Requested In Person" {...a11yProps(1)} />
-                    <Tab label="Sent" {...a11yProps(2)} />
-                    <Tab label="Future(Not Sent)"> Future (not sent) </Tab>
-                </Tabs>
-            </AppBar>
-            <TabPanel value={value} index={0}>
-                <div className={classes.demo}>
-                    <List dense={dense}>
-                        {data.completed.map((item) => (
-                            <div>
-                                <ListItem>
-                                    <ListItemText
-                                        primary={formatText(item)}
-                                        secondary={secondary ? 'Secondary text' : null}
-                                    >  </ListItemText>
-                                </ListItem>
-                                <Divider />
-                            </div>
-                        ))}
-                    </List>
-                </div>
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                Item Two
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-                Item Three
-            </TabPanel>
-            <TabPanel value={value} index={3}>
-                Item Four
-            </TabPanel>
-
-
-            <Fab color="primary" aria-label="add" onClick={handleClick}
-                style={{
-                    position: "absolute",
-                    bottom: 30,
-                    right: 30,
-                }}>
-                    <AddIcon />
-            </Fab>
-            <button onClick={stuff}>Button</button>
-        </div>
-    </>)
-}
-
-export default withAuthenticator(FollowUpPage);
+export default FollowUpPage;
