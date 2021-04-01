@@ -1,0 +1,20 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-amplifyf2ee9b3311494-staging-162644-authRole",
+      "UnauthRoleArn": "arn:aws:iam::127427591628:role/amplify-amplifyf2ee9b3311494-staging-162644-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::127427591628:role/amplify-amplifyf2ee9b3311494-staging-162644-authRole",
+      "Region": "ca-central-1",
+      "DeploymentBucketName": "amplify-amplifyf2ee9b3311494-staging-162644-deployment",
+      "UnauthRoleName": "amplify-amplifyf2ee9b3311494-staging-162644-unauthRole",
+      "StackName": "amplify-amplifyf2ee9b3311494-staging-162644",
+      "StackId": "arn:aws:cloudformation:ca-central-1:127427591628:stack/amplify-amplifyf2ee9b3311494-staging-162644/e6c82510-8418-11eb-a4a1-06dddc0bf174",
+      "AmplifyAppId": "dkyz56zsx39ii"
+    },
+    "categories": {
+      "auth": {
+        "301pharmacyapp": {}
+      }
+    }
+  }
+}

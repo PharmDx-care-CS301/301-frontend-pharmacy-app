@@ -1,0 +1,80 @@
+type Patient @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  first_name: String
+  last_name: String
+  postal_code: String
+  dob: AWSDate
+  phone_number: AWSPhone
+  email: AWSEmail
+  AssessmentRecord: [Assessment] @connection(keyName: "byPatient", fields: ["id"])
+  owner_id: String
+}
+
+type Pharmacy @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  address: String
+  name: String
+  pharmacist_ids: [ID]
+  pharmacists: [PharmacistPharmacy] @connection(keyName: "byPharmacy", fields: ["id"])
+}
+
+type Pharmacist @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  first_name: String
+  last_name: String
+  pharmacist_number: String
+  pharmacy_ids: [ID]
+  WorksFor: [PharmacistPharmacy] @connection(keyName: "byPharmacist", fields: ["id"])
+  cognito_id: String!
+}
+
+type FollowUp @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  contact_method: ContactMethod
+  assessment_id: ID
+  ForAssessment: Assessment @connection
+  owner_id: String!
+  follow_up_status: FollowUpStatus
+}
+
+type Assessment @model @key(name: "byPatient", fields: ["patient_id"]) @auth(rules: [{allow: public}]) {
+  id: ID!
+  date: AWSDateTime
+  description: String
+  patient_id: ID
+  Prescription: [Prescription] @connection(keyName: "byAssessment", fields: ["id"])
+  AssessedBy: Pharmacist @connection
+  PerformedAt: Pharmacy @connection
+  AssessedFor: Patient @connection
+  owner_id: String!
+}
+
+enum ContactMethod {
+  SMS
+  EMAIL
+  PHARMACY
+}
+
+enum FollowUpStatus {
+  COMPLETED
+  PENDINGRESPONSE
+  TODO
+  NOFOLLOWUPNEEDED
+  RESPONSEOVERDUE
+  FOLLOWUPREQUESTED
+}
+
+type Prescription @model @key(name: "byAssessment", fields: ["assessment_id"]) @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  assessment_id: ID
+}
+
+type PharmacistPharmacy @model(queries: null) @key(name: "byPharmacist", fields: ["pharmacistID", "pharmacyID"]) @key(name: "byPharmacy", fields: ["pharmacyID", "pharmacistID"]) @auth(rules: [{allow: public}, {allow: public}]) {
+  id: ID!
+  pharmacistID: ID!
+  pharmacyID: ID!
+  pharmacist: Pharmacist! @connection(fields: ["pharmacistID"])
+  pharmacy: Pharmacy! @connection(fields: ["pharmacyID"])
+}
+ 

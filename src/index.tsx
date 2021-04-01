@@ -1,14 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import Amplify, { Auth } from "aws-amplify";
+import config from "./aws-exports";
+import { SnackbarProvider } from "notistack";
+
+Amplify.configure(config);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <SnackbarProvider maxSnack={5}>
+      <App />
+    </SnackbarProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
