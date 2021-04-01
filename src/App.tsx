@@ -18,6 +18,9 @@ import { withAuthenticator } from "@aws-amplify/ui-react";
 
 
 const useStyles = makeStyles((theme) => ({
+  header: {
+    zIndex: -999
+  },
   buttons: {
     height: "36px",
     width: "194px",
@@ -95,7 +98,7 @@ function App() {
           width="100%"
         >
           <Router>
-            <AppBar position="static">
+            <AppBar position="static" className={classes.header}>
               <Toolbar>
                 <IconButton
                   edge="start"
