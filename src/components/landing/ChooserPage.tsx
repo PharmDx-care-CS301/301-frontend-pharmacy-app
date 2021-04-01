@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import logo from "../../logo.png";
 import {listPatients} from "../../graphql/queries";
 import {API} from 'aws-amplify';
-import {withAuthenticator} from '@aws-amplify/ui-react';
+import { AmplifySignOut, withAuthenticator } from '@aws-amplify/ui-react';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -33,19 +33,20 @@ async function TestAPI() {
 
 function ChooserPage(){
     const classes = useStyles();
-    return (<>
-        <img src={logo} className={classes.logo} alt="logo"/>
-        <Link to="/pharmacistlogin">
-            <Button className={classes.buttons} variant="contained" color="primary">
-                Pharmacist Login
-            </Button>
-        </Link>
-        <Link to="/patientlogin">
-            <Button className={classes.buttons} variant="contained" color="primary" onClick={TestAPI}>
-                Patient Login
-            </Button>
-        </Link>
+    return (
+        <>
+            <img src={logo} className={classes.logo} alt="logo"/>
+            <Link to="/pharmacistlogin">
+                <Button className={classes.buttons} variant="contained" color="primary">
+                    Pharmacist Login
+                </Button>
+            </Link>
+            <Link to="/patientlogin">
+                <Button className={classes.buttons} variant="contained" color="primary" onClick={TestAPI}>
+                    Patient Login
+                </Button>
+            </Link>
     </>)
 }
 
-export default withAuthenticator(ChooserPage);
+export default ChooserPage;
