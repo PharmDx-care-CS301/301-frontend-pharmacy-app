@@ -476,7 +476,6 @@ const PatientScheduling: React.FC<any> = (props) => {
           Submit
         </Button>
       </Box>
-      <AmplifySignOut />
     </Box>
   );
 };
