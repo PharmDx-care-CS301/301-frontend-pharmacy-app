@@ -19,7 +19,7 @@ import { withAuthenticator } from "@aws-amplify/ui-react";
 
 const useStyles = makeStyles((theme) => ({
   header: {
-    zIndex: -999
+    zIndex: 90
   },
   buttons: {
     height: "36px",
