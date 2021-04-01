@@ -108,6 +108,9 @@ function App() {
                 <Typography variant="h6" className={classes.title}>
                   PharmDX
                 </Typography>
+                <Link to="/survey" className={classes.linkStyle}>
+                  <Button style={{ color: "#ffffff" }}>Survey</Button>
+                </Link>
                 <Link to="/follow-up" className={classes.linkStyle}>
                   <Button style={{ color: "#ffffff" }}>View Follow Up</Button>
                 </Link>
@@ -151,6 +154,10 @@ function App() {
               />
               <ProtectedRoute exact path="/follow-up" component={createFollowUpPage} />
               <ProtectedRoute exact path="/createFollowUp" component={CreateFollowUp} />
+              <ProtectedRoute exact path="/survey" component={() => {
+                window.location.href="https://main.d65b59pejnjsy.amplifyapp.com";
+                return null;
+              }} />
               <Route exact path="/" component={ChooserPage} />
               <Route path="/" component={() => <div>404</div>} />
             </Switch>
