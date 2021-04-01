@@ -57,20 +57,6 @@ const TabPanel:React.FC<TabPanelInterface> = (props)=> {
   );
 }
 
-function formatText(item) {
-  return (
-    item.name +
-    " | Medication: " +
-    item.medication +
-    " | Symptoms Resolved: " +
-    (item.symptomsResolved ? " Yes " : " False ") +
-    "| " +
-    item.timeStamp +
-    " | " +
-    item.nextFollowUp
-  );
-}
-
 export interface FollowUpProps {
   patientData: PatientData;
   setPatientData: Function;
