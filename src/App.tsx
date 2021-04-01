@@ -111,7 +111,7 @@ function App() {
                 <Link to="/follow-up" className={classes.linkStyle}>
                   <Button style={{ color: "#ffffff" }}>View Follow Up</Button>
                 </Link>
-                <Link to="/createFollowup" className={classes.linkStyle}>
+                <Link to="/patientscheduling" className={classes.linkStyle}>
                   <Button style={{ color: "#ffffff" }}>Create Follow Up</Button>
                 </Link>
                 <Link to="/follow-up" className={classes.linkStyle}>

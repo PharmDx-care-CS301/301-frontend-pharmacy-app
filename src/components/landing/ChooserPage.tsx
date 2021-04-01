@@ -24,7 +24,7 @@ function ChooserPage() {
   return (
     <>
       <img src={logo} className={classes.logo} alt="logo" />
-      <Link to="/pharmacistlogin">
+      <Link to="/follow-up">
         <Button className={classes.buttons} variant="contained" color="primary">
           Pharmacist Login
         </Button>
