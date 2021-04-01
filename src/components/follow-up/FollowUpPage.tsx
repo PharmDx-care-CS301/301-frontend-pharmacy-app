@@ -1,29 +1,13 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import logo from "../../logo.png";
 import data from "./data.json";
-import {
-  AppBar,
-  Box,
-  Typography,
-  Tab,
-  Tabs,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-  Fab,
-} from "@material-ui/core";
+import { AppBar, Box, Typography, Tab, Tabs,
+  Fab, TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody} from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { Auth, API } from "aws-amplify";
-import { withAuthenticator } from "@aws-amplify/ui-react";
-import { createPharmacist } from "../../graphql/mutations";
-import {
-  getFollowUp,
-  getPharmacist,
-  listFollowUps,
-} from "../../graphql/queries";
+import {listFollowUps,} from "../../graphql/queries";
 import { format } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
@@ -43,11 +27,19 @@ const useStyles = makeStyles((theme) => ({
   demo: {
     backgroundColor: theme.palette.background.paper,
   },
+  table: {
+    minWidth: 200,
+  },
 }));
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+interface TabPanelInterface {
+  children: any;
+  value:number;
+  index: number;
+}
 
+const TabPanel:React.FC<TabPanelInterface> = (props)=> {
+  const { children, value, index, ...other } = props;
   return (
     <div
       role="tabpanel"
@@ -58,7 +50,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box p={3}>
-          <Typography>{children}</Typography>
+          <Typography component={"span"}>{children}</Typography>
         </Box>
       )}
     </div>
@@ -85,10 +77,10 @@ export interface FollowUpProps {
 }
 
 export interface PatientData {
-  completed?: {};
-  followuprequested?: {};
-  pendingresponse?: {};
-  todo?: {};
+  completed?: [];
+  followuprequested?: [];
+  pendingresponse?: [];
+  todo?: [];
 }
 
 const FollowUpPage: React.FC<FollowUpProps> = (props) => {
@@ -98,67 +90,90 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
   const [secondary, setSecondary] = React.useState(false);
   const [pageData, setPageData] = React.useState<any>([]);
   const history = useHistory();
+  const numEffect = 1
+
+  //only called once
+  /**Caution: If screen gets into infinite loop, kindly delete this code**/
+  /**This call makes sure to get data when component gets mounted**/
+  useEffect(()=>{handleChange(null, value)}, [])
+
+  function updateProps(status, values){
+    /**NOTE: This code runs slow s.t. screen gets updated and all states reinitialized**/
+    /**TODO: Find alternative way of updating props.setPageData**/
+    if (status === "COMPLETED" && values.length > 0) {
+      props.setPatientData({...props.patientData, "completed": values})
+    }
+    else if (status === "FOLLOWUPREQUESTED" && values.length > 0) {
+      props.setPatientData({...props.patientData, "followuprequested": values})
+    }
+    else if (status === "PENDINGRESPONSE" && values.length > 0) {
+      props.setPatientData({...props.patientData, "pendingresponse": values})
+    }
+    else if (status === "TODO" && values.length > 0) {
+      props.setPatientData({...props.patientData, "todo": values})
+    }
+  }
 
   async function getFollowUpList(status: string) {
-    console.log(`Calling getFollowUpList(${status})`)
-    console.log(`patientData obj: ${props.patientData}`)
-    console.log(props.patientData)
     switch (status) {
       case "COMPLETED":
         if (props.patientData.completed === undefined) {
-          let ret = await API.graphql({
+          const ret = await API.graphql({
             query: listFollowUps,
             variables: { filter: { follow_up_status: { eq: status } } },
           });
-          props.setPatientData({
-            ...props.patientData,
-            completed: ret["data"]["listFollowUps"]["items"],
-          });
+          const values = ret["data"]["listFollowUps"]["items"]
+          setPageData(values)
+
+          // props.setPatientData({...props.patientData, "completed": values})
+        }
+        else{
+          setPageData(props.patientData.completed);
         }
 
-        setPageData(props.patientData.completed);
         break;
       case "FOLLOWUPREQUESTED":
         if (props.patientData.followuprequested === undefined) {
-          let ret = await API.graphql({
+          const ret = await API.graphql({
             query: listFollowUps,
             variables: { filter: { follow_up_status: { eq: status } } },
           });
-          props.setPatientData({
-            ...props.patientData,
-            followuprequested: ret["data"]["listFollowUps"]["items"],
-          });
+          const values = ret["data"]["listFollowUps"]["items"]
+          setPageData(values)
+          // props.setPatientData({...props.patientData, "followuprequested": values})
         }
-
-        setPageData(props.patientData.followuprequested);
+        else{
+          setPageData(props.patientData.followuprequested);
+        }
 
         break;
       case "PENDINGRESPONSE":
         if (props.patientData.pendingresponse === undefined) {
-          let ret = await API.graphql({
+          const ret = await API.graphql({
             query: listFollowUps,
             variables: { filter: { follow_up_status: { eq: status } } },
           });
-          props.setPatientData({
-            ...props.patientData,
-            pendingresponse: ret["data"]["listFollowUps"]["items"],
-          });
-          
+          const values = ret["data"]["listFollowUps"]["items"]
+          setPageData(values)
+
         }
-        setPageData(props.patientData.pendingresponse);
+        else {
+          setPageData(props.patientData.pendingresponse);
+        }
+
         break;
       case "TODO":
         if (props.patientData.todo === undefined) {
-          let ret = await API.graphql({
+          const ret = await API.graphql({
             query: listFollowUps,
             variables: { filter: { follow_up_status: { eq: status } } },
           });
-          props.setPatientData({
-            ...props.patientData,
-            todo: ret["data"]["listFollowUps"]["items"],
-          });
+          const values = ret["data"]["listFollowUps"]["items"]
+          setPageData(values)
         }
-        setPageData(props.patientData.todo);
+        else {
+          setPageData(props.patientData.todo);
+        }
 
         break;
       default:
@@ -168,11 +183,6 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
         break;
     }
 
-    // let ret = await API.graphql({
-    //   query: listFollowUps,
-    //   variables: { filter: { follow_up_status: { eq: status } } },
-    // });
-    // setPageData(ret['data']['listFollowUps']['items'])
   }
 
   function a11yProps(index) {
@@ -182,59 +192,52 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
     };
   }
 
-  function formatInputItem(item) {
-    const date = item["updatedAt"];
-    const conv = format(new Date(date), "hh:mm MMM dd, yyyy");
-    return (
-      <ListItem style={{ justifyContent: "spaceEvenly" }} button>
-        <ListItemText secondary={secondary ? "Secondary text" : null}>
-          {item["owner_id"]}
-        </ListItemText>
-        <ListItemText secondary={secondary ? "Secondary text" : null}>
-          {item["contact_method"]}
-        </ListItemText>
-        <ListItemText
-          secondary={secondary ? "Secondary text" : null}
-          style={{ textAlign: "right" }}
-        >
-          {conv}
-        </ListItemText>
-      </ListItem>
-    );
-  }
-
-  function formatHeader() {
-    return (
-      <ListItem style={{ textAlign: "center" }}>
-        <ListItemText secondary={secondary ? "Secondary text" : null}>
-          {"Patient"}
-        </ListItemText>
-        <Divider orientation="vertical" flexItem />
-        <ListItemText secondary={secondary ? "Secondary text" : null}>
-          {"Contact Method"}
-        </ListItemText>
-        <Divider orientation="vertical" flexItem />
-        <ListItemText secondary={secondary ? "Secondary text" : null}>
-          {"Date"}
-        </ListItemText>
-      </ListItem>
-    );
-  }
-  const handleChange = (event, newValue) => {
+  const handleChange = async (event, newValue) => {
     const lookUp = {
       0: "COMPLETED",
       1: "FOLLOWUPREQUESTED",
       2: "PENDINGRESPONSE",
       3: "TODO",
     };
-    getFollowUpList(lookUp[newValue]);
-    setValue(newValue);
+    getFollowUpList(lookUp[newValue]).then(()=>{
+      setValue(newValue);
+      // updateProps(lookUp[newValue]);
+    })
+
   };
 
   function handleClick() {
     history.push("/patientscheduling");
   }
-
+  function CreateTable(rows){
+    const classes = useStyles();
+    return (
+        <TableContainer component={Paper}>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="left">Id</TableCell>
+                <TableCell align="left">Patient</TableCell>
+                <TableCell align="right">Contact method</TableCell>
+                <TableCell align="right">Date</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell component="th" scope="row" align="left">
+                      {row.id}
+                    </TableCell>
+                    <TableCell align="left">{row.owner_id}</TableCell>
+                    <TableCell align="right">{row.contact_method}</TableCell>
+                    <TableCell align="right">{format(new Date(row.updatedAt), "hh:mm MMM dd, yyyy")}</TableCell>
+                  </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+    )
+  }
   return (
     <>
       <img src={logo} className={classes.logo} alt="logo" />
@@ -253,66 +256,16 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <div className={classes.demo}>
-            <List dense={dense}>
-              {formatHeader()}
-              <Divider />
-              {pageData.map((item) => (
-                <div>
-                  {formatInputItem(item)}
-                  <Divider />
-                </div>
-              ))}
-            </List>
-          </div>
+          {CreateTable(pageData)}
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <div className={classes.demo}>
-            {formatHeader()}
-            <Divider />
-            <List dense={dense}>
-              {pageData.map((item) => (
-                <div>
-                  {formatInputItem(item)}
-                  <Divider />
-                </div>
-              ))}
-            </List>
-          </div>
+          {CreateTable(pageData)}
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <div className={classes.demo}>
-            {formatHeader()}
-            <Divider />
-            <List dense={dense}>
-              {pageData.map((item) => (
-                <div>
-                  {formatInputItem(item)}
-                  <Divider />
-                </div>
-              ))}
-            </List>
-          </div>
+          {CreateTable(pageData)}
         </TabPanel>
         <TabPanel value={value} index={3}>
-          <div className={classes.demo}>
-            <List dense={dense}>
-              {formatHeader()}
-              <Divider />
-              {pageData.map((item) => (
-                <div>
-                  <ListItem>
-                    <ListItemText
-                      secondary={secondary ? "Secondary text" : null}
-                    >
-                      {formatInputItem(item)}
-                    </ListItemText>
-                  </ListItem>
-                  <Divider />
-                </div>
-              ))}
-            </List>
-          </div>
+          {CreateTable(pageData)}
         </TabPanel>
 
         <Fab

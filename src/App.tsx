@@ -58,7 +58,12 @@ const ProtectedRoute: React.FC<any> = (props) => (
 
 function App() {
   const classes = useStyles();
-  const [patientData, setPatientData] = useState<PatientData>({});
+  const [patientData, setPatientData] = useState<PatientData>({
+    completed:undefined,
+    followuprequested: undefined,
+    pendingresponse: undefined,
+    todo: undefined
+  });
 
   function createFollowUpPage() {
     // @ts-ignore
