@@ -61,14 +61,16 @@ interface IFormData {
   prescriptionDate?: string;
   contactMethod?: string;
   email?: string;
+  scheduledDate?: string;
 }
 
 const PatientScheduling: React.FC<any> = (props) => {
   const classes = useStyles();
-  const [yes, setYesState] = React.useState(true);
+  const [yes, setYesState] = React.useState(false);
   const [state, setState] = React.useState<IFormData>({
     contactMethod: "",
     prescriptionDate: moment().format("YYYY-MM-DD"),
+    scheduledDate: moment().format("YYYY-MM-DD"),
   });
   const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
@@ -116,6 +118,14 @@ const PatientScheduling: React.FC<any> = (props) => {
       return;
     }
     let newState = { ...state, prescriptionDate: event.target.value };
+    setState(newState);
+  };
+
+  const updateScheduledDate = (event: React.FocusEvent<HTMLInputElement>) => {
+    if (event.target.value === state.scheduledDate) {
+      return;
+    }
+    let newState = { ...state, scheduledDate: event.target.value };
     setState(newState);
   };
 
@@ -182,7 +192,7 @@ const PatientScheduling: React.FC<any> = (props) => {
       followUpForAssessmentId: "",
       contact_method: state.contactMethod,
       owner_id: cognitoID,
-      follow_up_status: "COMPLETED",
+      follow_up_status: "FOLLOWUPREQUESTED",
     };
 
     const assessment = {
@@ -192,6 +202,9 @@ const PatientScheduling: React.FC<any> = (props) => {
       assessmentAssessedForId: "",
       assessmentAssessedById: cognitoID,
       owner_id: cognitoID,
+      scheduled_date: moment(state.scheduledDate).format(
+        "YYYY-MM-DD[T]HH:mm:ss[Z]"
+      ),
     };
 
     const patient = {
@@ -411,6 +424,23 @@ const PatientScheduling: React.FC<any> = (props) => {
                 marginBottom: 15,
               }}
               onBlur={updatePrescriptionDate}
+            />
+            <TextField
+              required
+              id="outlined-basic"
+              label="Assessment Date"
+              defaultValue={state.scheduledDate}
+              type="date"
+              variant="outlined"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              style={{
+                height: 60,
+                width: "100%",
+                marginBottom: 15,
+              }}
+              onBlur={updateScheduledDate}
             />
             <TextField
               required

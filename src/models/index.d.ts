@@ -17,18 +17,25 @@ export enum FollowUpStatus {
 
 
 
-export declare class Patient {
+export declare class Survey {
   readonly id: string;
-  readonly first_name?: string;
-  readonly last_name?: string;
-  readonly postal_code?: string;
-  readonly dob?: string;
   readonly phone_number?: string;
-  readonly email?: string;
-  readonly AssessmentRecord?: (Assessment | null)[];
-  readonly owner_id?: string;
-  constructor(init: ModelInit<Patient>);
-  static copyOf(source: Patient, mutator: (draft: MutableModel<Patient>) => MutableModel<Patient> | void): Patient;
+  readonly link_id?: string;
+  readonly survey_data?: string;
+  readonly FollowUp?: FollowUp;
+  constructor(init: ModelInit<Survey>);
+  static copyOf(source: Survey, mutator: (draft: MutableModel<Survey>) => MutableModel<Survey> | void): Survey;
+}
+
+export declare class FollowUp {
+  readonly id: string;
+  readonly contact_method?: ContactMethod | keyof typeof ContactMethod;
+  readonly assessment_id?: string;
+  readonly ForAssessment?: Assessment;
+  readonly owner_id: string;
+  readonly follow_up_status?: FollowUpStatus | keyof typeof FollowUpStatus;
+  constructor(init: ModelInit<FollowUp>);
+  static copyOf(source: FollowUp, mutator: (draft: MutableModel<FollowUp>) => MutableModel<FollowUp> | void): FollowUp;
 }
 
 export declare class Assessment {
@@ -41,6 +48,7 @@ export declare class Assessment {
   readonly PerformedAt?: Pharmacy;
   readonly AssessedFor?: Patient;
   readonly owner_id: string;
+  readonly scheduled_date?: string;
   constructor(init: ModelInit<Assessment>);
   static copyOf(source: Assessment, mutator: (draft: MutableModel<Assessment>) => MutableModel<Assessment> | void): Assessment;
 }
@@ -83,13 +91,16 @@ export declare class Pharmacy {
   static copyOf(source: Pharmacy, mutator: (draft: MutableModel<Pharmacy>) => MutableModel<Pharmacy> | void): Pharmacy;
 }
 
-export declare class FollowUp {
+export declare class Patient {
   readonly id: string;
-  readonly contact_method?: ContactMethod | keyof typeof ContactMethod;
-  readonly assessment_id?: string;
-  readonly ForAssessment?: Assessment;
-  readonly owner_id: string;
-  readonly follow_up_status?: FollowUpStatus | keyof typeof FollowUpStatus;
-  constructor(init: ModelInit<FollowUp>);
-  static copyOf(source: FollowUp, mutator: (draft: MutableModel<FollowUp>) => MutableModel<FollowUp> | void): FollowUp;
+  readonly first_name?: string;
+  readonly last_name?: string;
+  readonly postal_code?: string;
+  readonly dob?: string;
+  readonly phone_number?: string;
+  readonly email?: string;
+  readonly AssessmentRecord?: (Assessment | null)[];
+  readonly owner_id?: string;
+  constructor(init: ModelInit<Patient>);
+  static copyOf(source: Patient, mutator: (draft: MutableModel<Patient>) => MutableModel<Patient> | void): Patient;
 }

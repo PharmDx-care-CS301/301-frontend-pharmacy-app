@@ -1,3 +1,11 @@
+type Survey @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  phone_number: AWSPhone
+  link_id: String
+  survey_data: AWSJSON
+  FollowUp: FollowUp @connection
+}
+
 type Patient @model @auth(rules: [{allow: public}]) {
   id: ID!
   first_name: String
@@ -31,7 +39,7 @@ type Pharmacist @model @auth(rules: [{allow: public}]) {
 type FollowUp @model @auth(rules: [{allow: public}]) {
   id: ID!
   contact_method: ContactMethod
-  assessment_id: ID
+  assessment_id: String
   ForAssessment: Assessment @connection
   owner_id: String!
   follow_up_status: FollowUpStatus
@@ -47,6 +55,7 @@ type Assessment @model @key(name: "byPatient", fields: ["patient_id"]) @auth(rul
   PerformedAt: Pharmacy @connection
   AssessedFor: Patient @connection
   owner_id: String!
+  scheduled_date: AWSDateTime
 }
 
 enum ContactMethod {

@@ -17,16 +17,17 @@ const FollowUpStatus = {
   "FOLLOWUPREQUESTED": "FOLLOWUPREQUESTED"
 };
 
-const { Patient, Assessment, Prescription, Pharmacist, PharmacistPharmacy, Pharmacy, FollowUp } = initSchema(schema);
+const { Survey, FollowUp, Assessment, Prescription, Pharmacist, PharmacistPharmacy, Pharmacy, Patient } = initSchema(schema);
 
 export {
-  Patient,
+  Survey,
+  FollowUp,
   Assessment,
   Prescription,
   Pharmacist,
   PharmacistPharmacy,
   Pharmacy,
-  FollowUp,
+  Patient,
   ContactMethod,
   FollowUpStatus
 };

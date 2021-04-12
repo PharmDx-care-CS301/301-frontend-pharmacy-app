@@ -2,6 +2,96 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createSurvey = /* GraphQL */ `
+  mutation CreateSurvey(
+    $input: CreateSurveyInput!
+    $condition: ModelSurveyConditionInput
+  ) {
+    createSurvey(input: $input, condition: $condition) {
+      id
+      phone_number
+      link_id
+      survey_data
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      FollowUp {
+        id
+        contact_method
+        assessment_id
+        owner_id
+        follow_up_status
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+export const updateSurvey = /* GraphQL */ `
+  mutation UpdateSurvey(
+    $input: UpdateSurveyInput!
+    $condition: ModelSurveyConditionInput
+  ) {
+    updateSurvey(input: $input, condition: $condition) {
+      id
+      phone_number
+      link_id
+      survey_data
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      FollowUp {
+        id
+        contact_method
+        assessment_id
+        owner_id
+        follow_up_status
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+export const deleteSurvey = /* GraphQL */ `
+  mutation DeleteSurvey(
+    $input: DeleteSurveyInput!
+    $condition: ModelSurveyConditionInput
+  ) {
+    deleteSurvey(input: $input, condition: $condition) {
+      id
+      phone_number
+      link_id
+      survey_data
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      FollowUp {
+        id
+        contact_method
+        assessment_id
+        owner_id
+        follow_up_status
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
 export const createPatient = /* GraphQL */ `
   mutation CreatePatient(
     $input: CreatePatientInput!
@@ -240,6 +330,7 @@ export const createFollowUp = /* GraphQL */ `
         description
         patient_id
         owner_id
+        scheduled_date
         _version
         _deleted
         _lastChangedAt
@@ -271,6 +362,7 @@ export const updateFollowUp = /* GraphQL */ `
         description
         patient_id
         owner_id
+        scheduled_date
         _version
         _deleted
         _lastChangedAt
@@ -302,6 +394,7 @@ export const deleteFollowUp = /* GraphQL */ `
         description
         patient_id
         owner_id
+        scheduled_date
         _version
         _deleted
         _lastChangedAt
@@ -322,6 +415,7 @@ export const createAssessment = /* GraphQL */ `
       description
       patient_id
       owner_id
+      scheduled_date
       _version
       _deleted
       _lastChangedAt
@@ -384,6 +478,7 @@ export const updateAssessment = /* GraphQL */ `
       description
       patient_id
       owner_id
+      scheduled_date
       _version
       _deleted
       _lastChangedAt
@@ -446,6 +541,7 @@ export const deleteAssessment = /* GraphQL */ `
       description
       patient_id
       owner_id
+      scheduled_date
       _version
       _deleted
       _lastChangedAt

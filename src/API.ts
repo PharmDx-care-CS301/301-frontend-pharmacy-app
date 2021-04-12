@@ -2,29 +2,22 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreatePatientInput = {
+export type CreateSurveyInput = {
   id?: string | null,
-  first_name?: string | null,
-  last_name?: string | null,
-  postal_code?: string | null,
-  dob?: string | null,
   phone_number?: string | null,
-  email?: string | null,
-  owner_id?: string | null,
+  link_id?: string | null,
+  survey_data?: string | null,
   _version?: number | null,
+  surveyFollowUpId?: string | null,
 };
 
-export type ModelPatientConditionInput = {
-  first_name?: ModelStringInput | null,
-  last_name?: ModelStringInput | null,
-  postal_code?: ModelStringInput | null,
-  dob?: ModelStringInput | null,
+export type ModelSurveyConditionInput = {
   phone_number?: ModelStringInput | null,
-  email?: ModelStringInput | null,
-  owner_id?: ModelStringInput | null,
-  and?: Array< ModelPatientConditionInput | null > | null,
-  or?: Array< ModelPatientConditionInput | null > | null,
-  not?: ModelPatientConditionInput | null,
+  link_id?: ModelStringInput | null,
+  survey_data?: ModelStringInput | null,
+  and?: Array< ModelSurveyConditionInput | null > | null,
+  or?: Array< ModelSurveyConditionInput | null > | null,
+  not?: ModelSurveyConditionInput | null,
 };
 
 export type ModelStringInput = {
@@ -67,6 +60,71 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
+export type Survey = {
+  __typename: "Survey",
+  id?: string,
+  phone_number?: string | null,
+  link_id?: string | null,
+  survey_data?: string | null,
+  _version?: number,
+  _deleted?: boolean | null,
+  _lastChangedAt?: number,
+  createdAt?: string,
+  updatedAt?: string,
+  FollowUp?: FollowUp,
+};
+
+export type FollowUp = {
+  __typename: "FollowUp",
+  id?: string,
+  contact_method?: ContactMethod | null,
+  assessment_id?: string | null,
+  owner_id?: string,
+  follow_up_status?: FollowUpStatus | null,
+  _version?: number,
+  _deleted?: boolean | null,
+  _lastChangedAt?: number,
+  createdAt?: string,
+  updatedAt?: string,
+  ForAssessment?: Assessment,
+};
+
+export enum ContactMethod {
+  SMS = "SMS",
+  EMAIL = "EMAIL",
+  PHARMACY = "PHARMACY",
+}
+
+
+export enum FollowUpStatus {
+  COMPLETED = "COMPLETED",
+  PENDINGRESPONSE = "PENDINGRESPONSE",
+  TODO = "TODO",
+  NOFOLLOWUPNEEDED = "NOFOLLOWUPNEEDED",
+  RESPONSEOVERDUE = "RESPONSEOVERDUE",
+  FOLLOWUPREQUESTED = "FOLLOWUPREQUESTED",
+}
+
+
+export type Assessment = {
+  __typename: "Assessment",
+  id?: string,
+  date?: string | null,
+  description?: string | null,
+  patient_id?: string | null,
+  owner_id?: string,
+  scheduled_date?: string | null,
+  _version?: number,
+  _deleted?: boolean | null,
+  _lastChangedAt?: number,
+  createdAt?: string,
+  updatedAt?: string,
+  AssessedFor?: Patient,
+  PerformedAt?: Pharmacy,
+  AssessedBy?: Pharmacist,
+  Prescription?: ModelPrescriptionConnection,
+};
+
 export type Patient = {
   __typename: "Patient",
   id?: string,
@@ -90,24 +148,6 @@ export type ModelAssessmentConnection = {
   items?:  Array<Assessment | null > | null,
   nextToken?: string | null,
   startedAt?: number | null,
-};
-
-export type Assessment = {
-  __typename: "Assessment",
-  id?: string,
-  date?: string | null,
-  description?: string | null,
-  patient_id?: string | null,
-  owner_id?: string,
-  _version?: number,
-  _deleted?: boolean | null,
-  _lastChangedAt?: number,
-  createdAt?: string,
-  updatedAt?: string,
-  AssessedFor?: Patient,
-  PerformedAt?: Pharmacy,
-  AssessedBy?: Pharmacist,
-  Prescription?: ModelPrescriptionConnection,
 };
 
 export type Pharmacy = {
@@ -178,6 +218,45 @@ export type Prescription = {
   _lastChangedAt?: number,
   createdAt?: string,
   updatedAt?: string,
+};
+
+export type UpdateSurveyInput = {
+  id: string,
+  phone_number?: string | null,
+  link_id?: string | null,
+  survey_data?: string | null,
+  _version?: number | null,
+  surveyFollowUpId?: string | null,
+};
+
+export type DeleteSurveyInput = {
+  id?: string | null,
+  _version?: number | null,
+};
+
+export type CreatePatientInput = {
+  id?: string | null,
+  first_name?: string | null,
+  last_name?: string | null,
+  postal_code?: string | null,
+  dob?: string | null,
+  phone_number?: string | null,
+  email?: string | null,
+  owner_id?: string | null,
+  _version?: number | null,
+};
+
+export type ModelPatientConditionInput = {
+  first_name?: ModelStringInput | null,
+  last_name?: ModelStringInput | null,
+  postal_code?: ModelStringInput | null,
+  dob?: ModelStringInput | null,
+  phone_number?: ModelStringInput | null,
+  email?: ModelStringInput | null,
+  owner_id?: ModelStringInput | null,
+  and?: Array< ModelPatientConditionInput | null > | null,
+  or?: Array< ModelPatientConditionInput | null > | null,
+  not?: ModelPatientConditionInput | null,
 };
 
 export type UpdatePatientInput = {
@@ -289,26 +368,9 @@ export type CreateFollowUpInput = {
   followUpForAssessmentId?: string | null,
 };
 
-export enum ContactMethod {
-  SMS = "SMS",
-  EMAIL = "EMAIL",
-  PHARMACY = "PHARMACY",
-}
-
-
-export enum FollowUpStatus {
-  COMPLETED = "COMPLETED",
-  PENDINGRESPONSE = "PENDINGRESPONSE",
-  TODO = "TODO",
-  NOFOLLOWUPNEEDED = "NOFOLLOWUPNEEDED",
-  RESPONSEOVERDUE = "RESPONSEOVERDUE",
-  FOLLOWUPREQUESTED = "FOLLOWUPREQUESTED",
-}
-
-
 export type ModelFollowUpConditionInput = {
   contact_method?: ModelContactMethodInput | null,
-  assessment_id?: ModelIDInput | null,
+  assessment_id?: ModelStringInput | null,
   owner_id?: ModelStringInput | null,
   follow_up_status?: ModelFollowUpStatusInput | null,
   and?: Array< ModelFollowUpConditionInput | null > | null,
@@ -324,21 +386,6 @@ export type ModelContactMethodInput = {
 export type ModelFollowUpStatusInput = {
   eq?: FollowUpStatus | null,
   ne?: FollowUpStatus | null,
-};
-
-export type FollowUp = {
-  __typename: "FollowUp",
-  id?: string,
-  contact_method?: ContactMethod | null,
-  assessment_id?: string | null,
-  owner_id?: string,
-  follow_up_status?: FollowUpStatus | null,
-  _version?: number,
-  _deleted?: boolean | null,
-  _lastChangedAt?: number,
-  createdAt?: string,
-  updatedAt?: string,
-  ForAssessment?: Assessment,
 };
 
 export type UpdateFollowUpInput = {
@@ -362,6 +409,7 @@ export type CreateAssessmentInput = {
   description?: string | null,
   patient_id?: string | null,
   owner_id: string,
+  scheduled_date?: string | null,
   _version?: number | null,
   assessmentAssessedById?: string | null,
   assessmentPerformedAtId?: string | null,
@@ -373,6 +421,7 @@ export type ModelAssessmentConditionInput = {
   description?: ModelStringInput | null,
   patient_id?: ModelIDInput | null,
   owner_id?: ModelStringInput | null,
+  scheduled_date?: ModelStringInput | null,
   and?: Array< ModelAssessmentConditionInput | null > | null,
   or?: Array< ModelAssessmentConditionInput | null > | null,
   not?: ModelAssessmentConditionInput | null,
@@ -384,6 +433,7 @@ export type UpdateAssessmentInput = {
   description?: string | null,
   patient_id?: string | null,
   owner_id?: string | null,
+  scheduled_date?: string | null,
   _version?: number | null,
   assessmentAssessedById?: string | null,
   assessmentPerformedAtId?: string | null,
@@ -449,6 +499,23 @@ export type DeletePharmacistPharmacyInput = {
   _version?: number | null,
 };
 
+export type ModelSurveyFilterInput = {
+  id?: ModelIDInput | null,
+  phone_number?: ModelStringInput | null,
+  link_id?: ModelStringInput | null,
+  survey_data?: ModelStringInput | null,
+  and?: Array< ModelSurveyFilterInput | null > | null,
+  or?: Array< ModelSurveyFilterInput | null > | null,
+  not?: ModelSurveyFilterInput | null,
+};
+
+export type ModelSurveyConnection = {
+  __typename: "ModelSurveyConnection",
+  items?:  Array<Survey | null > | null,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
 export type ModelPatientFilterInput = {
   id?: ModelIDInput | null,
   first_name?: ModelStringInput | null,
@@ -509,7 +576,7 @@ export type ModelPharmacistConnection = {
 export type ModelFollowUpFilterInput = {
   id?: ModelIDInput | null,
   contact_method?: ModelContactMethodInput | null,
-  assessment_id?: ModelIDInput | null,
+  assessment_id?: ModelStringInput | null,
   owner_id?: ModelStringInput | null,
   follow_up_status?: ModelFollowUpStatusInput | null,
   and?: Array< ModelFollowUpFilterInput | null > | null,
@@ -530,6 +597,7 @@ export type ModelAssessmentFilterInput = {
   description?: ModelStringInput | null,
   patient_id?: ModelIDInput | null,
   owner_id?: ModelStringInput | null,
+  scheduled_date?: ModelStringInput | null,
   and?: Array< ModelAssessmentFilterInput | null > | null,
   or?: Array< ModelAssessmentFilterInput | null > | null,
   not?: ModelAssessmentFilterInput | null,
@@ -551,6 +619,105 @@ export type ModelPharmacistPharmacyFilterInput = {
   and?: Array< ModelPharmacistPharmacyFilterInput | null > | null,
   or?: Array< ModelPharmacistPharmacyFilterInput | null > | null,
   not?: ModelPharmacistPharmacyFilterInput | null,
+};
+
+export type CreateSurveyMutationVariables = {
+  input?: CreateSurveyInput,
+  condition?: ModelSurveyConditionInput | null,
+};
+
+export type CreateSurveyMutation = {
+  createSurvey?:  {
+    __typename: "Survey",
+    id: string,
+    phone_number?: string | null,
+    link_id?: string | null,
+    survey_data?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    FollowUp?:  {
+      __typename: "FollowUp",
+      id: string,
+      contact_method?: ContactMethod | null,
+      assessment_id?: string | null,
+      owner_id: string,
+      follow_up_status?: FollowUpStatus | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+  } | null,
+};
+
+export type UpdateSurveyMutationVariables = {
+  input?: UpdateSurveyInput,
+  condition?: ModelSurveyConditionInput | null,
+};
+
+export type UpdateSurveyMutation = {
+  updateSurvey?:  {
+    __typename: "Survey",
+    id: string,
+    phone_number?: string | null,
+    link_id?: string | null,
+    survey_data?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    FollowUp?:  {
+      __typename: "FollowUp",
+      id: string,
+      contact_method?: ContactMethod | null,
+      assessment_id?: string | null,
+      owner_id: string,
+      follow_up_status?: FollowUpStatus | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+  } | null,
+};
+
+export type DeleteSurveyMutationVariables = {
+  input?: DeleteSurveyInput,
+  condition?: ModelSurveyConditionInput | null,
+};
+
+export type DeleteSurveyMutation = {
+  deleteSurvey?:  {
+    __typename: "Survey",
+    id: string,
+    phone_number?: string | null,
+    link_id?: string | null,
+    survey_data?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    FollowUp?:  {
+      __typename: "FollowUp",
+      id: string,
+      contact_method?: ContactMethod | null,
+      assessment_id?: string | null,
+      owner_id: string,
+      follow_up_status?: FollowUpStatus | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+  } | null,
 };
 
 export type CreatePatientMutationVariables = {
@@ -821,6 +988,7 @@ export type CreateFollowUpMutation = {
       description?: string | null,
       patient_id?: string | null,
       owner_id: string,
+      scheduled_date?: string | null,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
@@ -855,6 +1023,7 @@ export type UpdateFollowUpMutation = {
       description?: string | null,
       patient_id?: string | null,
       owner_id: string,
+      scheduled_date?: string | null,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
@@ -889,6 +1058,7 @@ export type DeleteFollowUpMutation = {
       description?: string | null,
       patient_id?: string | null,
       owner_id: string,
+      scheduled_date?: string | null,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
@@ -911,6 +1081,7 @@ export type CreateAssessmentMutation = {
     description?: string | null,
     patient_id?: string | null,
     owner_id: string,
+    scheduled_date?: string | null,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
@@ -979,6 +1150,7 @@ export type UpdateAssessmentMutation = {
     description?: string | null,
     patient_id?: string | null,
     owner_id: string,
+    scheduled_date?: string | null,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
@@ -1047,6 +1219,7 @@ export type DeleteAssessmentMutation = {
     description?: string | null,
     patient_id?: string | null,
     owner_id: string,
+    scheduled_date?: string | null,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
@@ -1291,6 +1464,91 @@ export type DeletePharmacistPharmacyMutation = {
       createdAt: string,
       updatedAt: string,
     },
+  } | null,
+};
+
+export type GetSurveyQueryVariables = {
+  id?: string,
+};
+
+export type GetSurveyQuery = {
+  getSurvey?:  {
+    __typename: "Survey",
+    id: string,
+    phone_number?: string | null,
+    link_id?: string | null,
+    survey_data?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    FollowUp?:  {
+      __typename: "FollowUp",
+      id: string,
+      contact_method?: ContactMethod | null,
+      assessment_id?: string | null,
+      owner_id: string,
+      follow_up_status?: FollowUpStatus | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+  } | null,
+};
+
+export type ListSurveysQueryVariables = {
+  filter?: ModelSurveyFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListSurveysQuery = {
+  listSurveys?:  {
+    __typename: "ModelSurveyConnection",
+    items?:  Array< {
+      __typename: "Survey",
+      id: string,
+      phone_number?: string | null,
+      link_id?: string | null,
+      survey_data?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncSurveysQueryVariables = {
+  filter?: ModelSurveyFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncSurveysQuery = {
+  syncSurveys?:  {
+    __typename: "ModelSurveyConnection",
+    items?:  Array< {
+      __typename: "Survey",
+      id: string,
+      phone_number?: string | null,
+      link_id?: string | null,
+      survey_data?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -1543,39 +1801,6 @@ export type SyncPharmacistsQuery = {
   } | null,
 };
 
-export type GetFollowUpQueryVariables = {
-  id?: string,
-};
-
-export type GetFollowUpQuery = {
-  getFollowUp?:  {
-    __typename: "FollowUp",
-    id: string,
-    contact_method?: ContactMethod | null,
-    assessment_id?: string | null,
-    owner_id: string,
-    follow_up_status?: FollowUpStatus | null,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    createdAt: string,
-    updatedAt: string,
-    ForAssessment?:  {
-      __typename: "Assessment",
-      id: string,
-      date?: string | null,
-      description?: string | null,
-      patient_id?: string | null,
-      owner_id: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-  } | null,
-};
-
 export type ListFollowUpsQueryVariables = {
   filter?: ModelFollowUpFilterInput | null,
   limit?: number | null,
@@ -1600,6 +1825,40 @@ export type ListFollowUpsQuery = {
     } | null > | null,
     nextToken?: string | null,
     startedAt?: number | null,
+  } | null,
+};
+
+export type GetFollowUpQueryVariables = {
+  id?: string,
+};
+
+export type GetFollowUpQuery = {
+  getFollowUp?:  {
+    __typename: "FollowUp",
+    id: string,
+    contact_method?: ContactMethod | null,
+    assessment_id?: string | null,
+    owner_id: string,
+    follow_up_status?: FollowUpStatus | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    ForAssessment?:  {
+      __typename: "Assessment",
+      id: string,
+      date?: string | null,
+      description?: string | null,
+      patient_id?: string | null,
+      owner_id: string,
+      scheduled_date?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
   } | null,
 };
 
@@ -1647,6 +1906,7 @@ export type ListAssessmentsQuery = {
       description?: string | null,
       patient_id?: string | null,
       owner_id: string,
+      scheduled_date?: string | null,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
@@ -1670,6 +1930,7 @@ export type GetAssessmentQuery = {
     description?: string | null,
     patient_id?: string | null,
     owner_id: string,
+    scheduled_date?: string | null,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
@@ -1742,6 +2003,7 @@ export type SyncAssessmentsQuery = {
       description?: string | null,
       patient_id?: string | null,
       owner_id: string,
+      scheduled_date?: string | null,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
@@ -1845,6 +2107,90 @@ export type SyncPharmacistPharmaciesQuery = {
     } | null > | null,
     nextToken?: string | null,
     startedAt?: number | null,
+  } | null,
+};
+
+export type OnCreateSurveySubscription = {
+  onCreateSurvey?:  {
+    __typename: "Survey",
+    id: string,
+    phone_number?: string | null,
+    link_id?: string | null,
+    survey_data?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    FollowUp?:  {
+      __typename: "FollowUp",
+      id: string,
+      contact_method?: ContactMethod | null,
+      assessment_id?: string | null,
+      owner_id: string,
+      follow_up_status?: FollowUpStatus | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+  } | null,
+};
+
+export type OnUpdateSurveySubscription = {
+  onUpdateSurvey?:  {
+    __typename: "Survey",
+    id: string,
+    phone_number?: string | null,
+    link_id?: string | null,
+    survey_data?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    FollowUp?:  {
+      __typename: "FollowUp",
+      id: string,
+      contact_method?: ContactMethod | null,
+      assessment_id?: string | null,
+      owner_id: string,
+      follow_up_status?: FollowUpStatus | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+  } | null,
+};
+
+export type OnDeleteSurveySubscription = {
+  onDeleteSurvey?:  {
+    __typename: "Survey",
+    id: string,
+    phone_number?: string | null,
+    link_id?: string | null,
+    survey_data?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    FollowUp?:  {
+      __typename: "FollowUp",
+      id: string,
+      contact_method?: ContactMethod | null,
+      assessment_id?: string | null,
+      owner_id: string,
+      follow_up_status?: FollowUpStatus | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
   } | null,
 };
 
@@ -2066,6 +2412,7 @@ export type OnCreateFollowUpSubscription = {
       description?: string | null,
       patient_id?: string | null,
       owner_id: string,
+      scheduled_date?: string | null,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
@@ -2095,6 +2442,7 @@ export type OnUpdateFollowUpSubscription = {
       description?: string | null,
       patient_id?: string | null,
       owner_id: string,
+      scheduled_date?: string | null,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
@@ -2124,6 +2472,7 @@ export type OnDeleteFollowUpSubscription = {
       description?: string | null,
       patient_id?: string | null,
       owner_id: string,
+      scheduled_date?: string | null,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
@@ -2141,6 +2490,7 @@ export type OnCreateAssessmentSubscription = {
     description?: string | null,
     patient_id?: string | null,
     owner_id: string,
+    scheduled_date?: string | null,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
@@ -2204,6 +2554,7 @@ export type OnUpdateAssessmentSubscription = {
     description?: string | null,
     patient_id?: string | null,
     owner_id: string,
+    scheduled_date?: string | null,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
@@ -2267,6 +2618,7 @@ export type OnDeleteAssessmentSubscription = {
     description?: string | null,
     patient_id?: string | null,
     owner_id: string,
+    scheduled_date?: string | null,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,

@@ -1,41 +1,13 @@
 export const schema = {
     "models": {
-        "Patient": {
-            "name": "Patient",
+        "Survey": {
+            "name": "Survey",
             "fields": {
                 "id": {
                     "name": "id",
                     "isArray": false,
                     "type": "ID",
                     "isRequired": true,
-                    "attributes": []
-                },
-                "first_name": {
-                    "name": "first_name",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "last_name": {
-                    "name": "last_name",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "postal_code": {
-                    "name": "postal_code",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "dob": {
-                    "name": "dob",
-                    "isArray": false,
-                    "type": "AWSDate",
-                    "isRequired": false,
                     "attributes": []
                 },
                 "phone_number": {
@@ -45,37 +17,117 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "email": {
-                    "name": "email",
+                "link_id": {
+                    "name": "link_id",
                     "isArray": false,
-                    "type": "AWSEmail",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
-                "AssessmentRecord": {
-                    "name": "AssessmentRecord",
-                    "isArray": true,
+                "survey_data": {
+                    "name": "survey_data",
+                    "isArray": false,
+                    "type": "AWSJSON",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "FollowUp": {
+                    "name": "FollowUp",
+                    "isArray": false,
+                    "type": {
+                        "model": "FollowUp"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetName": "surveyFollowUpId"
+                    }
+                }
+            },
+            "syncable": true,
+            "pluralName": "Surveys",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "FollowUp": {
+            "name": "FollowUp",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "contact_method": {
+                    "name": "contact_method",
+                    "isArray": false,
+                    "type": {
+                        "enum": "ContactMethod"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "assessment_id": {
+                    "name": "assessment_id",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "ForAssessment": {
+                    "name": "ForAssessment",
+                    "isArray": false,
                     "type": {
                         "model": "Assessment"
                     },
                     "isRequired": false,
                     "attributes": [],
-                    "isArrayNullable": true,
                     "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "patient_id"
+                        "connectionType": "BELONGS_TO",
+                        "targetName": "followUpForAssessmentId"
                     }
                 },
                 "owner_id": {
                     "name": "owner_id",
                     "isArray": false,
                     "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "follow_up_status": {
+                    "name": "follow_up_status",
+                    "isArray": false,
+                    "type": {
+                        "enum": "FollowUpStatus"
+                    },
                     "isRequired": false,
                     "attributes": []
                 }
             },
             "syncable": true,
-            "pluralName": "Patients",
+            "pluralName": "FollowUps",
             "attributes": [
                 {
                     "type": "model",
@@ -188,6 +240,13 @@ export const schema = {
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
+                    "attributes": []
+                },
+                "scheduled_date": {
+                    "name": "scheduled_date",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
                     "attributes": []
                 }
             },
@@ -535,8 +594,8 @@ export const schema = {
                 }
             ]
         },
-        "FollowUp": {
-            "name": "FollowUp",
+        "Patient": {
+            "name": "Patient",
             "fields": {
                 "id": {
                     "name": "id",
@@ -545,54 +604,72 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "contact_method": {
-                    "name": "contact_method",
+                "first_name": {
+                    "name": "first_name",
                     "isArray": false,
-                    "type": {
-                        "enum": "ContactMethod"
-                    },
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
-                "assessment_id": {
-                    "name": "assessment_id",
+                "last_name": {
+                    "name": "last_name",
                     "isArray": false,
-                    "type": "ID",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
-                "ForAssessment": {
-                    "name": "ForAssessment",
+                "postal_code": {
+                    "name": "postal_code",
                     "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "dob": {
+                    "name": "dob",
+                    "isArray": false,
+                    "type": "AWSDate",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "phone_number": {
+                    "name": "phone_number",
+                    "isArray": false,
+                    "type": "AWSPhone",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "email": {
+                    "name": "email",
+                    "isArray": false,
+                    "type": "AWSEmail",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "AssessmentRecord": {
+                    "name": "AssessmentRecord",
+                    "isArray": true,
                     "type": {
                         "model": "Assessment"
                     },
                     "isRequired": false,
                     "attributes": [],
+                    "isArrayNullable": true,
                     "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "followUpForAssessmentId"
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "patient_id"
                     }
                 },
                 "owner_id": {
                     "name": "owner_id",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "follow_up_status": {
-                    "name": "follow_up_status",
-                    "isArray": false,
-                    "type": {
-                        "enum": "FollowUpStatus"
-                    },
                     "isRequired": false,
                     "attributes": []
                 }
             },
             "syncable": true,
-            "pluralName": "FollowUps",
+            "pluralName": "Patients",
             "attributes": [
                 {
                     "type": "model",
@@ -639,5 +716,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "c3ec393ec4463ec9b555901ee3041463"
+    "version": "061cc37ec31b975ae9bc5d831f7f5330"
 };

@@ -2,6 +2,87 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateSurvey = /* GraphQL */ `
+  subscription OnCreateSurvey {
+    onCreateSurvey {
+      id
+      phone_number
+      link_id
+      survey_data
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      FollowUp {
+        id
+        contact_method
+        assessment_id
+        owner_id
+        follow_up_status
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+export const onUpdateSurvey = /* GraphQL */ `
+  subscription OnUpdateSurvey {
+    onUpdateSurvey {
+      id
+      phone_number
+      link_id
+      survey_data
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      FollowUp {
+        id
+        contact_method
+        assessment_id
+        owner_id
+        follow_up_status
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+export const onDeleteSurvey = /* GraphQL */ `
+  subscription OnDeleteSurvey {
+    onDeleteSurvey {
+      id
+      phone_number
+      link_id
+      survey_data
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      FollowUp {
+        id
+        contact_method
+        assessment_id
+        owner_id
+        follow_up_status
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
 export const onCreatePatient = /* GraphQL */ `
   subscription OnCreatePatient {
     onCreatePatient {
@@ -210,6 +291,7 @@ export const onCreateFollowUp = /* GraphQL */ `
         description
         patient_id
         owner_id
+        scheduled_date
         _version
         _deleted
         _lastChangedAt
@@ -238,6 +320,7 @@ export const onUpdateFollowUp = /* GraphQL */ `
         description
         patient_id
         owner_id
+        scheduled_date
         _version
         _deleted
         _lastChangedAt
@@ -266,6 +349,7 @@ export const onDeleteFollowUp = /* GraphQL */ `
         description
         patient_id
         owner_id
+        scheduled_date
         _version
         _deleted
         _lastChangedAt
@@ -283,6 +367,7 @@ export const onCreateAssessment = /* GraphQL */ `
       description
       patient_id
       owner_id
+      scheduled_date
       _version
       _deleted
       _lastChangedAt
@@ -342,6 +427,7 @@ export const onUpdateAssessment = /* GraphQL */ `
       description
       patient_id
       owner_id
+      scheduled_date
       _version
       _deleted
       _lastChangedAt
@@ -401,6 +487,7 @@ export const onDeleteAssessment = /* GraphQL */ `
       description
       patient_id
       owner_id
+      scheduled_date
       _version
       _deleted
       _lastChangedAt

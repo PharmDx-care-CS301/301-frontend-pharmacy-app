@@ -1,13 +1,26 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import logo from "../../logo.png";
 import data from "./data.json";
-import { AppBar, Box, Typography, Tab, Tabs,
-  Fab, TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody} from "@material-ui/core";
+import {
+  AppBar,
+  Box,
+  Typography,
+  Tab,
+  Tabs,
+  Fab,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  Paper,
+  TableBody,
+} from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { Auth, API } from "aws-amplify";
-import {listFollowUps,} from "../../graphql/queries";
+import { listFollowUps } from "../../graphql/queries";
 import { format } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
@@ -34,11 +47,11 @@ const useStyles = makeStyles((theme) => ({
 
 interface TabPanelInterface {
   children: any;
-  value:number;
+  value: number;
   index: number;
 }
 
-const TabPanel:React.FC<TabPanelInterface> = (props)=> {
+const TabPanel: React.FC<TabPanelInterface> = (props) => {
   const { children, value, index, ...other } = props;
   return (
     <div
@@ -55,7 +68,7 @@ const TabPanel:React.FC<TabPanelInterface> = (props)=> {
       )}
     </div>
   );
-}
+};
 
 export interface FollowUpProps {
   patientData: PatientData;
@@ -76,27 +89,26 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
   const [secondary, setSecondary] = React.useState(false);
   const [pageData, setPageData] = React.useState<any>([]);
   const history = useHistory();
-  const numEffect = 1
+  const numEffect = 1;
 
   //only called once
   /**Caution: If screen gets into infinite loop, kindly delete this code**/
   /**This call makes sure to get data when component gets mounted**/
-  useEffect(()=>{handleChange(null, value)}, [])
+  useEffect(() => {
+    handleChange(null, value);
+  }, []);
 
-  function updateProps(status, values){
+  function updateProps(status, values) {
     /**NOTE: This code runs slow s.t. screen gets updated and all states reinitialized**/
     /**TODO: Find alternative way of updating props.setPageData**/
     if (status === "COMPLETED" && values.length > 0) {
-      props.setPatientData({...props.patientData, "completed": values})
-    }
-    else if (status === "FOLLOWUPREQUESTED" && values.length > 0) {
-      props.setPatientData({...props.patientData, "followuprequested": values})
-    }
-    else if (status === "PENDINGRESPONSE" && values.length > 0) {
-      props.setPatientData({...props.patientData, "pendingresponse": values})
-    }
-    else if (status === "TODO" && values.length > 0) {
-      props.setPatientData({...props.patientData, "todo": values})
+      props.setPatientData({ ...props.patientData, completed: values });
+    } else if (status === "FOLLOWUPREQUESTED" && values.length > 0) {
+      props.setPatientData({ ...props.patientData, followuprequested: values });
+    } else if (status === "PENDINGRESPONSE" && values.length > 0) {
+      props.setPatientData({ ...props.patientData, pendingresponse: values });
+    } else if (status === "TODO" && values.length > 0) {
+      props.setPatientData({ ...props.patientData, todo: values });
     }
   }
 
@@ -108,12 +120,11 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
             query: listFollowUps,
             variables: { filter: { follow_up_status: { eq: status } } },
           });
-          const values = ret["data"]["listFollowUps"]["items"]
-          setPageData(values)
+          const values = ret["data"]["listFollowUps"]["items"];
+          setPageData(values);
 
           // props.setPatientData({...props.patientData, "completed": values})
-        }
-        else{
+        } else {
           setPageData(props.patientData.completed);
         }
 
@@ -124,11 +135,10 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
             query: listFollowUps,
             variables: { filter: { follow_up_status: { eq: status } } },
           });
-          const values = ret["data"]["listFollowUps"]["items"]
-          setPageData(values)
+          const values = ret["data"]["listFollowUps"]["items"];
+          setPageData(values);
           // props.setPatientData({...props.patientData, "followuprequested": values})
-        }
-        else{
+        } else {
           setPageData(props.patientData.followuprequested);
         }
 
@@ -139,11 +149,9 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
             query: listFollowUps,
             variables: { filter: { follow_up_status: { eq: status } } },
           });
-          const values = ret["data"]["listFollowUps"]["items"]
-          setPageData(values)
-
-        }
-        else {
+          const values = ret["data"]["listFollowUps"]["items"];
+          setPageData(values);
+        } else {
           setPageData(props.patientData.pendingresponse);
         }
 
@@ -154,10 +162,9 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
             query: listFollowUps,
             variables: { filter: { follow_up_status: { eq: status } } },
           });
-          const values = ret["data"]["listFollowUps"]["items"]
-          setPageData(values)
-        }
-        else {
+          const values = ret["data"]["listFollowUps"]["items"];
+          setPageData(values);
+        } else {
           setPageData(props.patientData.todo);
         }
 
@@ -168,7 +175,6 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
         );
         break;
     }
-
   }
 
   function a11yProps(index) {
@@ -185,44 +191,45 @@ const FollowUpPage: React.FC<FollowUpProps> = (props) => {
       2: "PENDINGRESPONSE",
       3: "TODO",
     };
-    getFollowUpList(lookUp[newValue]).then(()=>{
+    getFollowUpList(lookUp[newValue]).then(() => {
       setValue(newValue);
       // updateProps(lookUp[newValue]);
-    })
-
+    });
   };
 
   function handleClick() {
     history.push("/patientscheduling");
   }
-  function CreateTable(rows){
+  function CreateTable(rows) {
     const classes = useStyles();
     return (
-        <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="left">Id</TableCell>
-                <TableCell align="left">Patient</TableCell>
-                <TableCell align="right">Contact method</TableCell>
-                <TableCell align="right">Date</TableCell>
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="left">Id</TableCell>
+              <TableCell align="left">Patient</TableCell>
+              <TableCell align="right">Contact method</TableCell>
+              <TableCell align="right">Date</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell component="th" scope="row" align="left">
+                  {row.id}
+                </TableCell>
+                <TableCell align="left">{row.owner_id}</TableCell>
+                <TableCell align="right">{row.contact_method}</TableCell>
+                <TableCell align="right">
+                  {format(new Date(row.updatedAt), "hh:mm MMM dd, yyyy")}
+                </TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                  <TableRow key={row.id}>
-                    <TableCell component="th" scope="row" align="left">
-                      {row.id}
-                    </TableCell>
-                    <TableCell align="left">{row.owner_id}</TableCell>
-                    <TableCell align="right">{row.contact_method}</TableCell>
-                    <TableCell align="right">{format(new Date(row.updatedAt), "hh:mm MMM dd, yyyy")}</TableCell>
-                  </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-    )
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
   }
   return (
     <>

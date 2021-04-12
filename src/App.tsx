@@ -16,10 +16,9 @@ import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
 import { Auth } from "aws-amplify";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 
-
 const useStyles = makeStyles((theme) => ({
   header: {
-    zIndex: 90
+    zIndex: 90,
   },
   buttons: {
     height: "36px",
@@ -50,22 +49,17 @@ class MenuIcon extends React.Component {
   }
 }
 
-
-
 const ProtectedRoute: React.FC<any> = (props) => (
-  <Route
-    {...props}
-    component={withAuthenticator(props.component)}
-  />
+  <Route {...props} component={withAuthenticator(props.component)} />
 );
 
 function App() {
   const classes = useStyles();
   const [patientData, setPatientData] = useState<PatientData>({
-    completed:undefined,
+    completed: undefined,
     followuprequested: undefined,
     pendingresponse: undefined,
-    todo: undefined
+    todo: undefined,
   });
 
   function createFollowUpPage() {
@@ -144,7 +138,11 @@ function App() {
                 path="/pharmacistlogin"
                 component={PharmacistLogin}
               />
-              <ProtectedRoute exact path="/patientlogin" component={PatientLogin} />
+              <ProtectedRoute
+                exact
+                path="/patientlogin"
+                component={PatientLogin}
+              />
               <ProtectedRoute
                 exact
                 path="/pharmacistSignUp"
@@ -155,12 +153,25 @@ function App() {
                 path="/pharmacistConfirm"
                 component={PharmacistConfirm}
               />
-              <ProtectedRoute exact path="/follow-up" component={createFollowUpPage} />
-              <ProtectedRoute exact path="/createFollowUp" component={CreateFollowUp} />
-              <ProtectedRoute exact path="/survey" component={() => {
-                window.location.href="https://main.d65b59pejnjsy.amplifyapp.com";
-                return null;
-              }} />
+              <ProtectedRoute
+                exact
+                path="/follow-up"
+                component={createFollowUpPage}
+              />
+              <ProtectedRoute
+                exact
+                path="/createFollowUp"
+                component={CreateFollowUp}
+              />
+              <ProtectedRoute
+                exact
+                path="/survey"
+                component={() => {
+                  window.location.href =
+                    "https://main.d65b59pejnjsy.amplifyapp.com";
+                  return null;
+                }}
+              />
               <Route exact path="/" component={ChooserPage} />
               <Route path="/" component={() => <div>404</div>} />
             </Switch>
