@@ -24,12 +24,12 @@ function ChooserPage() {
   return (
     <>
       <img src={logo} className={classes.logo} alt="logo" />
-      <Link to="/follow-up">
+      <Link to="/follow-up" style={{ textDecoration: 'none' }}>
         <Button className={classes.buttons} variant="contained" color="primary">
           Pharmacist Login
         </Button>
       </Link>
-      <Link to="/patientlogin">
+      <Link to="/patientlogin" style={{ textDecoration: 'none' }}>
         <Button className={classes.buttons} variant="contained" color="primary">
           Patient Login
         </Button>
